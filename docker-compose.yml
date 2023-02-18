@@ -1,0 +1,42 @@
+version: '3'
+
+volumes:
+  postgres:
+  node_modules:
+  redis:
+
+services:  
+  db:
+    image: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  web:
+    build: .
+    command: rails s -b 0.0.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    healthcheck:
+      test: "exit 0"
+  
+  # worker:
+  #   build: .
+  #   command: bundle exec rails s -d && bundle exec sidekiq -C /app/config/sidekiq.yml
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     web:
+  #       condition: service_healthy
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - "redis:/data"
+
