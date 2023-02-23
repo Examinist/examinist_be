@@ -19,21 +19,21 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - .:/myapp
     depends_on:
       - db
       - redis
     healthcheck:
       test: "exit 0"
   
-  # worker:
-  #   build: .
-  #   command: bundle exec rails s -d && bundle exec sidekiq -C /app/config/sidekiq.yml
-  #   volumes:
-  #     - .:/app
-  #   depends_on:
-  #     web:
-  #       condition: service_healthy
+  worker:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -d && bundle exec sidekiq -C /myapp/config/sidekiq.yml"
+    volumes:
+      - .:/myapp
+    depends_on:
+      web:
+        condition: service_healthy
 
   redis:
     image: redis:6-alpine
