@@ -7,5 +7,5 @@ class Student < ApplicationRecord
   validates :academic_id, presence: true, uniqueness: { scope: :faculty }
   has_secure_password
 
-  belongs_to :faculty, optional: true
+  belongs_to :faculty
 end
