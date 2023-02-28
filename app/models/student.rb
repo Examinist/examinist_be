@@ -5,7 +5,6 @@ class Student < ApplicationRecord
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
   validates :password , length: { minimum: 6 }
   validates :academic_id, presence: true, uniqueness: { scope: :faculty }
-  validates :academic_id, presence: true
   has_secure_password
 
   belongs_to :faculty, optional: true
