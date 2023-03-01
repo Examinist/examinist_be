@@ -44,6 +44,17 @@ RSpec.configure do |config|
             },
             required: %w[id faculty_name University_name]
           },
+          student: {
+            type: 'object',
+            properties: {
+                id: { type: 'integer' },
+                email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
+                name: { type: 'string', example: 'Jimmy'},
+                faculty_id: { type: 'integer', example: 1},
+                academic_id: { type: 'integer', example: 18010083}
+            },
+            required: %w[id email name faculty_id academic_id]
+          }
         }
       }
     }
