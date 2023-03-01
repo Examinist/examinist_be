@@ -4,8 +4,7 @@ class CreateStudents < ActiveRecord::Migration[6.1]
       t.string :name
       t.string :email
       t.string :password_digest
-      t.boolean :must_change_password, default: false
-      t.references :faculty, foreign_key: true
+      t.boolean :must_change_password, default: true
       t.integer :academic_id
 
       t.timestamps

@@ -26,6 +26,8 @@ module ExaministApi
 
     config.active_job.queue_adapter = :sidekiq
 
+    config.factory_bot.definition_file_paths = ['spec/factories']
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
