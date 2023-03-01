@@ -1,0 +1,75 @@
+---
+openapi: 3.0.1
+info:
+  title: Examinist API
+  version: v1
+  description: This is Examinist API documentation
+paths: {}
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000/
+components:
+  schemas:
+    faculty:
+      type: object
+      properties:
+        id:
+          type: integer
+        faculty_name:
+          type: string
+          example: Faculty of Engineering
+        University_name:
+          type: string
+          example: Alexandria University
+      required:
+      - id
+      - faculty_name
+      - University_name
+    student:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          example: ahmed.gamal5551.ag@gmail.com
+        name:
+          type: string
+          example: Jimmy
+        faculty_id:
+          type: integer
+          example: 1
+        academic_id:
+          type: integer
+          example: 18010083
+      required:
+      - id
+      - email
+      - name
+      - faculty_id
+      - academic_id
+    staff:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          example: ahmed.gamal5551.ag@gmail.com
+        name:
+          type: string
+          example: Jimmy
+        faculty_id:
+          type: integer
+          example: 1
+        role:
+          type: string
+          example: instructor
+      required:
+      - id
+      - email
+      - name
+      - faculty_id
+      - role
