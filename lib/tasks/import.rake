@@ -10,18 +10,14 @@ namespace :import do
   desc "Create 10 students for each faculty"
   task students: :environment do
     Faculty.all.each do |faculty|
-      for counter in 1..10 do
-        FactoryBot.create(:student, faculty: faculty)
-      end
+      FactoryBot.create_list(:student, 10, faculty: faculty)
     end
   end
 
   desc "Create 10 staffs for each faculty"
   task staffs: :environment do
     Faculty.all.each do |faculty|
-      for counter in 1..10 do
-        FactoryBot.create(:staff, faculty: faculty)
-      end
+      FactoryBot.create_list(:staff, 10, faculty: faculty)
     end
   end
 
