@@ -5,7 +5,7 @@ class CreateStudents < ActiveRecord::Migration[6.1]
       t.string :email
       t.string :password_digest
       t.boolean :must_change_password, default: true
-      t.integer :academic_id
+      t.string :academic_id
 
       t.timestamps
     end
