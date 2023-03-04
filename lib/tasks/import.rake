@@ -2,9 +2,7 @@
 namespace :import do
   desc "Create 5 faculties"
   task faculties: :environment do
-    for counter in 1..5 do
-      FactoryBot.create(:faculty)
-    end
+    FactoryBot.create_list(:faculty, 5)
   end
 
   desc "Create 10 students for each faculty"
