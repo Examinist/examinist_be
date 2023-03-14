@@ -10,10 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_01_213328) do
+ActiveRecord::Schema.define(version: 2023_03_13_201917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "course_group_staffs", id: false, force: :cascade do |t|
+    t.bigint "course_group_id"
+    t.bigint "staff_id"
+    t.index ["course_group_id"], name: "index_course_group_staffs_on_course_group_id"
+    t.index ["staff_id"], name: "index_course_group_staffs_on_staff_id"
+  end
+
+  create_table "course_group_students", id: false, force: :cascade do |t|
+    t.bigint "course_group_id"
+    t.bigint "student_id"
+    t.index ["course_group_id"], name: "index_course_group_students_on_course_group_id"
+    t.index ["student_id"], name: "index_course_group_students_on_student_id"
+  end
+
+  create_table "course_groups", force: :cascade do |t|
+    t.string "name"
+    t.bigint "course_id", null: false
+    t.datetime "end_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_course_groups_on_course_id"
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.string "title"
+    t.string "code"
+    t.bigint "faculty_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["faculty_id"], name: "index_courses_on_faculty_id"
+  end
 
   create_table "faculties", force: :cascade do |t|
     t.string "faculty_name"
@@ -48,6 +80,8 @@ ActiveRecord::Schema.define(version: 2023_03_01_213328) do
     t.index ["faculty_id"], name: "index_students_on_faculty_id"
   end
 
+  add_foreign_key "course_groups", "courses"
+  add_foreign_key "courses", "faculties"
   add_foreign_key "staffs", "faculties"
   add_foreign_key "students", "faculties"
 end

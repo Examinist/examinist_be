@@ -11,6 +11,7 @@ class Student < ApplicationRecord
 
   #Associations
   belongs_to :faculty
+  has_and_belongs_to_many :course_groups, join_table: "course_group_students"
 end
 
 # == Schema Information
