@@ -1,14 +1,17 @@
-# frozen_string_literal: true
+class StudentSerializer < ApplicationSerializer
+  include FastJsonapi::ObjectSerializer
+  attributes :id, :first_name, :last_name, :username
+  attribute :role do
+    'student'
+  end
+  attribute :auth_token, if: proc { |_record, params| params && params[:auth_token] } do |_object, params|
+    params[:auth_token]
+  end
 
-FactoryBot.define do
-  factory :student do
-    email { Faker::Internet.email }
-    first_name { Faker::Name.name   }
-    last_name { Faker::Name.name   }
-    username { Faker::Code.sin }
-    password { "password" }
-    academic_id { Faker::Code.sin }
-    faculty
+  ####################### Show Details ############################
+  attributes :email, :academic_id, if: proc { |_record, params| params && params[:show_details] }
+  attribute :faculty, if: proc { |_record, params| params && params[:show_details] } do |object|
+    FacultySerializer.new(object.faculty)
   end
 end
 

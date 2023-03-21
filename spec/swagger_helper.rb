@@ -25,7 +25,7 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: 'https://{defaultHost}',
+          url: 'http://localhost:3000',
           variables: {
             defaultHost: {
                 default: 'localhost:3000/',
@@ -38,7 +38,7 @@ RSpec.configure do |config|
           faculty: {
             type: 'object',
             properties: {
-                id: { type: 'integer' },
+                id: { type: 'integer', example: 1 },
                 faculty_name: { type: 'string', example: 'Faculty of Engineering' },
                 University_name: { type: 'string', example: 'Alexandria University'},
             },
@@ -47,24 +47,86 @@ RSpec.configure do |config|
           student: {
             type: 'object',
             properties: {
-                id: { type: 'integer' },
+                id: { type: 'integer', example: 1 },
                 email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
-                name: { type: 'string', example: 'Jimmy'},
+                first_name: { type: 'string', example: 'Ahmed'},
+                last_name: { type: 'string', example: 'Gamal' },
+                username: { type: 'string', example: '18010083' },
                 faculty_id: { type: 'integer', example: 1},
-                academic_id: { type: 'integer', example: 18010083}
+                academic_id: { type: 'string', example: '18010083'}
             },
-            required: %w[id email name faculty_id academic_id]
+            required: %w[id email first_name last_name username faculty_id academic_id]
+          },
+          student_session: {
+            type: 'object',
+            properties: {
+                id: { type: 'integer', example: 1 },
+                first_name: { type: :string , example: 'Ahmed'},
+                last_name: { type: :string, example: 'Gamal' },
+                username: { type: :string, example: '18010083' },
+                role: { type: :string, example: 'student' },
+                auth_token: { type: :string, example: "hgcscxmopjsecohsecophopshcijsic" }
+            },
+            required: %w[id first_name last_name username role auth_token]
           },
           staff: {
             type: 'object',
             properties: {
-                id: { type: 'integer' },
+                id: { type: 'integer', example: 1 },
                 email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
-                name: { type: 'string', example: 'Jimmy'},
+                first_name: { type: 'string', example: 'Ahmed'},
+                last_name: { type: 'string', example: 'Gamal' },
+                username: { type: 'string', example: 'jimmy' },
                 faculty_id: { type: 'integer', example: 1},
                 role: { type: 'string', example: 'instructor'}
             },
-            required: %w[id email name faculty_id role]
+            required: %w[id email first_name last_name username faculty_id role]
+          },
+          staff_session: {
+            type: 'object',
+            properties: {
+                id: { type: 'integer', example: 1 },
+                first_name: { type: 'string', example: 'Ahmed'},
+                last_name: { type: 'string', example: 'Gamal' },
+                username: { type: 'string', example: 'jimmy' },
+                role: { type: 'string', example: 'instructor'},
+                auth_token: { type: :string, example: "hgcscxmopjsecohsecophopshcijsic" }
+            },
+            required: %w[id first_name last_name username role auth_token]
+          }
+        },
+        responses: {
+          student_portal: {
+            show: {
+              student_session: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  student: { '$ref' => '#/components/schemas/student_session' },
+                  message: { 
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  },
+                }
+              }
+            }
+          },
+          staff_portal: {
+            show: {
+              staff_session: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  student: { '$ref' => '#/components/schemas/staff_session' },
+                  message: { 
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  },
+                }
+              }
+            }
           }
         }
       }
