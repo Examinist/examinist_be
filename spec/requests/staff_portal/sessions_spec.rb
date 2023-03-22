@@ -25,6 +25,11 @@ RSpec.describe 'staff_portal/sessions_controller', type: :request do
         schema '$ref' => '#/components/responses/staff_portal/show/staff_session'
         run_test!
       end
+
+      response 401, 'Invalid username or password' do
+        schema '$ref' => '#/components/errors/invalid_credentials'
+        run_test!
+      end
     end
   end
 end

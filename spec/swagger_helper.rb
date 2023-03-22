@@ -95,6 +95,16 @@ RSpec.configure do |config|
             required: %w[id first_name last_name username role auth_token]
           }
         },
+        errors:{
+          invalid_credentials: {
+            type: :object,
+            properties:
+            {
+              status: { type: 'string', example: 'error' },
+              message: { type: 'string', example: 'Invalid credentials' }
+            }
+          }
+        },
         responses: {
           student_portal: {
             show: {

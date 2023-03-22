@@ -21,10 +21,12 @@ module ErrorHandler
                                                           id: err.id))
     end
 
+    # JSON response with message; Status code 401 - Unauthorized
     rescue_from ErrorHandler::AuthorizationError do |err|
       raise_error(:unauthorized, err.message)
     end
 
+    # JSON response with message; Status code 401 - Unauthorized
     rescue_from ErrorHandler::AuthenticationError do |err|
       raise_error(:unauthorized, err.message)
     end

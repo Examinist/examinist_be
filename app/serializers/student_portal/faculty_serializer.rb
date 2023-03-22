@@ -1,4 +1,4 @@
-class FacultySerializer < ApplicationSerializer
+class StudentPortal::FacultySerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
   attributes :id, :faculty_name, :university_name
 end

@@ -25,6 +25,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/responses/staff_portal/show/staff_session"
+        '401':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
       requestBody:
         content:
           application/json:
@@ -60,6 +66,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/responses/student_portal/show/student_session"
+        '401':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
       requestBody:
         content:
           application/json:
@@ -218,6 +230,16 @@ components:
       - username
       - role
       - auth_token
+  errors:
+    invalid_credentials:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Invalid credentials
   responses:
     student_portal:
       show:

@@ -3,7 +3,7 @@ class StaffPortal::SessionsController < ApplicationController
 
   def create
     staff, auth_token = authenticate_user('staff')
-    render_response({ staff: StaffSerializer.new(staff, params: { auth_token: auth_token }).to_j }, :ok)
+    render_response({ staff: StaffPortal::StaffSerializer.new(staff, params: { auth_token: auth_token }).to_j }, :ok)
   end
 
   def destroy

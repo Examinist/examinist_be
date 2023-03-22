@@ -1,4 +1,4 @@
-class StudentSerializer < ApplicationSerializer
+class StudentPortal::StudentSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
   attributes :id, :first_name, :last_name, :username
   attribute :role do
@@ -11,7 +11,7 @@ class StudentSerializer < ApplicationSerializer
   ####################### Show Details ############################
   attributes :email, :academic_id, if: proc { |_record, params| params && params[:show_details] }
   attribute :faculty, if: proc { |_record, params| params && params[:show_details] } do |object|
-    FacultySerializer.new(object.faculty)
+    StudentPortal::FacultySerializer.new(object.faculty)
   end
 end
 

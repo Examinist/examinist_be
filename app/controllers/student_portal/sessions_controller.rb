@@ -3,7 +3,7 @@ class StudentPortal::SessionsController < ApplicationController
 
   def create
     student, auth_token = authenticate_user('student')
-    render_response({ student: StudentSerializer.new(student, params: { auth_token: auth_token }).to_j }, :ok)
+    render_response({ student: StudentPortal::StudentSerializer.new(student, params: { auth_token: auth_token }).to_j }, :ok)
   end
 
   def destroy

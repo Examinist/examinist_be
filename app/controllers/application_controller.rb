@@ -10,7 +10,7 @@ class ApplicationController < ActionController::API
     AuthenticateUser.new(
       username: params[:username],
       password: params[:password],
-      namespace: self.class.name.split('::')[1],
+      namespace: self.class.name.split('::')[0],
       type: type
     ).call
   end
@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
   def authorize_request
     @current_user = AuthorizeRequest.new(
       headers: request.headers,
-      namespace: self.class.name.split('::')[1]
+      namespace: self.class.name.split('::')[0]
     ).call
   end
 end

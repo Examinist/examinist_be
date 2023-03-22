@@ -1,4 +1,4 @@
-class StaffSerializer < ApplicationSerializer
+class StaffPortal::StaffSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
   attributes :id, :first_name, :last_name, :username, :role
   attribute :auth_token, if: proc { |_record, params| params && params[:auth_token] } do |_object, params|
@@ -8,7 +8,7 @@ class StaffSerializer < ApplicationSerializer
   ####################### Show Details ############################
   attributes :email, if: proc { |_record, params| params && params[:show_details] }
   attribute :faculty, if: proc { |_record, params| params && params[:show_details] } do |object|
-    FacultySerializer.new(object.faculty)
+    StaffPortal::FacultySerializer.new(object.faculty)
   end
 end
 
