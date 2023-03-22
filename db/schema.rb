@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2023_03_20_230829) do
     t.string "email"
     t.string "password_digest"
     t.boolean "must_change_password", default: true
-    t.string "academic_id"
+    t.integer "academic_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "faculty_id", null: false
