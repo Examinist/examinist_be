@@ -25,6 +25,8 @@ services:
       - redis
     healthcheck:
       test: "exit 0"
+    stdin_open: true
+    tty: true
   
   worker:
     build: .

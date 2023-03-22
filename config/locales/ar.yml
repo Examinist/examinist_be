@@ -1,0 +1,12 @@
+ar:
+  activerecord:
+    models:
+      student: "طالب"
+      staff: "طاقم عمل"
+    errors:
+      not_found: "فشل في العثور على %{model} بالتعريف %{id}"
+  authorization:
+    decode_error: "رمز مريب. فشل التفويض!"
+    invalid_credentials: "بيانات دخول غير صحيحة"
+  authentication: 
+    invalid_credentials: "بيانات دخول غير صحيحة"

@@ -10,9 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2023_03_20_230829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "faculties", force: :cascade do |t|
+    t.string "faculty_name"
+    t.string "university_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "staffs", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.boolean "must_change_password", default: true
+    t.integer "role"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "faculty_id", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "username"
+    t.index ["email"], name: "index_staffs_on_email", unique: true
+    t.index ["faculty_id"], name: "index_staffs_on_faculty_id"
+  end
+
+  create_table "students", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.boolean "must_change_password", default: true
+    t.string "academic_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "faculty_id", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "username"
+    t.index ["email"], name: "index_students_on_email", unique: true
+    t.index ["faculty_id"], name: "index_students_on_faculty_id"
+  end
+
+  add_foreign_key "staffs", "faculties"
+  add_foreign_key "students", "faculties"
 end
