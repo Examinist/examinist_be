@@ -4,9 +4,91 @@ info:
   title: Examinist API
   version: v1
   description: This is Examinist API documentation
-paths: {}
+paths:
+  "/staff_portal/sessions":
+    post:
+      summary: Staff Login
+      tags:
+      - Staff Portal / Session
+      description: |-
+        This API is responsible for:
+
+              * Logging in the student and returning the staff's object
+
+              * returning the Authentication Bearer token
+      operationId: staffLogin
+      parameters: []
+      responses:
+        '200':
+          description: Staff logged in successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/staff_session"
+        '401':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: marioma
+                password:
+                  type: string
+                  example: '123456'
+              required:
+              - username
+              - password
+  "/student_portal/sessions":
+    post:
+      summary: Student Login
+      tags:
+      - Student Portal / Session
+      description: |-
+        This API is responsible for:
+
+              * Logging in the student and returning the student's object
+
+              * returning the Authentication Bearer token
+      operationId: studentLogin
+      parameters: []
+      responses:
+        '200':
+          description: Student logged in successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/show/student_session"
+        '401':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: '18011769'
+                password:
+                  type: string
+                  example: '123456'
+              required:
+              - username
+              - password
 servers:
-- url: https://{defaultHost}
+- url: http://localhost:3000
   variables:
     defaultHost:
       default: localhost:3000/
@@ -17,6 +99,7 @@ components:
       properties:
         id:
           type: integer
+          example: 1
         faculty_name:
           type: string
           example: Faculty of Engineering
@@ -32,35 +115,79 @@ components:
       properties:
         id:
           type: integer
+          example: 1
         email:
           type: string
           example: ahmed.gamal5551.ag@gmail.com
-        name:
+        first_name:
           type: string
-          example: Jimmy
+          example: Ahmed
+        last_name:
+          type: string
+          example: Gamal
+        username:
+          type: string
+          example: '18010083'
         faculty_id:
           type: integer
           example: 1
         academic_id:
-          type: integer
-          example: 18010083
+          type: string
+          example: '18010083'
       required:
       - id
       - email
-      - name
+      - first_name
+      - last_name
+      - username
       - faculty_id
       - academic_id
+    student_session:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: Ahmed
+        last_name:
+          type: string
+          example: Gamal
+        username:
+          type: string
+          example: '18010083'
+        role:
+          type: string
+          example: student
+        auth_token:
+          type: string
+          example: hgcscxmopjsecohsecophopshcijsic
+      required:
+      - id
+      - first_name
+      - last_name
+      - username
+      - role
+      - auth_token
     staff:
       type: object
       properties:
         id:
           type: integer
+          example: 1
         email:
           type: string
           example: ahmed.gamal5551.ag@gmail.com
-        name:
+        first_name:
           type: string
-          example: Jimmy
+          example: Ahmed
+        last_name:
+          type: string
+          example: Gamal
+        username:
+          type: string
+          example: jimmy
         faculty_id:
           type: integer
           example: 1
@@ -70,6 +197,77 @@ components:
       required:
       - id
       - email
-      - name
+      - first_name
+      - last_name
+      - username
       - faculty_id
       - role
+    staff_session:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: Ahmed
+        last_name:
+          type: string
+          example: Gamal
+        username:
+          type: string
+          example: jimmy
+        role:
+          type: string
+          example: instructor
+        auth_token:
+          type: string
+          example: hgcscxmopjsecohsecophopshcijsic
+      required:
+      - id
+      - first_name
+      - last_name
+      - username
+      - role
+      - auth_token
+  errors:
+    invalid_credentials:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Invalid credentials
+  responses:
+    student_portal:
+      show:
+        student_session:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            student:
+              "$ref": "#/components/schemas/student_session"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+    staff_portal:
+      show:
+        staff_session:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            student:
+              "$ref": "#/components/schemas/staff_session"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 

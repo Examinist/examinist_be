@@ -1,14 +1,14 @@
-# frozen_string_literal: true
+class StaffPortal::StaffSerializer < ApplicationSerializer
+  include FastJsonapi::ObjectSerializer
+  attributes :id, :first_name, :last_name, :username, :role
+  attribute :auth_token, if: proc { |_record, params| params && params[:auth_token] } do |_object, params|
+    params[:auth_token]
+  end
 
-FactoryBot.define do
-  factory :staff do
-    email { Faker::Internet.email }
-    first_name { Faker::Name.name   }
-    last_name { Faker::Name.name   }
-    username { Faker::Name.name   }
-    password { "password" }
-    role { %i[admin instuctor proctor].sample }
-    faculty
+  ####################### Show Details ############################
+  attributes :email, if: proc { |_record, params| params && params[:show_details] }
+  attribute :faculty, if: proc { |_record, params| params && params[:show_details] } do |object|
+    StaffPortal::FacultySerializer.new(object.faculty)
   end
 end
 

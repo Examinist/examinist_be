@@ -1,20 +1,18 @@
-class Student < ApplicationRecord
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+class StudentPortal::StudentSerializer < ApplicationSerializer
+  include FastJsonapi::ObjectSerializer
+  attributes :id, :first_name, :last_name, :username
+  attribute :role do
+    'student'
+  end
+  attribute :auth_token, if: proc { |_record, params| params && params[:auth_token] } do |_object, params|
+    params[:auth_token]
+  end
 
-  #Validations
-  has_secure_password validations: false
-
-  validates_presence_of :first_name, :last_name, :username
-  validates_uniqueness_of :username
-  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  validates :password , length: { minimum: 6 }
-  validates :academic_id, presence: true, uniqueness: { scope: :faculty }
-  validates_presence_of :faculty
-  has_secure_password
-
-  #Associations
-  belongs_to :faculty
-  has_and_belongs_to_many :course_groups, join_table: "course_group_students"
+  ####################### Show Details ############################
+  attributes :email, :academic_id, if: proc { |_record, params| params && params[:show_details] }
+  attribute :faculty, if: proc { |_record, params| params && params[:show_details] } do |object|
+    StudentPortal::FacultySerializer.new(object.faculty)
+  end
 end
 
 # == Schema Information
