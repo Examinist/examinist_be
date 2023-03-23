@@ -29,3 +29,9 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore Swagger Yaml.
+/swagger/swagger.yaml
+
+# Ignore Schema.
+/db/schema.rb
