@@ -3,10 +3,10 @@
 FactoryBot.define do
   factory :student do
     email { Faker::Internet.email }
-    first_name { Faker::Name.name   }
-    last_name { Faker::Name.name   }
+    first_name { Faker::Name.name }
+    last_name { Faker::Name.name }
     username { Faker::Code.sin }
-    password { "password" }
+    password { 'password' }
     academic_id { Faker::Code.sin }
     faculty
   end

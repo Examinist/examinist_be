@@ -39,6 +39,7 @@ en:
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
+    unauthorized_action: 'Unauthorized Action!'
   authentication: 
     invalid_credentials: "Invalid credentials"
 

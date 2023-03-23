@@ -8,8 +8,8 @@ class Course < ApplicationRecord
   #Associations
   belongs_to :faculty
   has_many :course_groups, dependent: :destroy
-  has_many :students, through: :course_groups
-  has_many :staffs, through: :course_groups
+  has_many :students, -> { distinct }, through: :course_groups
+  has_many :staffs, -> { distinct }, through: :course_groups
 end
 
 # == Schema Information

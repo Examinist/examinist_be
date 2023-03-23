@@ -10,16 +10,19 @@ class AuthorizeRequest
     raise_invalid_token unless decoded_jwt_token
 
     current_user = find_user(decoded_jwt_token)
+    raise_invalid_token if current_user.nil?
+    current_user
   rescue ActiveRecord::RecordNotFound
     raise_invalid_token
   end
 
   private
 
+  attr_reader :headers, :namespace
+
   def find_user(decoded_jwt_token)
     return unless decoded_jwt_token[:namespace] == namespace
 
-    
     decoded_jwt_token[:type]&.classify&.constantize&.find(decoded_jwt_token[:user_id])
   end
 
