@@ -7,7 +7,7 @@ class StaffPortal::CoursePolicy < ApplicationPolicy
     def resolve
       return Course.all.where(faculty: @user.faculty) if @user.admin?
 
-      @user.courses
+      @user.assigned_courses
     end
   end
 end
