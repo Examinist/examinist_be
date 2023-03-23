@@ -203,7 +203,9 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
-              },
+              }
+            },
+            list: {
               courses_list: {
                 type: :object,
                 properties: {
