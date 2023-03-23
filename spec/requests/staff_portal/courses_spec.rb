@@ -16,7 +16,7 @@ RSpec.describe 'staff_portal/courses', type: :request do
       security [staff_auth: []]
 
       response 200, 'Courses Listed successfully' do
-        schema '$ref' => '#/components/responses/staff_portal/show/courses_list'
+        schema '$ref' => '#/components/responses/staff_portal/list/courses_list'
         run_test!
       end
 
