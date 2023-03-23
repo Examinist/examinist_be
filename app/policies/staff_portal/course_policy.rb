@@ -5,7 +5,7 @@ class StaffPortal::CoursePolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      @user.courses
+      @user.assigned_courses
     end
   end
 end
