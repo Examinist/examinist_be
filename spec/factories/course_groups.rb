@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :course_group do
     name { Faker::Alphanumeric.alpha(number: 5) }
     course
-    end_date { "2023-03-13 20:10:11" }
+    end_date { '2023-03-13 20:10:11' }
   end
 end
 
