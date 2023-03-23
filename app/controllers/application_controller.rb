@@ -2,6 +2,7 @@ class ApplicationController < ActionController::API
   include ErrorHandler
   include ResponseHandler
   include Pundit::Authorization
+  include Pagy::Backend
 
   before_action :authorize_request
 
