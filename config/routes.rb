@@ -5,7 +5,9 @@ Rails.application.routes.draw do
 
   namespace :staff_portal do
     resources :sessions, only: %i[create destroy]
-    resources :courses, only: %i[index show]
+    resources :courses, only: %i[index show] do
+      resources :course_groups, only: %i[index]
+    end
   end
 
   namespace :student_portal do

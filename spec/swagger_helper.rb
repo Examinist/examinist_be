@@ -65,6 +65,16 @@ RSpec.configure do |config|
               type: :number,
               example: -1
             }
+          },
+          course_id_param: {
+            name: 'course_id',
+            in: :path,
+            description: 'The course id to fetch with',
+            required: true,
+            schema: {
+              type: :number,
+              example: 1
+            }
           }
         },
         schemas: {
@@ -160,6 +170,26 @@ RSpec.configure do |config|
                 code: { type: :string, example: 'CSE512' }
               },
               required: %w[id title code]
+            }
+          },
+          course_groups_list: {
+            type: :array,
+            items:
+            {
+              type: 'object',
+              properties: {
+                id: { type: :integer, example: 1 },
+                end_date: { type: :date_time, example: '2023-03-25T09:25:25.551Z' },
+                instructors: {
+                  type: :array,
+                  items: { '$ref' => '#/components/schemas/low_detail_staff' }
+                },
+                students: {
+                  type: :array,
+                  items: { '$ref' => '#/components/schemas/low_detail_student' }
+                }
+              },
+              required: %w[id end_date instructors students]
             }
           },
           detailed_course_info: {
@@ -297,6 +327,18 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   courses: { '$ref' => '#/components/schemas/courses_list' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              course_groups_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  course_groups: { '$ref' => '#/components/schemas/course_groups_list' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',

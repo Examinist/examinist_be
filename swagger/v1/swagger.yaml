@@ -5,6 +5,39 @@ info:
   version: v1
   description: This is Examinist API documentation
 paths:
+  "/staff_portal/courses/{course_id}/course_groups":
+    get:
+      summary: List Course Groups of a specific Course
+      tags:
+      - Staff Portal / Course Group
+      description: |-
+        This API is responsible for:
+
+              * Listing the Course Groups of a specific Course
+      operationId: listCourseGroups
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Course Groups Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/course_groups_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this course or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/staff_portal/courses":
     get:
       summary: List Courses
@@ -239,6 +272,14 @@ components:
       schema:
         type: number
         example: -1
+    course_id_param:
+      name: course_id
+      in: path
+      description: The course id to fetch with
+      required: true
+      schema:
+        type: number
+        example: 1
   schemas:
     faculty:
       type: object
@@ -442,6 +483,30 @@ components:
         - id
         - title
         - code
+    course_groups_list:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          end_date:
+            type: date_time
+            example: '2023-03-25T09:25:25.551Z'
+          instructors:
+            type: array
+            items:
+              "$ref": "#/components/schemas/low_detail_staff"
+          students:
+            type: array
+            items:
+              "$ref": "#/components/schemas/low_detail_student"
+        required:
+        - id
+        - end_date
+        - instructors
+        - students
     detailed_course_info:
       type: object
       properties:
@@ -588,6 +653,19 @@ components:
               example: success
             courses:
               "$ref": "#/components/schemas/courses_list"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        course_groups_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            course_groups:
+              "$ref": "#/components/schemas/course_groups_list"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
