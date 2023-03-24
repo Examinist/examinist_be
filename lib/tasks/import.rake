@@ -3,6 +3,7 @@ namespace :import do
   desc "Create 5 faculties"
   task faculties: :environment do
     FactoryBot.create_list(:faculty, 5)
+    p 'Faculties  are created'
   end
 
   desc "Create 50 students for each faculty"
@@ -10,6 +11,7 @@ namespace :import do
     Faculty.all.each do |faculty|
       FactoryBot.create_list(:student, 50, faculty: faculty)
     end
+    p 'Students for each faculty are created'
   end
 
   desc "Create 10 staffs for each faculty"
@@ -17,6 +19,7 @@ namespace :import do
     Faculty.all.each do |faculty|
       FactoryBot.create_list(:staff, 10, faculty: faculty)
     end
+    p 'Staffs for each faculty are created'
   end
 
   desc "Create 5 courses for each faculty"
@@ -24,6 +27,7 @@ namespace :import do
     Faculty.all.each do |faculty|
       FactoryBot.create_list(:course, 5, faculty: faculty)
     end
+    p 'Courses for each faculty are created'
   end
 
   desc "Create 2 groups for each course"
@@ -31,6 +35,7 @@ namespace :import do
     Course.all.each do |course|
       FactoryBot.create_list(:course_group, 2, course: course)
     end
+    p 'Course Groups for each course are created'
   end
 
   desc "Add 25 students to each course group"
@@ -42,6 +47,7 @@ namespace :import do
         students_count += 25
       end
     end
+    p 'Students for each course groups are added'
   end
 
   desc "Add 1 staff to each course group"
@@ -53,6 +59,7 @@ namespace :import do
         staffs_count += 1
       end
     end
+    p 'Staffs for each course groups are added'
   end
 
   desc "Run all tasks"
