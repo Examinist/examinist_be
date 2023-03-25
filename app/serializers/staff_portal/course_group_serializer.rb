@@ -1,6 +1,6 @@
 class StaffPortal::CourseGroupSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :end_date
+  attributes :id, :name, :end_date
 
   attribute :instructors do |object|
     StaffPortal::StaffSerializer.new(object.staffs).to_j

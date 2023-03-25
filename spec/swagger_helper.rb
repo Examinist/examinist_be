@@ -172,6 +172,7 @@ RSpec.configure do |config|
             type: 'object',
             properties: {
               id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Group A' },
               end_date: { type: :date_time, example: '2023-03-25T09:25:25.551Z' },
               instructors: {
                 type: :array,
