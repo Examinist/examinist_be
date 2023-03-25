@@ -168,25 +168,21 @@ RSpec.configure do |config|
             },
             required: %w[id title code]
           },
-          course_groups_list: {
-            type: :array,
-            items:
-            {
-              type: 'object',
-              properties: {
-                id: { type: :integer, example: 1 },
-                end_date: { type: :date_time, example: '2023-03-25T09:25:25.551Z' },
-                instructors: {
-                  type: :array,
-                  items: { '$ref' => '#/components/schemas/low_detail_staff' }
-                },
-                students: {
-                  type: :array,
-                  items: { '$ref' => '#/components/schemas/low_detail_student' }
-                }
+          course_group: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              end_date: { type: :date_time, example: '2023-03-25T09:25:25.551Z' },
+              instructors: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/staff' }
               },
-              required: %w[id end_date instructors students]
-            }
+              students: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/student' }
+              }
+            },
+            required: %w[id end_date instructors students]
           },
           detailed_course_info: {
             type: 'object',
@@ -340,7 +336,10 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  course_groups: { '$ref' => '#/components/schemas/course_groups_list' },
+                  course_groups: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/course_group' }
+                  },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
