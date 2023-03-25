@@ -3,6 +3,10 @@ class StudentPortal::CoursePolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    true
+  end
+
   class Scope < Scope
     def resolve
       @user.enrolled_courses
