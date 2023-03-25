@@ -1,5 +1,5 @@
 class StaffPortal::CoursesController < ApplicationController
-  before_action :chech_authorization_policy
+  before_action :check_authorization_policy
   before_action :find_course, only: %i[show]
   #######
   # List Courses
