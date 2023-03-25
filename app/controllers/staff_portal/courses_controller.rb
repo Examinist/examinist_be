@@ -1,5 +1,5 @@
 class StaffPortal::CoursesController < ApplicationController
-  before_action :chech_authorization_policy
+  before_action :check_authorization_policy
   #######
   # List Courses
   # GET: /staff_portal/courses
@@ -13,7 +13,7 @@ class StaffPortal::CoursesController < ApplicationController
 
   private
 
-  def chech_authorization_policy
+  def check_authorization_policy
     authorize([:staff_portal, Course])
   end
 end

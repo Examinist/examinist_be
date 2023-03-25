@@ -127,18 +127,14 @@ RSpec.configure do |config|
             },
             required: %w[id first_name last_name username role auth_token]
           },
-          courses_list: {
-            type: :array,
-            items:
-            {
-              type: 'object',
-              properties: {
-                id: { type: :integer, example: 1 },
-                title: { type: :string, example: 'Database' },
-                code: { type: :string, example: 'CSE512' }
-              },
-              required: %w[id title code]
-            }
+          course: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'Database' },
+              code: { type: :string, example: 'CSE512' }
+            },
+            required: %w[id title code]
           }
         },
         errors: {
@@ -210,7 +206,10 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  courses: { '$ref' => '#/components/schemas/courses_list' },
+                  courses: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/course' }
+                    },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',

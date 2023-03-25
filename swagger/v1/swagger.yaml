@@ -25,7 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/responses/staff_portal/show/courses_list"
+                "$ref": "#/components/responses/staff_portal/list/courses_list"
         '401':
           description: One of the following errors
           content:
@@ -289,50 +289,16 @@ components:
         id:
           type: integer
           example: 1
-        email:
+        title:
           type: string
-          example: ahmed.gamal5551.ag@gmail.com
-        first_name:
+          example: Database
+        code:
           type: string
-          example: Ahmed
-        last_name:
-          type: string
-          example: Gamal
-        username:
-          type: string
-          example: jimmy
-        faculty_id:
-          type: integer
-          example: 1
-        role:
-          type: string
-          example: instructor
+          example: CSE512
       required:
       - id
-      - email
-      - first_name
-      - last_name
-      - username
-      - faculty_id
-      - role
-    courses_list:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-            example: 1
-          title:
-            type: string
-            example: Database
-          code:
-            type: string
-            example: CSE512
-        required:
-        - id
-        - title
-        - code
+      - title
+      - code
   errors:
     invalid_credentials:
       type: object
@@ -390,6 +356,7 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+      list:
         courses_list:
           type: object
           properties:
@@ -397,7 +364,9 @@ components:
               type: string
               example: success
             courses:
-              "$ref": "#/components/schemas/courses_list"
+              type: array
+              items:
+                "$ref": "#/components/schemas/course"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
