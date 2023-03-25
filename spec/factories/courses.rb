@@ -3,6 +3,7 @@ FactoryBot.define do
     title { Faker::Educator.course_name }
     code { Faker::Code.nric }
     faculty
+    credit_hours { Faker::Number.digit }
   end
 end
 

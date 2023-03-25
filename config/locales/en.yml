@@ -34,8 +34,11 @@ en:
     models:
       student: "Student"
       staff: "Staff"
+      course: "Course"
     errors:
       not_found: "Can not find %{model} with id %{id}"
+      course:
+          not_found_with_id: 'Unfortunately this course with id %{id} does not exist or you do not have permissions to access'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"

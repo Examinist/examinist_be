@@ -3,6 +3,7 @@ class Course < ApplicationRecord
   validates_presence_of :title
   validates_presence_of :code
   validates_presence_of :faculty_id
+  validates_presence_of :credit_hours
   validates :code, uniqueness: { scope: :faculty }
 
   #Associations
