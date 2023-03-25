@@ -23,7 +23,7 @@ class StaffPortal::CoursesController < ApplicationController
 
   private
 
-  def chech_authorization_policy
+  def check_authorization_policy
     authorize([:staff_portal, Course])
   end
 
