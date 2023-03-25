@@ -16,12 +16,13 @@ end
 #
 # Table name: courses
 #
-#  id         :bigint           not null, primary key
-#  code       :string
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  faculty_id :bigint           not null
+#  id           :bigint           not null, primary key
+#  code         :string
+#  credit_hours :integer
+#  title        :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  faculty_id   :bigint           not null
 #
 # Indexes
 #
