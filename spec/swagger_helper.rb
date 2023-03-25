@@ -87,7 +87,7 @@ RSpec.configure do |config|
             },
             required: %w[id faculty_name University_name]
           },
-          student: {
+          detailed_student: {
             type: 'object',
             properties: {
                 id: { type: 'integer', example: 1 },
@@ -100,7 +100,7 @@ RSpec.configure do |config|
             },
             required: %w[id email first_name last_name username faculty_id academic_id]
           },
-          low_detail_student: {
+          student: {
             type: 'object',
             properties: {
                 id: { type: 'integer', example: 1 },
@@ -123,7 +123,7 @@ RSpec.configure do |config|
             },
             required: %w[id first_name last_name username role auth_token]
           },
-          staff: {
+          detailed_staff: {
             type: 'object',
             properties: {
                 id: { type: 'integer', example: 1 },
@@ -136,7 +136,7 @@ RSpec.configure do |config|
             },
             required: %w[id email first_name last_name username faculty_id role]
           },
-          low_detail_staff: {
+          staff: {
             type: 'object',
             properties: {
                 id: { type: 'integer', example: 1 },
@@ -159,18 +159,14 @@ RSpec.configure do |config|
             },
             required: %w[id first_name last_name username role auth_token]
           },
-          courses_list: {
-            type: :array,
-            items:
-            {
-              type: 'object',
-              properties: {
-                id: { type: :integer, example: 1 },
-                title: { type: :string, example: 'Database' },
-                code: { type: :string, example: 'CSE512' }
-              },
-              required: %w[id title code]
-            }
+          course: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'Database' },
+              code: { type: :string, example: 'CSE512' }
+            },
+            required: %w[id title code]
           },
           course_groups_list: {
             type: :array,
@@ -201,11 +197,11 @@ RSpec.configure do |config|
               credit_hours: { type: :integer, example: 3 },
               instructors: {
                 type: :array,
-                items: { '$ref' => '#/components/schemas/low_detail_staff' }
+                items: { '$ref' => '#/components/schemas/staff' }
               },
               students: {
                 type: :array,
-                items: { '$ref' => '#/components/schemas/low_detail_student' }
+                items: { '$ref' => '#/components/schemas/student' }
               }
             },
             required: %w[id title code credit_hours instructors students]
@@ -284,7 +280,10 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  courses: { '$ref' => '#/components/schemas/courses_list' },
+                  courses: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/course' }
+                  },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
@@ -326,7 +325,10 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  courses: { '$ref' => '#/components/schemas/courses_list' },
+                  courses: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/course' }
+                  },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',

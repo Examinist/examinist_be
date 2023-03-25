@@ -297,7 +297,7 @@ components:
       - id
       - faculty_name
       - University_name
-    student:
+    detailed_student:
       type: object
       properties:
         id:
@@ -329,7 +329,7 @@ components:
       - username
       - faculty_id
       - academic_id
-    low_detail_student:
+    student:
       type: object
       properties:
         id:
@@ -381,7 +381,7 @@ components:
       - username
       - role
       - auth_token
-    staff:
+    detailed_staff:
       type: object
       properties:
         id:
@@ -413,7 +413,7 @@ components:
       - username
       - faculty_id
       - role
-    low_detail_staff:
+    staff:
       type: object
       properties:
         id:
@@ -465,24 +465,22 @@ components:
       - username
       - role
       - auth_token
-    courses_list:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-            example: 1
-          title:
-            type: string
-            example: Database
-          code:
-            type: string
-            example: CSE512
-        required:
-        - id
-        - title
-        - code
+    course:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Database
+        code:
+          type: string
+          example: CSE512
+      required:
+      - id
+      - title
+      - code
     course_groups_list:
       type: array
       items:
@@ -525,11 +523,11 @@ components:
         instructors:
           type: array
           items:
-            "$ref": "#/components/schemas/low_detail_staff"
+            "$ref": "#/components/schemas/staff"
         students:
           type: array
           items:
-            "$ref": "#/components/schemas/low_detail_student"
+            "$ref": "#/components/schemas/student"
       required:
       - id
       - title
@@ -610,7 +608,9 @@ components:
               type: string
               example: success
             courses:
-              "$ref": "#/components/schemas/courses_list"
+              type: array
+              items:
+                "$ref": "#/components/schemas/course"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
@@ -652,7 +652,9 @@ components:
               type: string
               example: success
             courses:
-              "$ref": "#/components/schemas/courses_list"
+              type: array
+              items:
+                "$ref": "#/components/schemas/course"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
