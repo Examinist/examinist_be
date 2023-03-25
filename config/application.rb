@@ -24,6 +24,7 @@ module ExaministApi
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
     config.autoload_paths << Rails.root.join('lib')
+    config.autoload_paths << Rails.root.join('app/policies')
     config.eager_load_paths << Rails.root.join('lib')
 
     config.active_job.queue_adapter = :sidekiq

@@ -34,6 +34,39 @@ RSpec.configure do |config|
         }
       ],
       components: {
+        securitySchemes: {
+          staff_auth: {
+            type: :http,
+            scheme: :bearer,
+            bearerFormat: :JWT
+          },
+          student_auth: {
+            type: :http,
+            scheme: :bearer,
+            bearerFormat: :JWT
+          }
+        },
+        global_parameters: {
+          id_param: {
+            name: 'id',
+            in: :path,
+            description: 'The id to fetch with',
+            required: true,
+            schema: {
+              type: :number,
+              example: 1
+            }
+          },
+          page_param: {
+            name: 'page',
+            in: :query,
+            description: 'The current page for paginated items, send it with value = -1 if no pagination needed',
+            schema: {
+              type: :number,
+              example: -1
+            }
+          }
+        },
         schemas: {
           faculty: {
             type: 'object',
@@ -93,9 +126,18 @@ RSpec.configure do |config|
                 auth_token: { type: :string, example: "hgcscxmopjsecohsecophopshcijsic" }
             },
             required: %w[id first_name last_name username role auth_token]
+          },
+          course: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'Database' },
+              code: { type: :string, example: 'CSE512' }
+            },
+            required: %w[id title code]
           }
         },
-        errors:{
+        errors: {
           invalid_credentials: {
             type: :object,
             properties:
@@ -103,6 +145,28 @@ RSpec.configure do |config|
               status: { type: 'string', example: 'error' },
               message: { type: 'string', example: 'Invalid credentials' }
             }
+          },
+          unauthorized: {
+            type: :array,
+            items:
+            {
+              type: :object,
+              properties: {
+                status: { type: 'string', example: 'error' },
+                message: { type: 'string', example: 'Invalid credentials' }
+              }
+            },
+            example:
+            [
+              {
+                status: 'error',
+                message: 'Invalid Credentials'
+              },
+              {
+                status: 'error',
+                message: 'Unauthorized action!'
+              }
+            ]
           }
         },
         responses: {
@@ -113,11 +177,11 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   student: { '$ref' => '#/components/schemas/student_session' },
-                  message: { 
+                  message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
                     example: nil
-                  },
+                  }
                 }
               }
             }
@@ -129,11 +193,28 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   student: { '$ref' => '#/components/schemas/staff_session' },
-                  message: { 
+                  message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
                     example: nil
-                  },
+                  }
+                }
+              }
+            },
+            list: {
+              courses_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  courses: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/course' }
+                    },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
                 }
               }
             }

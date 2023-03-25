@@ -1,10 +1,10 @@
 class Staff < ApplicationRecord
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
-  #Enum
-  enum role: { admin: 0, instuctor: 1, proctor: 2 }
+  # Enum
+  enum role: { admin: 0, instructor: 1, proctor: 2 }
 
-  #Validations
+  # Validations
   has_secure_password validations: false
 
   validates_presence_of :first_name, :last_name, :username
@@ -15,9 +15,10 @@ class Staff < ApplicationRecord
   validates_presence_of :faculty
   has_secure_password
 
-  #Associations
+  # Associations
   belongs_to :faculty
-  has_and_belongs_to_many :course_groups, join_table: "course_group_staffs"
+  has_and_belongs_to_many :course_groups, join_table: 'course_group_staffs'
+  has_many :assigned_courses, -> { distinct }, through: :course_groups, source: :course
 end
 
 # == Schema Information

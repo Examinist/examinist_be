@@ -3,11 +3,11 @@
 FactoryBot.define do
   factory :staff do
     email { Faker::Internet.email }
-    first_name { Faker::Name.name   }
-    last_name { Faker::Name.name   }
-    username { Faker::Name.name   }
-    password { "password" }
-    role { %i[admin instuctor proctor].sample }
+    first_name { Faker::Name.name }
+    last_name { Faker::Name.name }
+    username { Faker::Internet.username }
+    password { 'password' }
+    role { %i[admin instructor proctor].sample }
     faculty
   end
 end

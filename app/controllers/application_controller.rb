@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include ErrorHandler
   include ResponseHandler
+  include Pundit::Authorization
 
   before_action :authorize_request
 
@@ -20,5 +21,10 @@ class ApplicationController < ActionController::API
       headers: request.headers,
       namespace: self.class.name.split('::')[0]
     ).call
+    @current_user
+  end
+
+  def pundit_user
+    @current_user
   end
 end

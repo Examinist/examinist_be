@@ -5,6 +5,33 @@ info:
   version: v1
   description: This is Examinist API documentation
 paths:
+  "/staff_portal/courses":
+    get:
+      summary: List Courses
+      tags:
+      - Staff Portal / Course
+      description: |-
+        This API is responsible for:
+
+              * Listing the Courses
+      operationId: listCourses
+      parameters:
+      - "$ref": "#/components/global_parameters/page_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Courses Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/courses_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
   "/staff_portal/sessions":
     post:
       summary: Staff Login
@@ -93,6 +120,32 @@ servers:
     defaultHost:
       default: localhost:3000/
 components:
+  securitySchemes:
+    staff_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    student_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  global_parameters:
+    id_param:
+      name: id
+      in: path
+      description: The id to fetch with
+      required: true
+      schema:
+        type: number
+        example: 1
+    page_param:
+      name: page
+      in: query
+      description: The current page for paginated items, send it with value = -1 if
+        no pagination needed
+      schema:
+        type: number
+        example: -1
   schemas:
     faculty:
       type: object
@@ -230,6 +283,22 @@ components:
       - username
       - role
       - auth_token
+    course:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Database
+        code:
+          type: string
+          example: CSE512
+      required:
+      - id
+      - title
+      - code
   errors:
     invalid_credentials:
       type: object
@@ -240,6 +309,22 @@ components:
         message:
           type: string
           example: Invalid credentials
+    unauthorized:
+      type: array
+      items:
+        type: object
+        properties:
+          status:
+            type: string
+            example: error
+          message:
+            type: string
+            example: Invalid credentials
+      example:
+      - status: error
+        message: Invalid Credentials
+      - status: error
+        message: Unauthorized action!
   responses:
     student_portal:
       show:
@@ -266,6 +351,22 @@ components:
               example: success
             student:
               "$ref": "#/components/schemas/staff_session"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+      list:
+        courses_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            courses:
+              type: array
+              items:
+                "$ref": "#/components/schemas/course"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
