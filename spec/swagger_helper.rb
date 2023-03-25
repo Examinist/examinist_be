@@ -184,6 +184,23 @@ RSpec.configure do |config|
                   }
                 }
               }
+            },
+            list: {
+              courses_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  courses: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/course' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              }
             }
           },
           staff_portal: {
@@ -209,7 +226,7 @@ RSpec.configure do |config|
                   courses: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/course' }
-                    },
+                  },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
