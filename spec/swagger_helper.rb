@@ -190,7 +190,10 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  courses: { '$ref' => '#/components/schemas/courses_list' },
+                  courses: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/course' }
+                  },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
@@ -223,7 +226,7 @@ RSpec.configure do |config|
                   courses: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/course' }
-                    },
+                  },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',

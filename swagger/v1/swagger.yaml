@@ -316,50 +316,16 @@ components:
         id:
           type: integer
           example: 1
-        email:
+        title:
           type: string
-          example: ahmed.gamal5551.ag@gmail.com
-        first_name:
+          example: Database
+        code:
           type: string
-          example: Ahmed
-        last_name:
-          type: string
-          example: Gamal
-        username:
-          type: string
-          example: jimmy
-        faculty_id:
-          type: integer
-          example: 1
-        role:
-          type: string
-          example: instructor
+          example: CSE512
       required:
       - id
-      - email
-      - first_name
-      - last_name
-      - username
-      - faculty_id
-      - role
-    courses_list:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-            example: 1
-          title:
-            type: string
-            example: Database
-          code:
-            type: string
-            example: CSE512
-        required:
-        - id
-        - title
-        - code
+      - title
+      - code
   errors:
     invalid_credentials:
       type: object
@@ -410,7 +376,9 @@ components:
               type: string
               example: success
             courses:
-              "$ref": "#/components/schemas/courses_list"
+              type: array
+              items:
+                "$ref": "#/components/schemas/course"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
