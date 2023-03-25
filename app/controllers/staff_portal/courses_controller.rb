@@ -3,7 +3,7 @@ class StaffPortal::CoursesController < ApplicationController
   #######
   # List Courses
   # GET: /staff_portal/courses
-  # Auth: Instructor
+  # Auth: Admin and Instructor
   #######
   def index
     records = policy_scope([:staff_portal, Course])
