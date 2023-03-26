@@ -47,7 +47,7 @@ en:
           attributes:
             staff_id:
               staff_not_in_faculty: 'Unfortunately this staff is not in the faculty and can not be assigned to the course'
-              staff_is_not_instructor: 'Unfortunately this staff is not instructor and can not be assigned to the course'
+              staff_can_not_be_assigned: 'Unfortunately this staff is not instructor or admin and can not be assigned to the course'
         course_group_student:
           attributes:
             student_id:

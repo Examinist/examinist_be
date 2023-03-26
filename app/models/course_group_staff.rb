@@ -4,7 +4,7 @@ class CourseGroupStaff < ApplicationRecord
   validates_presence_of :staff_id
   validates :staff_id, uniqueness: { scope: :course_group }
   validate :validate_staff_in_faculty
-  validate :validate_staff_is_instructor
+  validate :validate_staff_ability_to_be_assigned
 
   #Associations
   belongs_to :course_group
@@ -17,8 +17,8 @@ class CourseGroupStaff < ApplicationRecord
     errors.add(:staff_id, :staff_not_in_faculty) unless staff.faculty_id == course_group.course_faculty_id
   end
 
-  def validate_staff_is_instructor
-    errors.add(:staff_id, :staff_is_not_instructor) unless staff.instructor?
+  def validate_staff_ability_to_be_assigned
+    errors.add(:staff_id, :staff_can_not_be_assigned) unless staff.instructor? || staff.admin?
   end
 end
 
