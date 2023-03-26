@@ -6,7 +6,7 @@ class Course < ApplicationRecord
   validates_presence_of :credit_hours
   validates :code, uniqueness: { scope: :faculty }
 
-  #Associations
+  # Associations
   belongs_to :faculty
   has_many :course_groups, dependent: :destroy
   has_many :students, -> { distinct }, through: :course_groups

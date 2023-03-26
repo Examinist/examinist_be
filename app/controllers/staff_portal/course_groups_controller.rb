@@ -1,5 +1,5 @@
 class StaffPortal::CourseGroupsController < ApplicationController
-  before_action :chech_authorization_policy
+  before_action :check_authorization_policy
   before_action :find_course, only: %i[index]
   #######
   # List Course Groups for a specific course
@@ -12,7 +12,7 @@ class StaffPortal::CourseGroupsController < ApplicationController
 
   private
 
-  def chech_authorization_policy
+  def check_authorization_policy
     authorize([:staff_portal, CourseGroup])
   end
 

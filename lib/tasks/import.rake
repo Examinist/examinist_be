@@ -14,12 +14,12 @@ namespace :import do
     p 'Students for each faculty are created'
   end
 
-  desc "Create 10 staffs for each faculty"
+  desc "Create 10 instructors for each faculty"
   task staffs: :environment do
     Faculty.all.each do |faculty|
-      FactoryBot.create_list(:staff, 10, faculty: faculty)
+      FactoryBot.create_list(:staff, 10, faculty: faculty, role: :instructor)
     end
-    p 'Staffs for each faculty are created'
+    p 'Instructors for each faculty are created'
   end
 
   desc "Create 5 courses for each faculty"
@@ -43,23 +43,29 @@ namespace :import do
     Course.all.each do |course|
       students_count = 0
       CourseGroup.where(course: course).each do |group|
-        group.add_students(Student.where(faculty: course.faculty).offset(students_count).limit(25))
+        Student.where(faculty: course.faculty).offset(students_count).limit(25).each do |student|
+          CourseGroupStudent.create!(student: student, course_group: group)
+        end
         students_count += 25
       end
     end
     p 'Students for each course groups are added'
   end
 
-  desc "Add 1 staff to each course group"
+  desc "Add 1 Instructor to each course group"
   task course_group_staffs: :environment do
-    Course.all.each do |course|
+    Faculty.all.each do |faculty|
       staffs_count = 0
-      CourseGroup.where(course: course).each do |group|
-        group.add_staffs(Staff.where(faculty: course.faculty).offset(staffs_count).limit(1))
-        staffs_count += 1
+      Course.where(faculty: faculty).each do |course|
+        CourseGroup.where(course: course).each do |group|
+          Staff.where(faculty: course.faculty).offset(staffs_count).limit(1).each do |staff|
+            CourseGroupStaff.create!(staff: staff, course_group: group)
+          end
+          staffs_count += 1
+        end
       end
     end
-    p 'Staffs for each course groups are added'
+    p 'Instructors for each course groups are added'
   end
 
   desc "Run all tasks"

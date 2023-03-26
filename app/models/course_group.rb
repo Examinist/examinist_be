@@ -5,21 +5,15 @@ class CourseGroup < ApplicationRecord
   validates_presence_of :end_date
   validates :name, uniqueness: { scope: :course }
 
-  #Associations
+  # Associations
   belongs_to :course
-  has_and_belongs_to_many :students, join_table: "course_group_students"
-  has_and_belongs_to_many :staffs, join_table: "course_group_staffs"
+  has_many :course_group_students
+  has_many :students, through: :course_group_students
+  has_many :course_group_staffs
+  has_many :staffs, through: :course_group_staffs
 
-  #Methods
-
-  #for add 1 or more students
-  def add_students(students_list)
-    students << students_list
-  end
-
-  def add_staffs(staffs_list)
-    staffs << staffs_list
-  end
+  # Delegations
+  delegate :faculty_id, to: :course, prefix: true
 end
 
 # == Schema Information

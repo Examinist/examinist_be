@@ -15,14 +15,14 @@ ActiveRecord::Schema.define(version: 2023_03_24_001008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "course_group_staffs", id: false, force: :cascade do |t|
+  create_table "course_group_staffs", force: :cascade do |t|
     t.bigint "course_group_id"
     t.bigint "staff_id"
     t.index ["course_group_id"], name: "index_course_group_staffs_on_course_group_id"
     t.index ["staff_id"], name: "index_course_group_staffs_on_staff_id"
   end
 
-  create_table "course_group_students", id: false, force: :cascade do |t|
+  create_table "course_group_students", force: :cascade do |t|
     t.bigint "course_group_id"
     t.bigint "student_id"
     t.index ["course_group_id"], name: "index_course_group_students_on_course_group_id"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 2023_03_24_001008) do
     t.string "email"
     t.string "password_digest"
     t.boolean "must_change_password", default: true
-    t.integer "academic_id"
+    t.string "academic_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "faculty_id", null: false

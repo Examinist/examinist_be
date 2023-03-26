@@ -25,7 +25,7 @@ end
 #  username             :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  academic_id          :integer
+#  academic_id          :string
 #  faculty_id           :bigint           not null
 #
 # Indexes
