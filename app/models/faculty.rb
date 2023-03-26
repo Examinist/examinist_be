@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Faculty < ApplicationRecord
-
   # Validations
   validates :faculty_name,  uniqueness: { scope: :university_name }
   validates_presence_of :faculty_name

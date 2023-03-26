@@ -35,10 +35,24 @@ en:
       student: "Student"
       staff: "Staff"
       course: "Course"
+      course_group: "Course Group"
+      course_group_staff: "Course Group Staff"
     errors:
       not_found: "Can not find %{model} with id %{id}"
       course:
-          not_found_with_id: 'Unfortunately this course with id %{id} does not exist or you do not have permissions to access'
+        not_found_with_id: 'Unfortunately this course with id %{id} does not exist or you do not have permissions to access'
+
+      models:
+        course_group_staff:
+          attributes:
+            staff_id:
+              staff_not_in_faculty: 'Unfortunately this staff is not in the faculty and can not be assigned to the course'
+              staff_can_not_be_assigned: 'Unfortunately this staff is not instructor or admin and can not be assigned to the course'
+        course_group_student:
+          attributes:
+            student_id:
+              student_not_in_faculty: 'Unfortunately this student is not in the faculty and can not be enrolled into the course'
+              student_already_enrolled_into_course: 'This student has already been enrolled into this course in another group'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"

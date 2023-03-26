@@ -1,7 +1,7 @@
 class Student < ApplicationRecord
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
-  #Validations
+  # Validations
   has_secure_password validations: false
 
   validates_presence_of :first_name, :last_name, :username
@@ -12,9 +12,10 @@ class Student < ApplicationRecord
   validates_presence_of :faculty
   has_secure_password
 
-  #Associations
+  # Associations
   belongs_to :faculty
-  has_and_belongs_to_many :course_groups, join_table: "course_group_students"
+  has_many :course_group_students
+  has_many :course_groups, through: :course_group_students
   has_many :enrolled_courses, -> { distinct }, through: :course_groups, source: :course
 end
 
@@ -31,7 +32,7 @@ end
 #  username             :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  academic_id          :integer
+#  academic_id          :string
 #  faculty_id           :bigint           not null
 #
 # Indexes

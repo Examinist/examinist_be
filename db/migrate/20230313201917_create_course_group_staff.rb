@@ -1,6 +1,6 @@
 class CreateCourseGroupStaff < ActiveRecord::Migration[6.1]
   def change
-    create_table :course_group_staffs, id: false do |t|
+    create_table :course_group_staffs do |t|
       t.belongs_to :course_group
       t.belongs_to :staff
     end
