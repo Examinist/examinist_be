@@ -77,5 +77,5 @@ namespace :import do
   end
 
   desc "Run all tasks"
-  task all: %i[environment faculties students staffs courses course_groups course_group_students course_group_staffs]
+  task all: %i[environment faculties students staffs courses course_topics course_groups course_group_students course_group_staffs]
 end
