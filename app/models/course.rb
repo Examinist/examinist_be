@@ -11,6 +11,7 @@ class Course < ApplicationRecord
   has_many :course_groups, dependent: :destroy
   has_many :students, -> { distinct }, through: :course_groups
   has_many :staffs, -> { distinct }, through: :course_groups
+  has_many :topics
 end
 
 # == Schema Information
