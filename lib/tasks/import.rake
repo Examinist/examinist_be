@@ -30,6 +30,14 @@ namespace :import do
     p 'Courses for each faculty are created'
   end
 
+  desc "Create 1 topics for each course"
+  task course_topics: :environment do
+    Course.all.each do |course|
+      FactoryBot.create_list(:topic, 1, course: course)
+    end
+    p 'Topics for each course are created'
+  end
+
   desc "Create 2 groups for each course"
   task course_groups: :environment do
     Course.all.each do |course|
