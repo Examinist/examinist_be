@@ -9,6 +9,7 @@ end
 #
 # Table name: course_group_students
 #
+#  id              :bigint           not null, primary key
 #  course_group_id :bigint
 #  student_id      :bigint
 #
