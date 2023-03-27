@@ -17,8 +17,7 @@ class StaffPortal::TopicsController < ApplicationController
   # Auth: Admin and Instructor
   #######
   def create
-    topic = Topic.create!(create_topic_params.merge(course: @course))
-    
+    topic = @course.topics.create!(create_topic_params)
     render_response({ topic: StaffPortal::TopicSerializer.new(topic).to_j }, :created)
   end
 
@@ -50,19 +49,20 @@ class StaffPortal::TopicsController < ApplicationController
   end
 
   def find_course
-    records = policy_scope([:staff_portal, Course])
+    records = @current_user.assigned_courses
     @course = records.find(params[:course_id])
   end
 
   def create_topic_params
-    params.require(:topic).permit(:name)
+    params.permit(:name)
   end
 
   def find_topic
-    @topic = @course.topics.find(params[:id])
+    records = policy_scope([:staff_portal, Topic])
+    @topic = records.where(course: @course).find(params[:id])
   end
 
   def update_topic_params
-    params.require(:topic).permit(:name)
+    params.permit(:name)
   end
 end

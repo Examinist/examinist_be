@@ -29,9 +29,7 @@ RSpec.describe 'staff_portal/courses/{course_id}/topics', type: :request do
         run_test!
       end
     end
-  end
 
-  path '/staff_portal/courses/{course_id}/topics' do
     post 'Create Topic for a specific Course' do
       tags 'Staff Portal / Course Topics'
       description "This API is responsible for:\n
@@ -107,9 +105,7 @@ RSpec.describe 'staff_portal/courses/{course_id}/topics', type: :request do
         run_test!
       end
     end
-  end
 
-  path '/staff_portal/courses/{course_id}/topics/{id}' do
     delete 'Delete Topic for a specific Course' do
       tags 'Staff Portal / Course Topics'
       description "This API is responsible for:\n

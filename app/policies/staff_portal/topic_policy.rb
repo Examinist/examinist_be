@@ -14,4 +14,10 @@ class StaffPortal::TopicPolicy < ApplicationPolicy
   def destroy?
     @user.instructor? || @user.admin?
   end
+  
+  class Scope < Scope
+    def resolve
+      @user.course_topics
+    end
+  end
 end
