@@ -37,6 +37,7 @@ en:
       course: "Course"
       course_group: "Course Group"
       course_group_staff: "Course Group Staff"
+      topic: "Topic"
     errors:
       not_found: "Can not find %{model} with id %{id}"
       course:
