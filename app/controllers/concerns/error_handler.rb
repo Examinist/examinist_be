@@ -35,5 +35,9 @@ module ErrorHandler
     rescue_from Pundit::NotAuthorizedError do |err|
       raise_error(:unauthorized, I18n.t('authorization.unauthorized_action'))
     end
+
+    rescue_from ActiveModel::StrictValidationFailed do |err|
+      raise_error(:bad_request, err.message)
+    end
   end
 end
