@@ -39,6 +39,7 @@ en:
       coursegroupstaff: "Course Group Staff"
       coursegroupstudent: "Course Group Student"
       topic: "Topic"
+      questiontype: "Question Type"
     errors:
       not_found: "Can not find %{model} with id %{id}"
       course:
@@ -55,6 +56,12 @@ en:
             student_id:
               student_not_in_faculty: 'Unfortunately this student is not in the faculty and can not be enrolled into the course'
               student_already_enrolled_into_course: 'This student has already been enrolled into this course in another group'
+        question_type:
+          attributes:
+            name:
+              cant_be_changed: 'You can not change the name of default question types'
+            base:
+              cant_be_deleted: 'You can not delete default question types'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
