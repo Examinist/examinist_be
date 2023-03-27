@@ -97,9 +97,18 @@ ActiveRecord::Schema.define(version: 2023_03_26_210723) do
     t.index ["faculty_id"], name: "index_students_on_faculty_id"
   end
 
+  create_table "topics", force: :cascade do |t|
+    t.string "name"
+    t.bigint "course_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_topics_on_course_id"
+  end
+
   add_foreign_key "course_groups", "courses"
   add_foreign_key "courses", "faculties"
   add_foreign_key "question_types", "courses"
   add_foreign_key "staffs", "faculties"
   add_foreign_key "students", "faculties"
+  add_foreign_key "topics", "courses"
 end
