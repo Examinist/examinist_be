@@ -2,10 +2,10 @@
 
 class QuestionType < ApplicationRecord
 
-  # ====================================== enums ======================================
+  # constants
   DEFAULT_TYPES = %w[Essay MCQ Short_Answer T/F].freeze
 
-  # =================================== validations ===================================
+  # validations
   validates_presence_of :name
   validates_presence_of :easy_weight
   validates_presence_of :medium_weight
@@ -18,13 +18,13 @@ class QuestionType < ApplicationRecord
     validate :validate_can_change_name, if: :name_changed?
   end
 
-  # =================================== Associations ==================================
+  # Associations
   belongs_to :course
 
-  # ====================================== Hooks ======================================
+  # Hooks
   before_destroy :check_if_can_be_deleted
 
-  # ===================================== Methods =====================================
+  # Methods
   private
 
   def validate_can_change_name

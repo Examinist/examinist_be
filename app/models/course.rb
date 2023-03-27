@@ -1,13 +1,13 @@
 class Course < ApplicationRecord
 
-  # =================================== validations ===================================
+  # validations
   validates_presence_of :title
   validates_presence_of :code
   validates_presence_of :faculty_id
   validates_presence_of :credit_hours
   validates :code, uniqueness: { scope: :faculty }
 
-  # =================================== Associations ==================================
+  # Associations
   belongs_to :faculty
   has_many :course_groups, dependent: :destroy
   has_many :students, -> { distinct }, through: :course_groups
@@ -15,10 +15,10 @@ class Course < ApplicationRecord
   has_many :topics
   has_many :question_types, dependent: :destroy
 
-  # ====================================== Hooks ======================================
+  # Hooks
   after_create_commit :create_default_question_types
 
-  # ===================================== Methods =====================================
+  # Methods
   private
 
   def create_default_question_types
