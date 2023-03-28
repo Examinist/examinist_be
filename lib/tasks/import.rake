@@ -76,6 +76,19 @@ namespace :import do
     p 'Instructors for each course groups are added'
   end
 
+  desc "Add 1 Questions of each type to each course"
+  task questions: :environment do
+    Faculty.all.each do |faculty|
+      Course.where(faculty: faculty).each do |course|
+        FactoryBot.create(:question, :with_mcq, course: course)
+        FactoryBot.create(:question, :with_t_f, course: course)
+        FactoryBot.create(:question, :with_essay, course: course)
+        FactoryBot.create(:question, :with_short_answer, course: course)
+      end
+    end
+    p 'One Question for each type is added for each course'
+  end
+
   desc "Run all tasks"
-  task all: %i[environment faculties students staffs courses course_topics course_groups course_group_students course_group_staffs]
+  task all: %i[environment faculties students staffs courses course_topics course_groups course_group_students course_group_staffs questions]
 end

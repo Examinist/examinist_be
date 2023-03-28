@@ -7,6 +7,7 @@ class Topic < ApplicationRecord
 
   # Associations
   belongs_to :course
+  has_many :questions, dependent: :nullify
 end
 
 # == Schema Information
