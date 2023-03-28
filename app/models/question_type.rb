@@ -24,11 +24,15 @@ class QuestionType < ApplicationRecord
   # Hooks
   before_destroy :check_if_can_be_deleted
 
+  def is_deletable
+    !DEFAULT_TYPES.include?(self.name)
+  end
+
   # Methods
   private
 
   def validate_can_change_name
-    errors.add(:name, :cant_be_changed) if DEFAULT_TYPES.include?(name_was)
+    errors.add(:name, :cant_be_changed, strict: true) if DEFAULT_TYPES.include?(name_was)
   end
 
   def check_if_can_be_deleted

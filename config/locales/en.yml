@@ -57,7 +57,7 @@ en:
         question_type:
           attributes:
             name:
-              cant_be_changed: 'You can not change the name of default question types'
+              cant_be_changed: 'can not be changed as it is a default question type'
             base:
               cant_be_deleted: 'You can not delete default question types'
   authorization:
