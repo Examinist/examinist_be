@@ -17,7 +17,6 @@ class Course < ApplicationRecord
 
   # Hooks
   after_create_commit :create_default_question_types
-  accepts_nested_attributes_for :question_types
 
   # Methods
   private

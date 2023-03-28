@@ -98,6 +98,194 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/not_found"
+  "/staff_portal/courses/{course_id}/question_types":
+    get:
+      summary: List Question Types of a specific Course
+      tags:
+      - Staff Portal / Question Types
+      description: |-
+        This API is responsible for:
+
+              * Listing the Question Types of a specific Course
+      operationId: listQuestionTypes
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Question Types Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/question_types"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    post:
+      summary: Create Question Types for a specific Course
+      tags:
+      - Staff Portal / Question Types
+      description: |-
+        This API is responsible for:
+
+              * Creating a Question Type for a specific Course
+      operationId: createQuestionTYpe
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Question Type Created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/question_type"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+        '422':
+          description: attribute already taken for question types in this course
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/already_taken"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Modeling
+                easy_weight:
+                  type: integer
+                  example: 1
+                medium_weight:
+                  type: integer
+                  example: 2
+                hard_weight:
+                  type: integer
+                  example: 3
+              required:
+              - name
+  "/staff_portal/courses/{course_id}/question_types/{id}":
+    patch:
+      summary: Update Question Type for a specific Course
+      tags:
+      - Staff Portal / Question Types
+      description: |-
+        This API is responsible for:
+
+              * Updating a Question Type for a specific Course
+      operationId: updateQuestionType
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Question Type Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/question_type"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+        '400':
+          description: Name can not be changed as it is a default question type
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/bad_request"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Modeling
+                easy_weight:
+                  type: integer
+                  example: 1
+                medium_weight:
+                  type: integer
+                  example: 2
+                hard_weight:
+                  type: integer
+                  example: 3
+    delete:
+      summary: Delete Question Type for a specific Course
+      tags:
+      - Staff Portal / Question Types
+      description: |-
+        This API is responsible for:
+
+              * Deleting a Question Type for a specific Course
+      operationId: deleteQuestionType
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Question Type Deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/question_type"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+        '400':
+          description: You can not delete default question types
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/bad_request"
   "/staff_portal/sessions":
     post:
       summary: Staff Login
@@ -536,6 +724,27 @@ components:
       - credit_hours
       - instructors
       - students
+    question_type:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: MCQ
+        easy_weight:
+          type: integer
+          example: 1
+        medium_weight:
+          type: integer
+          example: 2
+        hard_weight:
+          type: integer
+          example: 3
+        is_deletable:
+          type: boolean
+          example: false
   errors:
     invalid_credentials:
       type: object
@@ -572,6 +781,24 @@ components:
         message: Invalid Credentials
       - status: error
         message: Unauthorized action!
+    already_taken:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Name has already been taken
+    bad_request:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Bad Request, Error message mentioned above
   responses:
     student_portal:
       show:
@@ -645,6 +872,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        question_type:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            question_type:
+              "$ref": "#/components/schemas/question_type"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
       list:
         courses_list:
           type: object
@@ -671,6 +911,21 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/course_group"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        question_types:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            question_types:
+              type: array
+              items:
+                "$ref": "#/components/schemas/question_type"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

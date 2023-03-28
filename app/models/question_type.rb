@@ -45,9 +45,9 @@ end
 # Table name: question_types
 #
 #  id            :bigint           not null, primary key
-#  easy_weight   :integer          default(0)
-#  hard_weight   :integer          default(0)
-#  medium_weight :integer          default(0)
+#  easy_weight   :integer          default(1)
+#  hard_weight   :integer          default(3)
+#  medium_weight :integer          default(2)
 #  name          :string
 #  ratio         :float            default(0.0)
 #  created_at    :datetime         not null
