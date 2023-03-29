@@ -12,7 +12,7 @@ class Question < ApplicationRecord
   validate :validate_size_of_choices, if: -> { number_of_choices.present? && mcq? }
   validate :validate_all_ids_in_same_course
   validate :validate_answer_type_with_question_type
-  validate :validate_correct_answer_with_question_type
+  validate :validate_correct_answer_with_answer_type
 
   # Associations
   belongs_to :topic
@@ -65,24 +65,24 @@ class Question < ApplicationRecord
   end
 
   def validate_all_ids_in_same_course
-    errors.add(:base, :invalid_topic) unless Topic.find(topic_id).course_id == course_id
-    errors.add(:base, :invalid_question_type) unless QuestionType.find(question_type_id).course_id == course_id
+    errors.add(:topic_id, :invalid_topic) unless Topic.find(topic_id).course_id == course_id
+    errors.add(:question_type_id, :invalid_question_type) unless QuestionType.find(question_type_id).course_id == course_id
   end
 
   def validate_answer_type_with_question_type
     case answer_type.to_sym
     when :single_answer
-      errors.add(:base, :invalid_answer_type) unless mcq? || true_or_false?
+      errors.add(:answer_type, :invalid_answer_type) unless mcq? || true_or_false?
     when :multiple_answers
-      errors.add(:base, :invalid_answer_type) unless mcq?
+      errors.add(:answer_type, :invalid_answer_type) unless mcq?
     when :text_answer
-      errors.add(:base, :invalid_answer_type) unless short_answer? || essay? || other_question_types?
+      errors.add(:answer_type, :invalid_answer_type) unless short_answer? || essay? || other_question_types?
     when :pdf_answer
-      errors.add(:base, :invalid_answer_type) unless essay? || other_question_types?
+      errors.add(:answer_type, :invalid_answer_type) unless essay? || other_question_types?
     end
   end
 
-  def validate_correct_answer_with_question_type
+  def validate_correct_answer_with_answer_type
     case answer_type.to_sym
     when :multiple_answers
       errors.add(:base, :invalid_correct_answer) unless correct_answers.size > 1

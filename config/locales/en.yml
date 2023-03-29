@@ -65,11 +65,14 @@ en:
               cant_be_deleted: 'You can not delete default question types'
         question:
           attributes:
+            topic_id:
+              invalid_topic: 'The topic of this question is either not in this course or does not exist at all'
+            question_type_id:
+              invalid_question_type: 'The question type of this question is either not in this course or does not exist at all'
+            answer_type:
+              invalid_answer_type: 'The answer type is not compatible with the question type'
             base:
               choices_size: 'Number of actual choice fields does not match the total number of choices given'
-              invalid_topic: 'The topic of this question is either not in this course or does not exist at all'
-              invalid_question_type: 'The question type of this question is either not in this course or does not exist at all'
-              invalid_answer_type: 'The answer type is not compatible with the question type'
               invalid_correct_answer: 'The number of correct answers given is not compatible with the answer type'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
