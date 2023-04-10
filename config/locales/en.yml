@@ -38,6 +38,9 @@ en:
       course_group: "Course Group"
       course_group_staff: "Course Group Staff"
       questiontype: "Question Type"
+      question: "Question"
+      correctanswer: "Correct Answer"
+      choice: "Choice"
     errors:
       not_found: "Can not find %{model} with id %{id}"
       course:
@@ -60,6 +63,17 @@ en:
               cant_be_changed: 'You can not change the name of default question types'
             base:
               cant_be_deleted: 'You can not delete default question types'
+        question:
+          attributes:
+            topic_id:
+              invalid_topic: 'The topic of this question is either not in this course or does not exist at all'
+            question_type_id:
+              invalid_question_type: 'The question type of this question is either not in this course or does not exist at all'
+            answer_type:
+              invalid_answer_type: 'The answer type is not compatible with the question type'
+            base:
+              choices_size: 'Number of actual choice fields does not match the total number of choices given'
+              invalid_correct_answer: 'The number of correct answers given is not compatible with the answer type'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
