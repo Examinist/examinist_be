@@ -202,6 +202,20 @@ RSpec.configure do |config|
               }
             },
             required: %w[id title code credit_hours instructors students]
+          },
+          question: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              header: { type: :string, example: 'header' },
+              difficulty: { type: :string, example: 'easy' },
+              number_of_choices: { type: :integer, example: 1 },
+              answer_type: { type: :string, example: 'type' },
+              question_type_id: { type: :integer, example: 1 },
+              topic_id: { type: :integer, example: 1 },
+              course: { '$ref' => '#/components/schemas/course' }
+            },
+            required: %w[id header difficulty number_of_choices answer_type question_type_id topic_id course]
           }
         },
         errors: {
@@ -315,6 +329,18 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
+              },
+              question: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  question: { '$ref' => '#/components/schemas/question' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
               }
             },
             list: {
@@ -340,6 +366,21 @@ RSpec.configure do |config|
                   course_groups: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/course_group' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              questions_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  questions: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/question' }
                   },
                   message: {
                     type: :string,
