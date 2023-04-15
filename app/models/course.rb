@@ -12,8 +12,8 @@ class Course < ApplicationRecord
   has_many :course_groups, dependent: :destroy
   has_many :students, -> { distinct }, through: :course_groups
   has_many :staffs, -> { distinct }, through: :course_groups
-  has_many :topics
-  has_many :question_types, dependent: :destroy
+  has_many :topics, dependent: :delete_all
+  has_many :question_types, dependent: :delete_all
   has_many :questions, dependent: :destroy
 
   # Hooks
