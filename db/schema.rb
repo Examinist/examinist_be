@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_26_210723) do
+ActiveRecord::Schema.define(version: 2023_03_28_020544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,9 +57,9 @@ ActiveRecord::Schema.define(version: 2023_03_26_210723) do
 
   create_table "question_types", force: :cascade do |t|
     t.string "name"
-    t.integer "easy_weight", default: 0
-    t.integer "medium_weight", default: 0
-    t.integer "hard_weight", default: 0
+    t.integer "easy_weight", default: 1
+    t.integer "medium_weight", default: 2
+    t.integer "hard_weight", default: 3
     t.float "ratio", default: 0.0
     t.bigint "course_id", null: false
     t.datetime "created_at", precision: 6, null: false

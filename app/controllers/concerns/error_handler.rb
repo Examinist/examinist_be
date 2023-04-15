@@ -21,6 +21,10 @@ module ErrorHandler
                                                           id: err.id))
     end
 
+    rescue_from ActiveRecord::RecordInvalid do |err|
+      raise_error(:unprocessable_entity, err.message.gsub("Validation failed: ", ""))
+    end
+
     # JSON response with message; Status code 401 - Unauthorized
     rescue_from ErrorHandler::AuthorizationError do |err|
       raise_error(:unauthorized, err.message)
@@ -38,6 +42,10 @@ module ErrorHandler
 
     rescue_from ActiveModel::StrictValidationFailed do |err|
       raise_error(:bad_request, err.message)
+    end
+
+    rescue_from JWT::DecodeError do |err|
+      raise_error(:unauthorized, I18n.t('authorization.decode_error'))
     end
   end
 end
