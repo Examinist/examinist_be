@@ -327,6 +327,158 @@ paths:
               required:
               - username
               - password
+  "/staff_portal/courses/{course_id}/topics":
+    get:
+      summary: List Topics of a specific Course
+      tags:
+      - Staff Portal / Course Topics
+      description: |-
+        This API is responsible for:
+
+              * Listing the Topics of a specific Course
+      operationId: listTopics
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Course Topics Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/topics_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    post:
+      summary: Create Topic for a specific Course
+      tags:
+      - Staff Portal / Course Topics
+      description: |-
+        This API is responsible for:
+
+              * Create a Topic for a specific Course
+      operationId: createTopic
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Topic Created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/topic"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: introduction
+              required:
+              - name
+  "/staff_portal/courses/{course_id}/topics/{id}":
+    patch:
+      summary: Update Topic for a specific Course
+      tags:
+      - Staff Portal / Course Topics
+      description: |-
+        This API is responsible for:
+
+              * Update a Topic for a specific Course
+      operationId: updateTopic
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Topic Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/topic"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: introduction
+    delete:
+      summary: Delete Topic for a specific Course
+      tags:
+      - Staff Portal / Course Topics
+      description: |-
+        This API is responsible for:
+
+              * Delete a Topic for a specific Course
+      operationId: deleteTopic
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Topic Deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/topic"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/student_portal/courses":
     get:
       summary: List Courses
@@ -724,6 +876,21 @@ components:
       - credit_hours
       - instructors
       - students
+    topic:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Introduction
+        course:
+          "$ref": "#/components/schemas/course"
+      required:
+      - id
+      - name
+      - course
     question_type:
       type: object
       properties:
@@ -872,6 +1039,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        topic:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            topic:
+              "$ref": "#/components/schemas/topic"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
         question_type:
           type: object
           properties:
@@ -911,6 +1091,21 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/course_group"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        topics_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            topic:
+              type: array
+              items:
+                "$ref": "#/components/schemas/topic"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

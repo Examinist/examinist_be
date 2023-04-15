@@ -35,8 +35,10 @@ en:
       student: "Student"
       staff: "Staff"
       course: "Course"
-      course_group: "Course Group"
-      course_group_staff: "Course Group Staff"
+      coursegroup: "Course Group"
+      coursegroupstaff: "Course Group Staff"
+      coursegroupstudent: "Course Group Student"
+      topic: "Topic"
       questiontype: "Question Type"
     errors:
       not_found: "Can not find %{model} with id %{id}"
