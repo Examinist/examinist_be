@@ -13,7 +13,7 @@ class Course < ApplicationRecord
   has_many :students, -> { distinct }, through: :course_groups
   has_many :staffs, -> { distinct }, through: :course_groups
   has_many :topics, dependent: :delete_all
-  has_many :question_types, dependent: :destroy
+  has_many :question_types, dependent: :delete_all
 
   # Hooks
   after_create_commit :create_default_question_types

@@ -21,6 +21,7 @@ class Staff < ApplicationRecord
   has_many :course_groups, through: :course_group_staffs
   has_many :assigned_courses, -> { distinct }, through: :course_groups, source: :course
   has_many :course_topics, through: :assigned_courses, source: :topics
+  has_many :course_question_types, through: :assigned_courses, source: :question_types
 end
 
 # == Schema Information
