@@ -324,7 +324,6 @@ paths:
           - easy
           - medium
           - hard
-          example: easy
         description: Filter qusetions by difficulty
       - "$ref": "#/components/global_parameters/page_param"
       security:
@@ -1197,6 +1196,18 @@ components:
         name:
           type: string
           example: Introduction
+      required:
+      - id
+      - name
+    detailed_topic:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Introduction
         course:
           "$ref": "#/components/schemas/course"
       required:
@@ -1224,6 +1235,30 @@ components:
         is_deletable:
           type: boolean
           example: false
+    choice:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        choice:
+          type: string
+          example: choice
+      required:
+      - id
+      - choice
+    correct_answer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        answer:
+          type: string
+          example: answer
+      required:
+      - id
+      - choice
     question:
       type: object
       properties:
@@ -1235,19 +1270,75 @@ components:
           example: header
         difficulty:
           type: string
+          enum:
+          - easy
+          - medium
+          - hard
           example: easy
         number_of_choices:
           type: integer
           example: 1
         answer_type:
           type: string
-          example: type
-        question_type_id:
+          enum:
+          - single_answer
+          - multiple_answers
+          - text_answer
+          - pdf_answer
+          example: multiple_answers
+        question_type:
+          "$ref": "#/components/schemas/question_type"
+        topic:
+          "$ref": "#/components/schemas/topic"
+        choices:
+          "$ref": "#/components/schemas/choice"
+        correct_answers:
+          "$ref": "#/components/schemas/correct_answer"
+      required:
+      - id
+      - header
+      - difficulty
+      - number_of_choices
+      - answer_type
+      - question_type
+      - topic
+      - choices
+      - correct_answers
+    detailed_question:
+      type: object
+      properties:
+        id:
           type: integer
           example: 1
-        topic_id:
+        header:
+          type: string
+          example: header
+        difficulty:
+          type: string
+          enum:
+          - easy
+          - medium
+          - hard
+          example: easy
+        number_of_choices:
           type: integer
           example: 1
+        answer_type:
+          type: string
+          enum:
+          - single_answer
+          - multiple_answers
+          - text_answer
+          - pdf_answer
+          example: multiple_answers
+        question_type:
+          "$ref": "#/components/schemas/question_type"
+        topic:
+          "$ref": "#/components/schemas/topic"
+        choices:
+          "$ref": "#/components/schemas/choice"
+        correct_answers:
+          "$ref": "#/components/schemas/correct_answer"
         course:
           "$ref": "#/components/schemas/course"
       required:
@@ -1256,8 +1347,10 @@ components:
       - difficulty
       - number_of_choices
       - answer_type
-      - question_type_id
-      - topic_id
+      - question_type
+      - topic
+      - choices
+      - correct_answers
       - course
   errors:
     invalid_credentials:
@@ -1393,7 +1486,7 @@ components:
               type: string
               example: success
             topic:
-              "$ref": "#/components/schemas/topic"
+              "$ref": "#/components/schemas/detailed_topic"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
@@ -1419,7 +1512,7 @@ components:
               type: string
               example: success
             question:
-              "$ref": "#/components/schemas/question"
+              "$ref": "#/components/schemas/detailed_question"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
@@ -1462,7 +1555,7 @@ components:
             status:
               type: string
               example: success
-            topic:
+            topics:
               type: array
               items:
                 "$ref": "#/components/schemas/topic"

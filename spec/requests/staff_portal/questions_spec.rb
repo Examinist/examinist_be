@@ -18,7 +18,7 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
                 description: 'Filter qusetions by topic id'
       parameter name: :filter_by_question_type_id, in: :query, schema: { type: :integer, example: 1 },
                 description: 'Filter qusetions by question type id'
-      parameter name: :filter_by_difficulty, in: :query, schema: { type: :string, enum: %w[easy medium hard], example: 'easy' },
+      parameter name: :filter_by_difficulty, in: :query, schema: { type: :string, enum: %w[easy medium hard] },
                 description: 'Filter qusetions by difficulty'
 
       parameter '$ref' => '#/components/global_parameters/page_param'

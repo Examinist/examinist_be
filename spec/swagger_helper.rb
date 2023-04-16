@@ -208,6 +208,14 @@ RSpec.configure do |config|
             properties: {
               id: { type: :integer, example: 1 },
               name: { type: :string, example: 'Introduction' },
+            },
+            required: %w[id name]
+          },
+          detailed_topic: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Introduction' },
               course: { '$ref' => '#/components/schemas/course' }
             },
             required: %w[id name course]
@@ -223,19 +231,52 @@ RSpec.configure do |config|
               is_deletable:{ type: :boolean, example: false}
             }
           },
+          choice: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              choice: { type: :string, example: 'choice' }
+            },
+            required: %w[id choice]
+          },
+          correct_answer: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              answer: { type: :string, example: 'answer' }
+            },
+            required: %w[id choice]
+          },
           question: {
             type: 'object',
             properties: {
               id: { type: :integer, example: 1 },
               header: { type: :string, example: 'header' },
-              difficulty: { type: :string, example: 'easy' },
+              difficulty: { type: :string, enum: %w[easy medium hard], example: 'easy' },
               number_of_choices: { type: :integer, example: 1 },
-              answer_type: { type: :string, example: 'type' },
-              question_type_id: { type: :integer, example: 1 },
-              topic_id: { type: :integer, example: 1 },
+              answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers'},
+              question_type: { '$ref' => '#/components/schemas/question_type' },
+              topic: { '$ref' => '#/components/schemas/topic' },
+              choices: { '$ref' => '#/components/schemas/choice' },
+              correct_answers: { '$ref' => '#/components/schemas/correct_answer' }
+            },
+            required: %w[id header difficulty number_of_choices answer_type question_type topic choices correct_answers]
+          },
+          detailed_question: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              header: { type: :string, example: 'header' },
+              difficulty: { type: :string, enum: %w[easy medium hard], example: 'easy' },
+              number_of_choices: { type: :integer, example: 1 },
+              answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers'},
+              question_type: { '$ref' => '#/components/schemas/question_type' },
+              topic: { '$ref' => '#/components/schemas/topic' },
+              choices: { '$ref' => '#/components/schemas/choice' },
+              correct_answers: { '$ref' => '#/components/schemas/correct_answer' },
               course: { '$ref' => '#/components/schemas/course' }
             },
-            required: %w[id header difficulty number_of_choices answer_type question_type_id topic_id course]
+            required: %w[id header difficulty number_of_choices answer_type question_type topic choices correct_answers course]
           }
         },
         errors: {
@@ -370,7 +411,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  topic: { '$ref' => '#/components/schemas/topic' },
+                  topic: { '$ref' => '#/components/schemas/detailed_topic' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
@@ -394,7 +435,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  question: { '$ref' => '#/components/schemas/question' },
+                  question: { '$ref' => '#/components/schemas/detailed_question' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
@@ -438,7 +479,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  topic: { 
+                  topics: { 
                     type: :array,
                     items: { '$ref' => '#/components/schemas/topic' } 
                   },

@@ -24,7 +24,7 @@ class StaffPortal::QuestionsController < ApplicationController
   #######
   def create
     question = @course.questions.create!(create_question_params)
-    render_response({ question: StaffPortal::QuestionSerializer.new(question).to_j }, :created)
+    render_response({ question: StaffPortal::QuestionSerializer.new(question, show_details: true).to_j }, :created)
   end
 
   #######
@@ -34,7 +34,7 @@ class StaffPortal::QuestionsController < ApplicationController
   #######
   def update
     @question.update!(update_question_params)
-    render_response({ question: StaffPortal::QuestionSerializer.new(@question).to_j }, :ok)
+    render_response({ question: StaffPortal::QuestionSerializer.new(@question, show_details: true).to_j }, :ok)
   end
 
   #######
@@ -44,7 +44,7 @@ class StaffPortal::QuestionsController < ApplicationController
   #######
   def destroy
     @question.destroy!
-    render_response({ question: StaffPortal::QuestionSerializer.new(@question).to_j }, :ok)
+    render_response({ question: StaffPortal::QuestionSerializer.new(@question, show_details: true).to_j }, :ok)
   end
 
   private
