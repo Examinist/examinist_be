@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(version: 2023_04_17_000435) do
   end
 
   create_table "exam_templates", force: :cascade do |t|
-    t.string "name"
     t.float "easy", default: 60.0
     t.float "medium", default: 30.0
     t.float "hard", default: 10.0

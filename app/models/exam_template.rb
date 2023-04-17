@@ -33,7 +33,6 @@ end
 #  easy       :float            default(60.0)
 #  hard       :float            default(10.0)
 #  medium     :float            default(30.0)
-#  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  course_id  :bigint           not null
