@@ -62,6 +62,10 @@ en:
               cant_be_changed: 'can not be changed as it is a default question type'
             base:
               cant_be_deleted: 'You can not delete default question types'
+        exam_template:
+          attributes:
+            base:
+              invalid_ratios: 'Invalid Ratios!! Sum does not add up to 100%'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
