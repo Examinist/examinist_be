@@ -286,6 +286,317 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/bad_request"
+  "/staff_portal/courses/{course_id}/questions":
+    get:
+      summary: List Questions of a specific Course
+      tags:
+      - Staff Portal / Course Questions
+      description: |-
+        This API is responsible for:
+
+              * Listing the Questions of a specific Course
+      operationId: listQuestions
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      - name: filter_by_header
+        in: query
+        schema:
+          type: string
+          example: header
+        description: Search qusetions by header
+      - name: filter_by_topic_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        description: Filter qusetions by topic id
+      - name: filter_by_question_type_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        description: Filter qusetions by question type id
+      - name: filter_by_difficulty
+        in: query
+        schema:
+          type: string
+          enum:
+          - easy
+          - medium
+          - hard
+        description: Filter qusetions by difficulty
+      - "$ref": "#/components/global_parameters/page_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Course Questions Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/questions_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    post:
+      summary: Create Question for a specific Course
+      tags:
+      - Staff Portal / Course Questions
+      description: |-
+        This API is responsible for:
+
+              * Create a Question for a specific Course
+      operationId: createQuestion
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Question Created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/question"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                header:
+                  type: string
+                  example: header
+                difficulty:
+                  type: string
+                  example: easy
+                number_of_choices:
+                  type: integer
+                  example: 4
+                answer_type:
+                  type: string
+                  enum:
+                  - single_answer
+                  - multiple_answers
+                  - text_answer
+                  - pdf_answer
+                  example: multiple_answers
+                question_type_id:
+                  type: integer
+                  example: 1
+                topic_id:
+                  type: integer
+                  example: 1
+                choices_attributes:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        choice:
+                          type: string
+                          example: choice one
+                    - type: object
+                      properties:
+                        choice:
+                          type: string
+                          example: choice two
+                    - type: object
+                      properties:
+                        choice:
+                          type: string
+                          example: choice three
+                    - type: object
+                      properties:
+                        choice:
+                          type: string
+                          example: choice four
+                correct_answers_attributes:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        answer:
+                          type: string
+                          example: choice one
+                    - type: object
+                      properties:
+                        answer:
+                          type: string
+                          example: choice two
+              required:
+              - header
+              - difficulty
+              - number_of_choices
+              - answer_type
+              - question_type_id
+              - topic_id
+              - correct_answers_attributes
+  "/staff_portal/courses/{course_id}/questions/{id}":
+    patch:
+      summary: Update Question for a specific Course
+      tags:
+      - Staff Portal / Course Questions
+      description: |-
+        This API is responsible for:
+
+              * Update a Question for a specific Course
+      operationId: updateQuestion
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Question Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/question"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                header:
+                  type: string
+                  example: header
+                difficulty:
+                  type: string
+                  example: easy
+                number_of_choices:
+                  type: integer
+                  example: 4
+                answer_type:
+                  type: string
+                  enum:
+                  - single_answer
+                  - multiple_answers
+                  - text_answer
+                  - pdf_answer
+                  example: multiple_answers
+                topic_id:
+                  type: integer
+                  example: 1
+                choices_attributes:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        choice:
+                          type: string
+                          example: choice one modified
+                    - type: object
+                      properties:
+                        choice:
+                          type: string
+                          example: choice five
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 7
+                        _destroy:
+                          type: boolean
+                          example: true
+                correct_answers_attributes:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        answer:
+                          type: string
+                          example: choice one modifiied
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 7
+                        _destroy:
+                          type: boolean
+                          example: true
+                    - type: object
+                      properties:
+                        answer:
+                          type: string
+                          example: choice five
+    delete:
+      summary: Delete Question for a specific Course
+      tags:
+      - Staff Portal / Course Questions
+      description: |-
+        This API is responsible for:
+
+              * Delete a Question for a specific Course
+      operationId: deleteQuestion
+      parameters:
+      - "$ref": "#/components/global_parameters/course_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Question Deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/question"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/staff_portal/sessions":
     post:
       summary: Staff Login
@@ -885,6 +1196,18 @@ components:
         name:
           type: string
           example: Introduction
+      required:
+      - id
+      - name
+    detailed_topic:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Introduction
         course:
           "$ref": "#/components/schemas/course"
       required:
@@ -912,6 +1235,123 @@ components:
         is_deletable:
           type: boolean
           example: false
+    choice:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        choice:
+          type: string
+          example: choice
+      required:
+      - id
+      - choice
+    correct_answer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        answer:
+          type: string
+          example: answer
+      required:
+      - id
+      - choice
+    question:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        header:
+          type: string
+          example: header
+        difficulty:
+          type: string
+          enum:
+          - easy
+          - medium
+          - hard
+          example: easy
+        number_of_choices:
+          type: integer
+          example: 1
+        answer_type:
+          type: string
+          enum:
+          - single_answer
+          - multiple_answers
+          - text_answer
+          - pdf_answer
+          example: multiple_answers
+        question_type:
+          "$ref": "#/components/schemas/question_type"
+        topic:
+          "$ref": "#/components/schemas/topic"
+        choices:
+          "$ref": "#/components/schemas/choice"
+        correct_answers:
+          "$ref": "#/components/schemas/correct_answer"
+      required:
+      - id
+      - header
+      - difficulty
+      - number_of_choices
+      - answer_type
+      - question_type
+      - topic
+      - choices
+      - correct_answers
+    detailed_question:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        header:
+          type: string
+          example: header
+        difficulty:
+          type: string
+          enum:
+          - easy
+          - medium
+          - hard
+          example: easy
+        number_of_choices:
+          type: integer
+          example: 1
+        answer_type:
+          type: string
+          enum:
+          - single_answer
+          - multiple_answers
+          - text_answer
+          - pdf_answer
+          example: multiple_answers
+        question_type:
+          "$ref": "#/components/schemas/question_type"
+        topic:
+          "$ref": "#/components/schemas/topic"
+        choices:
+          "$ref": "#/components/schemas/choice"
+        correct_answers:
+          "$ref": "#/components/schemas/correct_answer"
+        course:
+          "$ref": "#/components/schemas/course"
+      required:
+      - id
+      - header
+      - difficulty
+      - number_of_choices
+      - answer_type
+      - question_type
+      - topic
+      - choices
+      - correct_answers
+      - course
   errors:
     invalid_credentials:
       type: object
@@ -1046,7 +1486,7 @@ components:
               type: string
               example: success
             topic:
-              "$ref": "#/components/schemas/topic"
+              "$ref": "#/components/schemas/detailed_topic"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
@@ -1060,6 +1500,19 @@ components:
               example: success
             question_type:
               "$ref": "#/components/schemas/question_type"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        question:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            question:
+              "$ref": "#/components/schemas/detailed_question"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
@@ -1102,7 +1555,7 @@ components:
             status:
               type: string
               example: success
-            topic:
+            topics:
               type: array
               items:
                 "$ref": "#/components/schemas/topic"
@@ -1121,6 +1574,21 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/question_type"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        questions_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            questions:
+              type: array
+              items:
+                "$ref": "#/components/schemas/question"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
