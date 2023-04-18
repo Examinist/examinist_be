@@ -7,9 +7,7 @@ class Question < ApplicationRecord
 
   # validations
   validates_presence_of :question_type_id, :course_id, :topic_id, :header, :difficulty, :answer_type, :correct_answers
-  validates_presence_of :number_of_choices, if: -> { true_or_false? && mcq? }
   validates_presence_of :choices, if: :mcq?
-  validate :validate_size_of_choices, if: -> { number_of_choices.present? && mcq? }
   validate :validate_all_ids_in_same_course
   validate :validate_answer_type_with_question_type
   validate :validate_correct_answer_with_answer_type
@@ -24,10 +22,6 @@ class Question < ApplicationRecord
   # Nested Attributes
   accepts_nested_attributes_for :choices, allow_destroy: true
   accepts_nested_attributes_for :correct_answers, allow_destroy: true
-
-  # Hooks
-  before_validation :set_number_of_choices, if: :true_or_false?
-  after_create :set_choices, if: :true_or_false?
 
   # Scopes
   scope :filter_by_header, ->(header) { where('header ILIKE :header', header: "%#{header}%") }
@@ -58,12 +52,6 @@ class Question < ApplicationRecord
 
   private
 
-  def validate_size_of_choices
-    return if choices.size == number_of_choices
-
-    errors.add(:base, :choices_size)
-  end
-
   def validate_all_ids_in_same_course
     errors.add(:topic_id, :invalid_topic) unless Topic.find(topic_id).course_id == course_id
     errors.add(:question_type_id, :invalid_question_type) unless QuestionType.find(question_type_id).course_id == course_id
@@ -90,32 +78,21 @@ class Question < ApplicationRecord
       errors.add(:base, :invalid_correct_answer) unless correct_answers.size == 1
     end
   end
-
-  def set_number_of_choices
-    self.number_of_choices = QuestionType::DEFAULT_T_F_CHOICES.size
-  end
-
-  def set_choices
-    QuestionType::DEFAULT_T_F_CHOICES.each do |choice|
-      choices.create(choice: choice)
-    end
-  end
 end
 
 # == Schema Information
 #
 # Table name: questions
 #
-#  id                :bigint           not null, primary key
-#  answer_type       :integer
-#  difficulty        :integer
-#  header            :text
-#  number_of_choices :integer
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  course_id         :bigint           not null
-#  question_type_id  :bigint
-#  topic_id          :bigint
+#  id               :bigint           not null, primary key
+#  answer_type      :integer
+#  difficulty       :integer
+#  header           :text
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  course_id        :bigint           not null
+#  question_type_id :bigint
+#  topic_id         :bigint
 #
 # Indexes
 #

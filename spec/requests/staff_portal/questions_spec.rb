@@ -57,7 +57,6 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
         properties: {
           header: { type: :string, example: 'header' },
           difficulty: { type: :string, example: 'easy' },
-          number_of_choices: { type: :integer, example: 4 },
           answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers' },
           question_type_id: { type: :integer, example: 1 },
           topic_id: { type: :integer, example: 1 },
@@ -112,7 +111,7 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
             }
           }
         },
-        required: %w[header difficulty number_of_choices answer_type question_type_id topic_id correct_answers_attributes]
+        required: %w[header difficulty answer_type question_type_id topic_id correct_answers_attributes]
       }
 
       security [staff_auth: []]
@@ -153,7 +152,6 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
         properties: {
           header: { type: :string, example: 'header' },
           difficulty: { type: :string, example: 'easy' },
-          number_of_choices: { type: :integer, example: 4 },
           answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers' },
           topic_id: { type: :integer, example: 1 },
           choices_attributes: {

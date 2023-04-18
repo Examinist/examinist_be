@@ -1,6 +1,6 @@
 class StaffPortal::QuestionSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :header, :difficulty, :number_of_choices, :answer_type
+  attributes :id, :header, :difficulty, :answer_type
 
   attribute :topic do |object|
     StaffPortal::TopicSerializer.new(object.topic).to_j

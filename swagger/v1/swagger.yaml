@@ -391,9 +391,6 @@ paths:
                 difficulty:
                   type: string
                   example: easy
-                number_of_choices:
-                  type: integer
-                  example: 4
                 answer_type:
                   type: string
                   enum:
@@ -449,7 +446,6 @@ paths:
               required:
               - header
               - difficulty
-              - number_of_choices
               - answer_type
               - question_type_id
               - topic_id
@@ -500,9 +496,6 @@ paths:
                 difficulty:
                   type: string
                   example: easy
-                number_of_choices:
-                  type: integer
-                  example: 4
                 answer_type:
                   type: string
                   enum:
@@ -1275,9 +1268,6 @@ components:
           - medium
           - hard
           example: easy
-        number_of_choices:
-          type: integer
-          example: 1
         answer_type:
           type: string
           enum:
@@ -1298,7 +1288,6 @@ components:
       - id
       - header
       - difficulty
-      - number_of_choices
       - answer_type
       - question_type
       - topic
@@ -1320,9 +1309,6 @@ components:
           - medium
           - hard
           example: easy
-        number_of_choices:
-          type: integer
-          example: 1
         answer_type:
           type: string
           enum:
@@ -1345,7 +1331,6 @@ components:
       - id
       - header
       - difficulty
-      - number_of_choices
       - answer_type
       - question_type
       - topic
