@@ -36,6 +36,10 @@ FactoryBot.define do
           question.choices << FactoryBot.build(:choice, question: question)
         end
       else
+        if question.true_or_false?
+          question.choices << FactoryBot.build(:choice, question: question, choice: 'True')
+          question.choices << FactoryBot.build(:choice, question: question, choice: 'False')
+        end
         question.correct_answers << FactoryBot.build(:correct_answer, question: question)
       end
     end

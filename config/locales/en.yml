@@ -71,6 +71,7 @@ en:
               invalid_topic: 'The topic of this question is either not in this course or does not exist at all'
             question_type_id:
               invalid_question_type: 'The question type of this question is either not in this course or does not exist at all'
+              invalid_update: 'Can't update Question Type of the question
             answer_type:
               invalid_answer_type: 'The answer type is not compatible with the question type'
             base:

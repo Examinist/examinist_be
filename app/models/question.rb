@@ -29,6 +29,9 @@ class Question < ApplicationRecord
   scope :filter_by_question_type_id, ->(question_type_id) { where(question_type_id: question_type_id) }
   scope :filter_by_difficulty, ->(difficulty) { where(difficulty: difficulty.to_sym) }
 
+  # Hooks
+  before_update :check_question_type_change
+
   # Methods
   def mcq?
     question_type_id == QuestionType.where(course_id: course_id).find_by_name('MCQ').id
@@ -52,6 +55,10 @@ class Question < ApplicationRecord
 
   private
 
+  def check_question_type_change
+    errors.add(:question_type_id, :invalid_update) if question_type_id_changed?
+  end
+
   def validate_all_ids_in_same_course
     errors.add(:topic_id, :invalid_topic) unless Topic.find(topic_id).course_id == course_id
     errors.add(:question_type_id, :invalid_question_type) unless QuestionType.find(question_type_id).course_id == course_id
@@ -73,7 +80,7 @@ class Question < ApplicationRecord
   def validate_correct_answer_with_answer_type
     case answer_type.to_sym
     when :multiple_answers
-      errors.add(:base, :invalid_correct_answer) unless correct_answers.size > 1
+      errors.add(:base, :invalid_correct_answer) unless correct_answers.size >= 1
     else
       errors.add(:base, :invalid_correct_answer) unless correct_answers.size == 1
     end
