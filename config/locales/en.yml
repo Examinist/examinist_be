@@ -71,12 +71,13 @@ en:
               invalid_topic: 'The topic of this question is either not in this course or does not exist at all'
             question_type_id:
               invalid_question_type: 'The question type of this question is either not in this course or does not exist at all'
-              invalid_update: 'Can't update Question Type of the question
+              invalid_update: 'Can not update Question Type of the question'
             answer_type:
               invalid_answer_type: 'The answer type is not compatible with the question type'
             base:
               choices_size: 'Number of actual choice fields does not match the total number of choices given'
               invalid_correct_answer: 'The number of correct answers given is not compatible with the answer type'
+              blank_correct_answer: "Correct Answer can't be blank"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"

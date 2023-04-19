@@ -1,16 +1,16 @@
 # frozen_string_literal: true
-
+# Question.create!(question_type_id:2, course_id:1, topic_id:1, header:"dummy", difficulty:0, answer_type:1, choices_attributes:[{choice:"x", is_answer: true},{choice:"y", is_answer: true}, {choice:"z"}])
+# Question.first.update!(choices_attributes:[{id:2, is_answer:false},{id:3, is_answer:false}])
 class Question < ApplicationRecord
   # Enum
   enum difficulty: { easy: 0, medium: 1, hard: 2 }
   enum answer_type: { single_answer: 0, multiple_answers: 1, text_answer: 2, pdf_answer: 3 }
 
   # validations
-  validates_presence_of :question_type_id, :course_id, :topic_id, :header, :difficulty, :answer_type, :correct_answers
-  validates_presence_of :choices, if: :mcq?
+  validates_presence_of :question_type_id, :course_id, :topic_id, :header, :difficulty, :answer_type
+  validates_presence_of :choices, if: -> { mcq? || true_or_false? }
   validate :validate_all_ids_in_same_course
   validate :validate_answer_type_with_question_type
-  validate :validate_correct_answer_with_answer_type
 
   # Associations
   belongs_to :topic
@@ -30,7 +30,11 @@ class Question < ApplicationRecord
   scope :filter_by_difficulty, ->(difficulty) { where(difficulty: difficulty.to_sym) }
 
   # Hooks
+  after_create :check_presence_of_correct_answer
+  after_create :validate_correct_answer_with_answer_type
   before_update :check_question_type_change
+  after_update :check_presence_of_correct_answer
+  after_update :validate_correct_answer_with_answer_type
 
   # Methods
   def mcq?
@@ -56,7 +60,7 @@ class Question < ApplicationRecord
   private
 
   def check_question_type_change
-    errors.add(:question_type_id, :invalid_update) if question_type_id_changed?
+    errors.add(:question_type_id, :invalid_update, strict: true) if question_type_id_changed?
   end
 
   def validate_all_ids_in_same_course
@@ -80,10 +84,14 @@ class Question < ApplicationRecord
   def validate_correct_answer_with_answer_type
     case answer_type.to_sym
     when :multiple_answers
-      errors.add(:base, :invalid_correct_answer) unless correct_answers.size >= 1
+      errors.add(:base, :invalid_correct_answer, strict: true) unless correct_answers.size >= 1
     else
-      errors.add(:base, :invalid_correct_answer) unless correct_answers.size == 1
+      errors.add(:base, :invalid_correct_answer, strict: true) unless correct_answers.size == 1
     end
+  end
+
+  def check_presence_of_correct_answer
+    errors.add(:base, :blank_correct_answer, strict: true) unless correct_answers.present?
   end
 end
 

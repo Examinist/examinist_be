@@ -28,18 +28,13 @@ FactoryBot.define do
 
     after(:build) do |question|
       if question.mcq?
-        5.times.each do
-          question.correct_answers << FactoryBot.build(:correct_answer, question: question)
-        end
-
-        3.times.each do
-          question.choices << FactoryBot.build(:choice, question: question)
-        end
+        question.choices << FactoryBot.build(:choice, question: question)
+        question.choices << FactoryBot.build(:choice, :answer, question: question)
+        question.choices << FactoryBot.build(:choice, :answer, question: question)
+      elsif question.true_or_false?
+        question.choices << FactoryBot.build(:choice, :answer, question: question, choice: 'True')
+        question.choices << FactoryBot.build(:choice, question: question, choice: 'False')
       else
-        if question.true_or_false?
-          question.choices << FactoryBot.build(:choice, question: question, choice: 'True')
-          question.choices << FactoryBot.build(:choice, question: question, choice: 'False')
-        end
         question.correct_answers << FactoryBot.build(:correct_answer, question: question)
       end
     end
