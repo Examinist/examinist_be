@@ -235,15 +235,17 @@ RSpec.configure do |config|
             type: 'object',
             properties: {
               id: { type: :integer, example: 1 },
-              choice: { type: :string, example: 'choice' }
+              choice: { type: :string, example: 'choice' },
+              is_answer: { type: :boolean, example: true }
             },
-            required: %w[id choice]
+            required: %w[id choice is_answer]
           },
           correct_answer: {
             type: 'object',
             properties: {
               id: { type: :integer, example: 1 },
-              answer: { type: :string, example: 'answer' }
+              answer: { type: :string, example: 'answer' },
+              choice_id: { type: :integer, example: 1 }
             },
             required: %w[id choice]
           },

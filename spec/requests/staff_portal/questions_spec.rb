@@ -67,7 +67,8 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
                 {
                   type: :object,
                   properties: {
-                    choice: { type: :string, example: 'choice one' }
+                    choice: { type: :string, example: 'choice one' },
+                    is_answer: { type: :boolean, example: true }
                   },
                 },
                 {
@@ -79,7 +80,8 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
                 {
                   type: :object,
                   properties: {
-                    choice: { type: :string, example: 'choice three' }
+                    choice: { type: :string, example: 'choice three' },
+                    is_answer: { type: :boolean, example: true }
                   }
                 },
                 {
@@ -94,20 +96,9 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
           correct_answers_attributes: {
             type: :array,
             items: {
-              oneOf: [
-                {
-                  type: :object,
-                  properties: {
-                    answer: { type: :string, example: 'choice one' }
-                  },
-                },
-                {
-                  type: :object,
-                  properties: {
-                    answer: { type: :string, example: 'choice two' }
-                  }
-                }
-              ]
+              properties: {
+                answer: { type: :string, example: 'answer' }
+              }
             }
           }
         },

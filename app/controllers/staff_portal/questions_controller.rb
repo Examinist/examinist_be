@@ -68,12 +68,12 @@ class StaffPortal::QuestionsController < ApplicationController
   end
 
   def create_question_params
-    params.permit(:header, :difficulty, :answer_type, :question_type_id, :topic_id, choices_attributes: [:choice],
+    params.permit(:header, :difficulty, :answer_type, :question_type_id, :topic_id, choices_attributes: %i[choice is_answer],
                   correct_answers_attributes: [:answer])
   end
 
   def update_question_params
-    params.permit(:header, :difficulty, :answer_type, :topic_id, choices_attributes: %i[id _destroy choice],
+    params.permit(:header, :difficulty, :answer_type, :topic_id, choices_attributes: %i[id _destroy choice is_answer],
                   correct_answers_attributes: %i[id _destroy answer])
   end
 end
