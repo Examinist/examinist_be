@@ -4,6 +4,10 @@ FactoryBot.define do
   factory :choice do
     question
     choice { Faker::Lorem.sentence }
+
+    trait :answer do
+      is_answer { true }
+    end
   end
 end
 
@@ -13,6 +17,7 @@ end
 #
 #  id          :bigint           not null, primary key
 #  choice      :text
+#  is_answer   :boolean          default(FALSE)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  question_id :bigint           not null

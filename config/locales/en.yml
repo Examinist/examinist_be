@@ -77,6 +77,7 @@ en:
             base:
               choices_size: 'Number of actual choice fields does not match the total number of choices given'
               invalid_correct_answer: 'The number of correct answers given is not compatible with the answer type'
+              blank_correct_answer: "Correct Answer can't be blank"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
