@@ -253,14 +253,13 @@ RSpec.configure do |config|
               id: { type: :integer, example: 1 },
               header: { type: :string, example: 'header' },
               difficulty: { type: :string, enum: %w[easy medium hard], example: 'easy' },
-              number_of_choices: { type: :integer, example: 1 },
               answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers'},
               question_type: { '$ref' => '#/components/schemas/question_type' },
               topic: { '$ref' => '#/components/schemas/topic' },
               choices: { '$ref' => '#/components/schemas/choice' },
               correct_answers: { '$ref' => '#/components/schemas/correct_answer' }
             },
-            required: %w[id header difficulty number_of_choices answer_type question_type topic choices correct_answers]
+            required: %w[id header difficulty answer_type question_type topic choices correct_answers]
           },
           detailed_question: {
             type: 'object',
@@ -268,7 +267,6 @@ RSpec.configure do |config|
               id: { type: :integer, example: 1 },
               header: { type: :string, example: 'header' },
               difficulty: { type: :string, enum: %w[easy medium hard], example: 'easy' },
-              number_of_choices: { type: :integer, example: 1 },
               answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers'},
               question_type: { '$ref' => '#/components/schemas/question_type' },
               topic: { '$ref' => '#/components/schemas/topic' },
@@ -276,7 +274,7 @@ RSpec.configure do |config|
               correct_answers: { '$ref' => '#/components/schemas/correct_answer' },
               course: { '$ref' => '#/components/schemas/course' }
             },
-            required: %w[id header difficulty number_of_choices answer_type question_type topic choices correct_answers course]
+            required: %w[id header difficulty answer_type question_type topic choices correct_answers course]
           }
         },
         errors: {

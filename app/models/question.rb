@@ -7,9 +7,7 @@ class Question < ApplicationRecord
 
   # validations
   validates_presence_of :question_type_id, :course_id, :topic_id, :header, :difficulty, :answer_type, :correct_answers
-  validates_presence_of :number_of_choices, if: -> { true_or_false? && mcq? }
   validates_presence_of :choices, if: :mcq?
-  validate :validate_size_of_choices, if: -> { number_of_choices.present? && mcq? }
   validate :validate_all_ids_in_same_course
   validate :validate_answer_type_with_question_type
   validate :validate_correct_answer_with_answer_type
@@ -25,15 +23,14 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :choices, allow_destroy: true
   accepts_nested_attributes_for :correct_answers, allow_destroy: true
 
-  # Hooks
-  before_validation :set_number_of_choices, if: :true_or_false?
-  after_create :set_choices, if: :true_or_false?
-
   # Scopes
   scope :filter_by_header, ->(header) { where('header ILIKE :header', header: "%#{header}%") }
   scope :filter_by_topic_id, ->(topic_id) { where(topic_id: topic_id) }
   scope :filter_by_question_type_id, ->(question_type_id) { where(question_type_id: question_type_id) }
   scope :filter_by_difficulty, ->(difficulty) { where(difficulty: difficulty.to_sym) }
+
+  # Hooks
+  before_update :check_question_type_change
 
   # Methods
   def mcq?
@@ -58,10 +55,8 @@ class Question < ApplicationRecord
 
   private
 
-  def validate_size_of_choices
-    return if choices.size == number_of_choices
-
-    errors.add(:base, :choices_size)
+  def check_question_type_change
+    errors.add(:question_type_id, :invalid_update) if question_type_id_changed?
   end
 
   def validate_all_ids_in_same_course
@@ -85,19 +80,9 @@ class Question < ApplicationRecord
   def validate_correct_answer_with_answer_type
     case answer_type.to_sym
     when :multiple_answers
-      errors.add(:base, :invalid_correct_answer) unless correct_answers.size > 1
+      errors.add(:base, :invalid_correct_answer) unless correct_answers.size >= 1
     else
       errors.add(:base, :invalid_correct_answer) unless correct_answers.size == 1
-    end
-  end
-
-  def set_number_of_choices
-    self.number_of_choices = QuestionType::DEFAULT_T_F_CHOICES.size
-  end
-
-  def set_choices
-    QuestionType::DEFAULT_T_F_CHOICES.each do |choice|
-      choices.create(choice: choice)
     end
   end
 end
@@ -106,16 +91,15 @@ end
 #
 # Table name: questions
 #
-#  id                :bigint           not null, primary key
-#  answer_type       :integer
-#  difficulty        :integer
-#  header            :text
-#  number_of_choices :integer
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  course_id         :bigint           not null
-#  question_type_id  :bigint
-#  topic_id          :bigint
+#  id               :bigint           not null, primary key
+#  answer_type      :integer
+#  difficulty       :integer
+#  header           :text
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  course_id        :bigint           not null
+#  question_type_id :bigint
+#  topic_id         :bigint
 #
 # Indexes
 #

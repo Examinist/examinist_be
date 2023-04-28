@@ -7,13 +7,11 @@ FactoryBot.define do
     trait :with_mcq do
       question_type_id { |evaluator| QuestionType.where(course: evaluator.course).find_by_name('MCQ').id }
       answer_type { 'multiple_answers' }
-      number_of_choices { 3 }
     end
 
     trait :with_t_f do
       question_type_id { |evaluator| QuestionType.where(course: evaluator.course).find_by_name('T/F').id }
       answer_type { 'single_answer' }
-      number_of_choices { 2 }
     end
 
     trait :with_essay do
@@ -34,10 +32,14 @@ FactoryBot.define do
           question.correct_answers << FactoryBot.build(:correct_answer, question: question)
         end
 
-        question.number_of_choices.times.each do
+        3.times.each do
           question.choices << FactoryBot.build(:choice, question: question)
         end
       else
+        if question.true_or_false?
+          question.choices << FactoryBot.build(:choice, question: question, choice: 'True')
+          question.choices << FactoryBot.build(:choice, question: question, choice: 'False')
+        end
         question.correct_answers << FactoryBot.build(:correct_answer, question: question)
       end
     end
@@ -48,16 +50,15 @@ end
 #
 # Table name: questions
 #
-#  id                :bigint           not null, primary key
-#  answer_type       :integer
-#  difficulty        :integer
-#  header            :text
-#  number_of_choices :integer
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  course_id         :bigint           not null
-#  question_type_id  :bigint
-#  topic_id          :bigint
+#  id               :bigint           not null, primary key
+#  answer_type      :integer
+#  difficulty       :integer
+#  header           :text
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  course_id        :bigint           not null
+#  question_type_id :bigint
+#  topic_id         :bigint
 #
 # Indexes
 #
