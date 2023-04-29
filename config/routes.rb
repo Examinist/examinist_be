@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :course_groups, only: %i[index]
       resources :question_types, only: %i[index create update destroy]
       resources :topics, only: %i[index create update destroy]
+      resources :questions, only: %i[index create update destroy]
     end
   end
 

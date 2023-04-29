@@ -4,6 +4,7 @@ class QuestionType < ApplicationRecord
 
   # constants
   DEFAULT_TYPES = %w[Essay MCQ Short_Answer T/F].freeze
+  DEFAULT_T_F_CHOICES = %w[True False].freeze
 
   # validations
   validates_presence_of :name
@@ -20,6 +21,7 @@ class QuestionType < ApplicationRecord
 
   # Associations
   belongs_to :course
+  has_many :questions, dependent: :nullify
 
   # Hooks
   before_destroy :check_if_can_be_deleted
