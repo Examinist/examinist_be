@@ -56,7 +56,7 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
         type: :object,
         properties: {
           header: { type: :string, example: 'header' },
-          difficulty: { type: :string, example: 'easy' },
+          difficulty: { type: :string, example: 'medium' },
           answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers' },
           question_type_id: { type: :integer, example: 1 },
           topic_id: { type: :integer, example: 1 },
@@ -67,7 +67,8 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
                 {
                   type: :object,
                   properties: {
-                    choice: { type: :string, example: 'choice one' }
+                    choice: { type: :string, example: 'choice one' },
+                    is_answer: { type: :boolean, example: true }
                   },
                 },
                 {
@@ -79,7 +80,8 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
                 {
                   type: :object,
                   properties: {
-                    choice: { type: :string, example: 'choice three' }
+                    choice: { type: :string, example: 'choice three' },
+                    is_answer: { type: :boolean, example: true }
                   }
                 },
                 {
@@ -91,27 +93,8 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
               ]
             }
           },
-          correct_answers_attributes: {
-            type: :array,
-            items: {
-              oneOf: [
-                {
-                  type: :object,
-                  properties: {
-                    answer: { type: :string, example: 'choice one' }
-                  },
-                },
-                {
-                  type: :object,
-                  properties: {
-                    answer: { type: :string, example: 'choice two' }
-                  }
-                }
-              ]
-            }
-          }
         },
-        required: %w[header difficulty answer_type question_type_id topic_id correct_answers_attributes]
+        required: %w[header difficulty answer_type question_type_id topic_id choices_attributes]
       }
 
       security [staff_auth: []]
@@ -152,7 +135,6 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
         properties: {
           header: { type: :string, example: 'header' },
           difficulty: { type: :string, example: 'easy' },
-          answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers' },
           topic_id: { type: :integer, example: 1 },
           choices_attributes: {
             type: :array,
@@ -168,41 +150,30 @@ RSpec.describe 'staff_portal/courses/{course_id}/questions', type: :request do
                 {
                   type: :object,
                   properties: {
-                    choice: { type: :string, example: 'choice five' }
-                  }
-                },
-                {
-                  type: :object,
-                  properties: {
-                    id: { type: :integer, example: 7 },
-                    _destroy: { type: :boolean, example: true }
-                  }
-                }
-              ]
-            }
-          },
-          correct_answers_attributes: {
-            type: :array,
-            items: {
-              oneOf: [
-                {
-                  type: :object,
-                  properties: {
                     id: { type: :integer, example: 5 },
-                    answer: { type: :string, example: 'choice one modifiied' }
+                    choice: { type: :string, example: 'choice one modified' },
+                    is_answer: { type: :boolean, example: true }
                   },
                 },
                 {
                   type: :object,
                   properties: {
-                    id: { type: :integer, example: 7 },
-                    _destroy: { type: :boolean, example: true }
+                    id: { type: :integer, example: 5 },
+                    is_answer: { type: :boolean, example: false }
+                  },
+                },
+                {
+                  type: :object,
+                  properties: {
+                    choice: { type: :string, example: 'choice five' },
+                    is_answer: { type: :boolean, example: true }
                   }
                 },
                 {
                   type: :object,
                   properties: {
-                    answer: { type: :string, example: 'choice five' }
+                    id: { type: :integer, example: 7 },
+                    _destroy: { type: :boolean, example: true }
                   }
                 }
               ]

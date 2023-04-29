@@ -390,7 +390,7 @@ paths:
                   example: header
                 difficulty:
                   type: string
-                  example: easy
+                  example: medium
                 answer_type:
                   type: string
                   enum:
@@ -414,6 +414,9 @@ paths:
                         choice:
                           type: string
                           example: choice one
+                        is_answer:
+                          type: boolean
+                          example: true
                     - type: object
                       properties:
                         choice:
@@ -424,32 +427,21 @@ paths:
                         choice:
                           type: string
                           example: choice three
+                        is_answer:
+                          type: boolean
+                          example: true
                     - type: object
                       properties:
                         choice:
                           type: string
                           example: choice four
-                correct_answers_attributes:
-                  type: array
-                  items:
-                    oneOf:
-                    - type: object
-                      properties:
-                        answer:
-                          type: string
-                          example: choice one
-                    - type: object
-                      properties:
-                        answer:
-                          type: string
-                          example: choice two
               required:
               - header
               - difficulty
               - answer_type
               - question_type_id
               - topic_id
-              - correct_answers_attributes
+              - choices_attributes
   "/staff_portal/courses/{course_id}/questions/{id}":
     patch:
       summary: Update Question for a specific Course
@@ -496,14 +488,6 @@ paths:
                 difficulty:
                   type: string
                   example: easy
-                answer_type:
-                  type: string
-                  enum:
-                  - single_answer
-                  - multiple_answers
-                  - text_answer
-                  - pdf_answer
-                  example: multiple_answers
                 topic_id:
                   type: integer
                   example: 1
@@ -521,29 +505,31 @@ paths:
                           example: choice one modified
                     - type: object
                       properties:
-                        choice:
-                          type: string
-                          example: choice five
-                    - type: object
-                      properties:
                         id:
                           type: integer
-                          example: 7
-                        _destroy:
+                          example: 5
+                        choice:
+                          type: string
+                          example: choice one modified
+                        is_answer:
                           type: boolean
                           example: true
-                correct_answers_attributes:
-                  type: array
-                  items:
-                    oneOf:
                     - type: object
                       properties:
                         id:
                           type: integer
                           example: 5
-                        answer:
+                        is_answer:
+                          type: boolean
+                          example: false
+                    - type: object
+                      properties:
+                        choice:
                           type: string
-                          example: choice one modifiied
+                          example: choice five
+                        is_answer:
+                          type: boolean
+                          example: true
                     - type: object
                       properties:
                         id:
@@ -552,11 +538,6 @@ paths:
                         _destroy:
                           type: boolean
                           example: true
-                    - type: object
-                      properties:
-                        answer:
-                          type: string
-                          example: choice five
     delete:
       summary: Delete Question for a specific Course
       tags:
@@ -1237,9 +1218,13 @@ components:
         choice:
           type: string
           example: choice
+        is_answer:
+          type: boolean
+          example: true
       required:
       - id
       - choice
+      - is_answer
     correct_answer:
       type: object
       properties:
@@ -1249,6 +1234,9 @@ components:
         answer:
           type: string
           example: answer
+        choice_id:
+          type: integer
+          example: 1
       required:
       - id
       - choice
