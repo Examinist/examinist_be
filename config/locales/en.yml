@@ -78,11 +78,19 @@ en:
               choices_size: 'Number of actual choice fields does not match the total number of choices given'
               invalid_correct_answer: 'The number of correct answers given is not compatible with the answer type'
               blank_correct_answer: "Correct Answer can't be blank"
+        exam_template:
+          attributes:
+            base:
+              invalid_ratios: 'Invalid Ratios!! Sum does not add up to 100%'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
     unauthorized_action: 'Unauthorized Action!'
   authentication: 
     invalid_credentials: "Invalid credentials"
+
+  exam_template:
+    must_update_template: 'Weight ratios are not set! please update the course template'
+
 
 

@@ -67,6 +67,16 @@ ActiveRecord::Schema.define(version: 2023_04_19_003123) do
     t.index ["faculty_id"], name: "index_courses_on_faculty_id"
   end
 
+  create_table "exam_templates", force: :cascade do |t|
+    t.float "easy"
+    t.float "medium"
+    t.float "hard"
+    t.bigint "course_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_exam_templates_on_course_id"
+  end
+
   create_table "faculties", force: :cascade do |t|
     t.string "faculty_name"
     t.string "university_name"
@@ -143,6 +153,7 @@ ActiveRecord::Schema.define(version: 2023_04_19_003123) do
   add_foreign_key "correct_answers", "questions"
   add_foreign_key "course_groups", "courses"
   add_foreign_key "courses", "faculties"
+  add_foreign_key "exam_templates", "courses"
   add_foreign_key "question_types", "courses"
   add_foreign_key "questions", "courses"
   add_foreign_key "questions", "question_types"
