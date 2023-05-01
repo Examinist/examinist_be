@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(version: 2023_04_17_000435) do
   end
 
   create_table "exam_templates", force: :cascade do |t|
-    t.float "easy", default: 60.0
-    t.float "medium", default: 30.0
-    t.float "hard", default: 10.0
+    t.float "easy"
+    t.float "medium"
+    t.float "hard"
     t.bigint "course_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

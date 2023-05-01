@@ -73,4 +73,8 @@ en:
   authentication: 
     invalid_credentials: "Invalid credentials"
 
+  exam_template:
+    must_update_template: 'Weight ratios are not set! please update the course template'
+
+
 
