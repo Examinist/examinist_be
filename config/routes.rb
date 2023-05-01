@@ -9,6 +9,10 @@ Rails.application.routes.draw do
       resources :course_groups, only: %i[index]
       resources :question_types, only: %i[index create update destroy]
       resources :topics, only: %i[index create update destroy]
+      member do
+        get :exam_template
+        patch :update_exam_template
+      end
     end
   end
 

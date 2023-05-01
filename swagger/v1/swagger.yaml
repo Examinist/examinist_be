@@ -98,6 +98,97 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/not_found"
+  "/staff_portal/courses/{id}/exam_template":
+    get:
+      summary: Show Course Exam Template
+      tags:
+      - Staff Portal / Course
+      description: |-
+        This API is responsible for:
+
+              * Showing the Course Exam Template
+      operationId: showCourseExamTemplate
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Course Exam Template Showed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/exam_template"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this course or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+  "/staff_portal/courses/{id}/update_exam_template":
+    patch:
+      summary: Update Course Exam Template
+      tags:
+      - Staff Portal / Course
+      description: |-
+        This API is responsible for:
+
+              * Updating the Course Exam Template
+      operationId: updateCourseExamTemplate
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Course Exam Template Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/exam_template"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this course or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                easy:
+                  type: float
+                  example: 70
+                medium:
+                  type: float
+                  example: 25
+                hard:
+                  type: float
+                  example: 5
+                question_types_attributes:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: bigint
+                        example: 1
+                      ratio:
+                        type: float
+                        example: 25
   "/staff_portal/courses/{course_id}/question_types":
     get:
       summary: List Question Types of a specific Course
@@ -912,6 +1003,30 @@ components:
         is_deletable:
           type: boolean
           example: false
+        ratio:
+          type: float
+          example: 25
+    exam_template:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        easy:
+          type: float
+          example: 60.0
+        medium:
+          type: float
+          example: 30.0
+        hard:
+          type: float
+          example: 10.0
+        question_types:
+          type: array
+          items:
+            "$ref": "#/components/schemas/question_type"
+        course:
+          "$ref": "#/components/schemas/course"
   errors:
     invalid_credentials:
       type: object
@@ -1060,6 +1175,19 @@ components:
               example: success
             question_type:
               "$ref": "#/components/schemas/question_type"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        exam_template:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            exam_template:
+              "$ref": "#/components/schemas/exam_template"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

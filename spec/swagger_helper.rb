@@ -220,7 +220,22 @@ RSpec.configure do |config|
               easy_weight: { type: :integer, example: 1 },
               medium_weight: { type: :integer, example: 2 },
               hard_weight: { type: :integer, example: 3 },
-              is_deletable:{ type: :boolean, example: false}
+              is_deletable:{ type: :boolean, example: false},
+              ratio: { type: :float, example: 25 }
+            }
+          },
+          exam_template: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              easy: { type: :float, example: 60.0 },
+              medium: { type: :float, example: 30.0 },
+              hard: { type: :float, example: 10.0 },
+              question_types: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/question_type' }
+              },
+              course: { '$ref' => '#/components/schemas/course' }
             }
           }
         },
@@ -369,6 +384,18 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   question_type: { '$ref' => '#/components/schemas/question_type' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              exam_template:{
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  exam_template: { '$ref' => '#/components/schemas/exam_template' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
