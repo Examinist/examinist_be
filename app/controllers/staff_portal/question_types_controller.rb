@@ -9,8 +9,7 @@ class StaffPortal::QuestionTypesController < ApplicationController
   # Auth: Admin and Instructor assigned to this course
   #######
   def index
-    render_response({ question_types: StaffPortal::QuestionTypeSerializer.new(@course.question_types,
-                                                                              params: { show_details: true }).to_j }, :ok)
+    render_response({ question_types: StaffPortal::QuestionTypeSerializer.new(@course.question_types).to_j }, :ok)
   end
 
   #######
@@ -20,8 +19,7 @@ class StaffPortal::QuestionTypesController < ApplicationController
   #######
   def create
     question_type = @course.question_types.create!(create_question_type_params)
-    render_response({ question_type: StaffPortal::QuestionTypeSerializer.new(question_type,
-                                                                             params: { show_details: true }).to_j }, :created)
+    render_response({ question_type: StaffPortal::QuestionTypeSerializer.new(question_type).to_j }, :created)
   end
 
   #######
@@ -31,8 +29,7 @@ class StaffPortal::QuestionTypesController < ApplicationController
   #######
   def update
     @question_type.update!(update_question_type_params)
-    render_response({ question_type: StaffPortal::QuestionTypeSerializer.new(@question_type, 
-                                                                             params: { show_details: true }).to_j }, :ok)
+    render_response({ question_type: StaffPortal::QuestionTypeSerializer.new(@question_type).to_j }, :ok)
   end
 
   #######
@@ -42,8 +39,7 @@ class StaffPortal::QuestionTypesController < ApplicationController
   #######
   def destroy
     @question_type.destroy!
-    render_response({ question_type: StaffPortal::QuestionTypeSerializer.new(@question_type, 
-                                                                             params: { show_details: true }).to_j }, :ok)
+    render_response({ question_type: StaffPortal::QuestionTypeSerializer.new(@question_type).to_j }, :ok)
   end
 
   private

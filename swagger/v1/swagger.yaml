@@ -1003,12 +1003,6 @@ components:
         is_deletable:
           type: boolean
           example: false
-    question_type_template:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
         ratio:
           type: float
           example: 25
@@ -1027,13 +1021,12 @@ components:
         hard:
           type: float
           example: 10.0
-        course_id:
-          type: integer
-          example: 1
         question_types:
           type: array
           items:
-            "$ref": "#/components/schemas/question_type_template"
+            "$ref": "#/components/schemas/question_type"
+        course:
+          "$ref": "#/components/schemas/course"
   errors:
     invalid_credentials:
       type: object
