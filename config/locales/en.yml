@@ -84,7 +84,7 @@ en:
               invalid_ratios: 'Invalid Ratios!! Sum does not add up to 100%'
         exam: 
           attributes:
-            base:
+            status:
               invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"

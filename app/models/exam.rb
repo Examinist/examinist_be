@@ -8,7 +8,7 @@ class Exam < ApplicationRecord
   enum status: { unscheduled: 0, scheduled: 1, ongoing: 2, pending_grading: 3, graded: 4}, _default: 'unscheduled'
 
   # validations
-  validates_presence_of :title, :course, :total_score, :staff, :duration
+  validates_presence_of :title, :course, :staff, :duration
   with_options on: :update do
     validate :validate_state_transition, if: :will_save_change_to_status?
   end
@@ -26,11 +26,11 @@ class Exam < ApplicationRecord
   scope :filter_by_status, ->(status) { where(status: status) }
 
   # Hooks
-  before_validation :calculate_total_score, unless: ->{ is_auto }
   before_create :check_if_can_create
   before_update :raise_error, unless: ->{ will_save_change_to_status? || %w[unscheduled scheduled].include?(status_was) }
-  before_destroy :raise_error, unless: -> { %w[unscheduled].include? status }
-  after_update_commit :update_exam_stauts, if: :saved_change_to_starts_at?
+  before_destroy :raise_error, unless: -> { unscheduled? }
+  after_save :calculate_total_score, unless: ->{ is_auto }
+  after_update_commit :update_exam_status, if: :saved_change_to_starts_at?
   after_update_commit :end_exam, if: :saved_change_to_duration
 
   # Methods
@@ -43,7 +43,7 @@ class Exam < ApplicationRecord
   def validate_state_transition
     return if valid_status_transition?(status_was, status)
 
-    errors.add(:base, :invalid_status_transition, from: status_was, to: status)
+    errors.add(:status, :invalid_status_transition, from: status_was, to: status)
   end
 
   def calculate_total_score
@@ -61,7 +61,7 @@ class Exam < ApplicationRecord
     raise(ErrorHandler::GeneralRequestError, I18n.t('exam.cant_create'))
   end
 
-  def update_exam_stauts
+  def update_exam_status
     start_exam
     end_exam
   end

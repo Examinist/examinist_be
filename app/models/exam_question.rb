@@ -6,7 +6,7 @@ class ExamQuestion < ApplicationRecord
   # Associations
   belongs_to :exam
   belongs_to :question
-  has_one :question_type, through: :exam
+  has_one :question_type, through: :question
 
 end
 
