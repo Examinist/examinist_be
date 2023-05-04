@@ -82,6 +82,10 @@ en:
           attributes:
             base:
               invalid_ratios: 'Invalid Ratios!! Sum does not add up to 100%'
+        exam: 
+          attributes:
+            base:
+              invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
@@ -91,6 +95,7 @@ en:
 
   exam_template:
     must_update_template: 'Weight ratios are not set! please update the course template'
-
-
-
+  exam:  
+    cant_create: "You are not assigned to this course, you can't create an exam"
+    cant_update: "Exam can't be edited"
+    cant_delete: "Exam can't be deleted"
