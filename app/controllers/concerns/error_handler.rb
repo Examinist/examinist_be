@@ -6,6 +6,8 @@ module ErrorHandler
 
   class AuthorizationError < StandardError; end
 
+  class GeneralRequestError < StandardError; end
+
   def raise_error(status_code, error_msg)
     render(
       json: { status: "error" }.merge(message: error_msg),
@@ -46,6 +48,10 @@ module ErrorHandler
 
     rescue_from JWT::DecodeError do |err|
       raise_error(:unauthorized, I18n.t('authorization.decode_error'))
+    end
+
+    rescue_from ErrorHandler::GeneralRequestError do |err|
+      raise_error(:bad_request, err.message)
     end
   end
 end
