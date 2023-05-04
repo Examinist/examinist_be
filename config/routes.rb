@@ -11,10 +11,20 @@ Rails.application.routes.draw do
       resources :topics, only: %i[index create update destroy]
       resources :questions, only: %i[index create update destroy]
     end
+    resources :staffs do
+      collection do
+        get :user_info
+      end
+    end
   end
 
   namespace :student_portal do
     resources :sessions, only: %i[create destroy]
     resources :courses, only: %i[index show]
+    resources :students do
+      collection do
+        get :user_info
+      end
+    end
   end
 end

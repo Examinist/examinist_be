@@ -612,6 +612,31 @@ paths:
               required:
               - username
               - password
+  "/staff_portal/staffs/user_info":
+    get:
+      summary: Staff user info
+      tags:
+      - Staff Portal / Staff
+      description: |-
+        This API is responsible for:
+
+              * Getting user info from the header
+      operationId: userInfo
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: user info returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/staff"
+        '401':
+          description: Suspicious token. Authorization failed!
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
   "/staff_portal/courses/{course_id}/topics":
     get:
       summary: List Topics of a specific Course
@@ -865,6 +890,31 @@ paths:
               required:
               - username
               - password
+  "/student_portal/students/user_info":
+    get:
+      summary: Student user info
+      tags:
+      - Student Portal / Student
+      description: |-
+        This API is responsible for:
+
+              * Getting user info from the header
+      operationId: userInfo
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: user info returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/show/student"
+        '401':
+          description: Suspicious token. Authorization failed!
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
 servers:
 - url: http://localhost:3000
   variables:
@@ -940,12 +990,11 @@ components:
         username:
           type: string
           example: '18010083'
-        faculty_id:
-          type: integer
-          example: 1
         academic_id:
           type: string
           example: '18010083'
+        faculty:
+          "$ref": "#/components/schemas/faculty"
       required:
       - id
       - email
@@ -1024,12 +1073,11 @@ components:
         username:
           type: string
           example: jimmy
-        faculty_id:
-          type: integer
-          example: 1
         role:
           type: string
           example: instructor
+        faculty:
+          "$ref": "#/components/schemas/faculty"
       required:
       - id
       - email
@@ -1408,6 +1456,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        student:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            student:
+              "$ref": "#/components/schemas/detailed_student"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
       list:
         courses_list:
           type: object
@@ -1486,6 +1547,19 @@ components:
               example: success
             question:
               "$ref": "#/components/schemas/detailed_question"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        staff:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            student:
+              "$ref": "#/components/schemas/detailed_staff"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

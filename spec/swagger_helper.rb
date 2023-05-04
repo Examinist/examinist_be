@@ -95,8 +95,8 @@ RSpec.configure do |config|
                 first_name: { type: 'string', example: 'Ahmed'},
                 last_name: { type: 'string', example: 'Gamal' },
                 username: { type: 'string', example: '18010083' },
-                faculty_id: { type: 'integer', example: 1},
-                academic_id: { type: 'string', example: '18010083'}
+                academic_id: { type: 'string', example: '18010083'},
+                faculty: { '$ref' => '#/components/schemas/faculty'  }
             },
             required: %w[id email first_name last_name username faculty_id academic_id]
           },
@@ -131,8 +131,8 @@ RSpec.configure do |config|
                 first_name: { type: 'string', example: 'Ahmed'},
                 last_name: { type: 'string', example: 'Gamal' },
                 username: { type: 'string', example: 'jimmy' },
-                faculty_id: { type: 'integer', example: 1},
-                role: { type: 'string', example: 'instructor'}
+                role: { type: 'string', example: 'instructor'},
+                faculty: { '$ref' => '#/components/schemas/faculty'  }
             },
             required: %w[id email first_name last_name username faculty_id role]
           },
@@ -361,6 +361,18 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
+              },
+              student: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  student: { '$ref' => '#/components/schemas/detailed_student' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
               }
             },
             list: {
@@ -436,6 +448,18 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   question: { '$ref' => '#/components/schemas/detailed_question' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              staff: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  student: { '$ref' => '#/components/schemas/detailed_staff' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
