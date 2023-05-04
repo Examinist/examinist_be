@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_19_003123) do
+ActiveRecord::Schema.define(version: 2023_05_04_214429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,14 +67,40 @@ ActiveRecord::Schema.define(version: 2023_04_19_003123) do
     t.index ["faculty_id"], name: "index_courses_on_faculty_id"
   end
 
+  create_table "exam_questions", force: :cascade do |t|
+    t.bigint "exam_id", null: false
+    t.bigint "question_id", null: false
+    t.integer "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["exam_id"], name: "index_exam_questions_on_exam_id"
+    t.index ["question_id"], name: "index_exam_questions_on_question_id"
+  end
+
   create_table "exam_templates", force: :cascade do |t|
-    t.float "easy"
-    t.float "medium"
-    t.float "hard"
+    t.float "easy", default: 60.0
+    t.float "medium", default: 30.0
+    t.float "hard", default: 10.0
     t.bigint "course_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["course_id"], name: "index_exam_templates_on_course_id"
+  end
+
+  create_table "exams", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "staff_id", null: false
+    t.string "title"
+    t.datetime "starts_at"
+    t.integer "duration"
+    t.integer "total_score"
+    t.integer "status"
+    t.boolean "is_auto", default: false
+    t.boolean "has_models", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_exams_on_course_id"
+    t.index ["staff_id"], name: "index_exams_on_staff_id"
   end
 
   create_table "faculties", force: :cascade do |t|
@@ -153,7 +179,11 @@ ActiveRecord::Schema.define(version: 2023_04_19_003123) do
   add_foreign_key "correct_answers", "questions"
   add_foreign_key "course_groups", "courses"
   add_foreign_key "courses", "faculties"
+  add_foreign_key "exam_questions", "exams"
+  add_foreign_key "exam_questions", "questions"
   add_foreign_key "exam_templates", "courses"
+  add_foreign_key "exams", "courses"
+  add_foreign_key "exams", "staffs"
   add_foreign_key "question_types", "courses"
   add_foreign_key "questions", "courses"
   add_foreign_key "questions", "question_types"
