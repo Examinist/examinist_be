@@ -381,7 +381,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  student: { '$ref' => '#/components/schemas/detailed_student' },
+                  student: { '$ref' => '#/components/schemas/student' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
@@ -486,7 +486,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  student: { '$ref' => '#/components/schemas/detailed_staff' },
+                  student: { '$ref' => '#/components/schemas/staff' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
