@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
+  Sidekiq::Web.use ActionDispatch::Cookies
+  Sidekiq::Web.use ActionDispatch::Session::CookieStore, key: '_interslice_session'
+  # Sidekiq route
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    username == 'examinist' && password == 'password'
+  end
+  mount Sidekiq::Web => '/sidekiq'
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   namespace :staff_portal do

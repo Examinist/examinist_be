@@ -37,9 +37,9 @@ end
 # Table name: exam_templates
 #
 #  id         :bigint           not null, primary key
-#  easy       :float
-#  hard       :float
-#  medium     :float
+#  easy       :float            default(60.0)
+#  hard       :float            default(10.0)
+#  medium     :float            default(30.0)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  course_id  :bigint           not null

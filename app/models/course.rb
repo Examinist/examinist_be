@@ -16,6 +16,7 @@ class Course < ApplicationRecord
   has_many :topics, dependent: :delete_all
   has_many :question_types, dependent: :delete_all
   has_many :questions, dependent: :destroy
+  has_many :exams, dependent: :destroy
 
   # Hooks
   after_create :create_exam_template
