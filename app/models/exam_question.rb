@@ -2,6 +2,8 @@ class ExamQuestion < ApplicationRecord
   
   # Validations
   validates_presence_of :score, :exam, :question
+  validates :question_id, uniqueness: { scope: :exam, message: I18n.t('activerecord.errors.duplicated',
+                                                               model_name: 'exam_questions') }
 
   # Associations
   belongs_to :exam
@@ -23,8 +25,9 @@ end
 #
 # Indexes
 #
-#  index_exam_questions_on_exam_id      (exam_id)
-#  index_exam_questions_on_question_id  (question_id)
+#  index_exam_questions_on_exam_id                  (exam_id)
+#  index_exam_questions_on_exam_id_and_question_id  (exam_id,question_id) UNIQUE
+#  index_exam_questions_on_question_id              (question_id)
 #
 # Foreign Keys
 #

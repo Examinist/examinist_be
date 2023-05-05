@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_04_130305) do
+ActiveRecord::Schema.define(version: 2023_05_05_002622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,14 +73,15 @@ ActiveRecord::Schema.define(version: 2023_05_04_130305) do
     t.integer "score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["exam_id", "question_id"], name: "index_exam_questions_on_exam_id_and_question_id", unique: true
     t.index ["exam_id"], name: "index_exam_questions_on_exam_id"
     t.index ["question_id"], name: "index_exam_questions_on_question_id"
   end
 
   create_table "exam_templates", force: :cascade do |t|
-    t.float "easy"
-    t.float "medium"
-    t.float "hard"
+    t.float "easy", default: 60.0
+    t.float "medium", default: 30.0
+    t.float "hard", default: 10.0
     t.bigint "course_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
