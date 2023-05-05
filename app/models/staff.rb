@@ -23,6 +23,7 @@ class Staff < ApplicationRecord
   has_many :course_topics, through: :assigned_courses, source: :topics
   has_many :course_question_types, through: :assigned_courses, source: :question_types
   has_many :course_questions, through: :assigned_courses, source: :questions
+  has_many :exams, dependent: :destroy
 end
 
 # == Schema Information

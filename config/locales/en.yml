@@ -45,6 +45,7 @@ en:
       choice: "Choice"
     errors:
       not_found: "Can not find %{model} with id %{id}"
+      duplicated: "Duplication, there are two %{model_name} that are the same"
       course:
         not_found_with_id: 'Unfortunately this course with id %{id} does not exist or you do not have permissions to access'
 
@@ -82,6 +83,10 @@ en:
           attributes:
             base:
               invalid_ratios: 'Invalid Ratios!! Sum does not add up to 100%'
+        exam: 
+          attributes:
+            status:
+              invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
@@ -92,6 +97,7 @@ en:
   exam_template:
     must_update_template: 'Weight ratios are not set! please update the course template'
     invalid_question_types_ratios: 'Sum of Question types ratios are not 100'
-
-
-
+  exam:  
+    cant_create: "You are not assigned to this course, you can't create an exam"
+    cant_update: "Exam can't be edited"
+    cant_delete: "Exam can't be deleted"
