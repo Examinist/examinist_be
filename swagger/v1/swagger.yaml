@@ -1081,6 +1081,9 @@ components:
         username:
           type: string
           example: '18010083'
+        role:
+          type: string
+          example: student
         academic_id:
           type: string
           example: '18010083'
@@ -1578,7 +1581,7 @@ components:
               type: string
               example: success
             student:
-              "$ref": "#/components/schemas/detailed_student"
+              "$ref": "#/components/schemas/student"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
@@ -1654,19 +1657,6 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
-        exam_template:
-          type: object
-          properties:
-            status:
-              type: string
-              example: success
-            exam_template:
-              "$ref": "#/components/schemas/exam_template"
-            message:
-              type: string
-              description: 'This message is the error message in case of status: "error"
-                otherwise it is null'
-              example: 
         question:
           type: object
           properties:
@@ -1680,6 +1670,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        exam_template:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            exam_template:
+              "$ref": "#/components/schemas/exam_template"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
         staff:
           type: object
           properties:
@@ -1687,7 +1690,7 @@ components:
               type: string
               example: success
             student:
-              "$ref": "#/components/schemas/detailed_staff"
+              "$ref": "#/components/schemas/staff"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

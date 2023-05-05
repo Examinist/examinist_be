@@ -95,6 +95,7 @@ RSpec.configure do |config|
                 first_name: { type: 'string', example: 'Ahmed'},
                 last_name: { type: 'string', example: 'Gamal' },
                 username: { type: 'string', example: '18010083' },
+                role: { type: :string, example: 'student' },
                 academic_id: { type: 'string', example: '18010083'},
                 faculty: { '$ref' => '#/components/schemas/faculty'  }
             },
