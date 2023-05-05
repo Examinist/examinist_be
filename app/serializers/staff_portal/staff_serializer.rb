@@ -8,7 +8,7 @@ class StaffPortal::StaffSerializer < ApplicationSerializer
   ####################### Show Details ############################
   attributes :email, if: proc { |_record, params| params && params[:show_details] }
   attribute :faculty, if: proc { |_record, params| params && params[:show_details] } do |object|
-    StaffPortal::FacultySerializer.new(object.faculty)
+    StaffPortal::FacultySerializer.new(object.faculty).to_j
   end
 end
 

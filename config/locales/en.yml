@@ -96,6 +96,7 @@ en:
 
   exam_template:
     must_update_template: 'Weight ratios are not set! please update the course template'
+    invalid_question_types_ratios: 'Sum of Question types ratios are not 100'
   exam:  
     cant_create: "You are not assigned to this course, you can't create an exam"
     cant_update: "Exam can't be edited"

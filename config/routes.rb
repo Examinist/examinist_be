@@ -24,10 +24,20 @@ Rails.application.routes.draw do
         patch :update_exam_template
       end
     end
+    resources :staffs do
+      collection do
+        get :user_info
+      end
+    end
   end
 
   namespace :student_portal do
     resources :sessions, only: %i[create destroy]
     resources :courses, only: %i[index show]
+    resources :students do
+      collection do
+        get :user_info
+      end
+    end
   end
 end

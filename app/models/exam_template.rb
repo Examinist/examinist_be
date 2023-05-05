@@ -6,7 +6,7 @@ class ExamTemplate < ApplicationRecord
     validates_presence_of :easy
     validates_presence_of :medium
     validates_presence_of :hard
-    validate :validate_sum_of_ratios
+    validate :validate_sum_of_difficulty_ratios
   end
 
   # Associations
@@ -17,18 +17,19 @@ class ExamTemplate < ApplicationRecord
   accepts_nested_attributes_for :question_types
 
   # Hooks
-  before_create :check_if_ratios_are_set
+  before_commit :validate_sum_of_question_types_ratios
 
   # Methods
   private
 
-  def validate_sum_of_ratios
+  def validate_sum_of_difficulty_ratios
     sum = easy + medium + hard
     errors.add(:base, :invalid_ratios) if sum != 100.0
   end
 
-  def check_if_ratios_are_set
-    raise(ErrorHandler::GeneralRequestError, I18n.t('exam_template.must_update_template'))
+  def validate_sum_of_question_types_ratios
+    sum = question_types.sum(:ratio)
+    raise(ErrorHandler::GeneralRequestError, I18n.t('exam_template.invalid_question_types_ratios')) if sum != 100.0
   end
 end
 

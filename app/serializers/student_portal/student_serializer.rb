@@ -11,7 +11,7 @@ class StudentPortal::StudentSerializer < ApplicationSerializer
   ####################### Show Details ############################
   attributes :email, :academic_id, if: proc { |_record, params| params && params[:show_details] }
   attribute :faculty, if: proc { |_record, params| params && params[:show_details] } do |object|
-    StudentPortal::FacultySerializer.new(object.faculty)
+    StudentPortal::FacultySerializer.new(object.faculty).to_j
   end
 end
 
