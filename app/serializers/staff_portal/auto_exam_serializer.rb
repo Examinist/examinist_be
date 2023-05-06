@@ -28,7 +28,7 @@ class StaffPortal::AutoExamSerializer < ApplicationSerializer
     grouped_exam_questions = obj&.exam_questions&.group_by(&:question_type)
     obj&.course&.question_types&.each do |type|
       records = grouped_exam_questions[type]
-      exam_questions << { type.name.to_s => StaffPortal::ExamQuestionSerializer.new(records).to_j } if records.size.positive?
+      exam_questions << { type.name.to_s => StaffPortal::ExamQuestionSerializer.new(records).to_j } if records.present?
     end
     exam_questions
   end
