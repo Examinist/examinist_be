@@ -65,7 +65,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
             }
           }
         },
-        required: %w[title duration is_auto course_id exam_questions_attributes]
+        required: %w[title duration is_auto course_id has_models exam_questions_attributes]
       }
 
       security [staff_auth: []]
@@ -267,7 +267,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
             }
           }
         },
-        required: %w[duration course_id question_type_topics]
+        required: %w[title duration course_id has_models question_type_topics]
       }
   
       security [staff_auth: []]

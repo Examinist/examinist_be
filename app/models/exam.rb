@@ -58,7 +58,7 @@ class Exam < ApplicationRecord
     DIFFICULTIES.each do |difficulty|
       mins = duration * template.send(difficulty) / 100
       question_types.each do |type|
-        if type.ratio > 0 
+        if type.ratio.positive? 
           selected_questions = questions_by_topic.joins(:question_type)
                                                .where(question_type: type, difficulty: difficulty)
                                                .limit((mins * type.ratio / 100) / type.send("#{difficulty}_weight"))

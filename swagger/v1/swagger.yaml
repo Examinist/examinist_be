@@ -307,6 +307,7 @@ paths:
               - duration
               - is_auto
               - course_id
+              - has_models
               - exam_questions_attributes
   "/staff_portal/exams/{id}":
     get:
@@ -552,8 +553,10 @@ paths:
                         - 2
                         - 3
               required:
+              - title
               - duration
               - course_id
+              - has_models
               - question_type_topics
   "/staff_portal/courses/{course_id}/question_types":
     get:
