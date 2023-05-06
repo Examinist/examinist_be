@@ -21,7 +21,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
 
       security [staff_auth: []]
 
-      response 200, 'Course Questions Listed successfully' do
+      response 200, 'Course Exams Listed successfully' do
         schema '$ref' => '#/components/responses/staff_portal/list/exams_list'
         run_test!
       end
@@ -53,6 +53,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
           duration: { type: :integer, example: 120 },
           is_auto: { type: :boolean, example: false },
           course_id: { type: :integer, example: 1 },
+          has_models: { type: :boolean, example: false },
           exam_questions_attributes: {
             type: :array,
             items: {
@@ -69,7 +70,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
 
       security [staff_auth: []]
 
-      response 201, 'Course Question Created successfully' do
+      response 201, 'Course Exam Created successfully' do
         schema '$ref' => '#/components/responses/staff_portal/show/exam'
         run_test!
       end
@@ -102,7 +103,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
 
       security [staff_auth: []]
 
-      response 201, 'Course Question Deleted successfully' do
+      response 201, 'Course Exam Deleted successfully' do
         schema '$ref' => '#/components/responses/staff_portal/show/exam'
         run_test!
       end
@@ -137,6 +138,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
         properties: {
           title: { type: :string, example: 'Final' },
           duration: { type: :integer, example: 60 },
+          has_models: { type: :boolean, example: false },
           exam_questions_attributes: {
             type: :array,
             items: {
@@ -185,7 +187,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
 
       security [staff_auth: []]
 
-      response 201, 'Course Question Updated successfully' do
+      response 201, 'Course Exam Updated successfully' do
         schema '$ref' => '#/components/responses/staff_portal/show/exam'
         run_test!
       end
@@ -216,7 +218,61 @@ RSpec.describe 'staff_portal/exams', type: :request do
 
       security [staff_auth: []]
 
-      response 201, 'Course Question Deleted successfully' do
+      response 201, 'Course Exam Deleted successfully' do
+        schema '$ref' => '#/components/responses/staff_portal/show/exam'
+        run_test!
+      end
+
+      response 401, 'One of the following errors' do
+        schema '$ref' => '#/components/errors/unauthorized'
+        run_test!
+      end
+
+      response 404, 'You may have no access to this item or it doesnt exist' do
+        schema '$ref' => '#/components/errors/not_found'
+        run_test!
+      end
+    end
+  end
+
+  path '/staff_portal/exams/auto_generate' do
+    post 'Generate Exam Automatically' do
+      tags 'Staff Portal / Exam'
+      description "This API is responsible for:\n
+      * Generate an Exam Automatically for a specific Course"
+  
+      operationId 'autoGenerateExam'
+      consumes 'application/json'
+      produces 'application/json'
+  
+      parameter name: :payload, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string, example: 'Midterm' },
+          duration: { type: :integer, example: 60 },
+          course_id: { type: :integer, example: 1 },
+          has_models: { type: :boolean, example: false },
+          question_type_topics: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                question_type_id: { type: :integer, example: 1 },
+                topic_ids:{
+                  type: :array,
+                  items: { type: :integer },
+                  example: [1, 2, 3]
+                }
+              }
+            }
+          }
+        },
+        required: %w[duration course_id question_type_topics]
+      }
+  
+      security [staff_auth: []]
+  
+      response 201, 'Course Exam Automatically generated successfully' do
         schema '$ref' => '#/components/responses/staff_portal/show/exam'
         run_test!
       end

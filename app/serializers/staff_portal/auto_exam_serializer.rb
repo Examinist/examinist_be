@@ -1,6 +1,6 @@
-class StaffPortal::ExamSerializer < ApplicationSerializer
+class StaffPortal::AutoExamSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :title, :status, :duration, :total_score, :has_models, :created_at
+  attributes :id, :title, :status, :duration, :total_score, :created_at
 
   attribute :scheduled_date do |object|
     object&.starts_at
@@ -25,8 +25,9 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
   ####################### Methods ############################
   def self.get_questions(obj)
     exam_questions = []
+    questions = obj&.exam_questions&.group_by(&:question_type)
     obj&.course&.question_types&.each do |type|
-      records = obj&.exam_questions&.joins(question: :question_type)&.where(question_types: { id: type.id })
+      records = questions[type]
       exam_questions << { type.name.to_s => StaffPortal::ExamQuestionSerializer.new(records).to_j } if records.size.positive?
     end
     exam_questions

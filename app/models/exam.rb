@@ -40,7 +40,9 @@ class Exam < ApplicationRecord
     NEXT_VALID_TRANSITIONS[old_status.to_sym]&.include?(new_status.to_sym)
   end
 
-  def generate_exam(question_type_topics = [])
+  def generate_questions(question_type_topics = [])
+    check_if_can_create
+
     questions_by_topic = nil
     question_type_topics.each do |object|
       selected_questions = Question.where(question_type_id: object[:question_type_id], topic_id: object[:topic_ids])
@@ -67,7 +69,9 @@ class Exam < ApplicationRecord
       end
     end
 
-    questions.map { |question| exam_questions.new(question_id: question.id, score: question.score) }  
+    questions.map { |question| exam_questions.new(question_id: question.id, score: question.score) }
+
+    self.total_score = exam_questions.sum(&:score)
   end
 
   private

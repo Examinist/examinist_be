@@ -55,6 +55,17 @@ class StaffPortal::ExamsController < ApplicationController
     render_response({ exam: StaffPortal::ExamSerializer.new(@exam, params: { show_details: true }).to_j }, :ok)
   end
 
+  #######
+  # Generate Exam Automaticalliy
+  # POST: /staff_portal/exams/auto_create
+  # Auth: Admin and Instructor
+  #######
+  def auto_generate
+    exam = Exam.new(auto_generate_exam_params)
+    exam.generate_questions(generate_questions_params)
+    render_response({ exam: StaffPortal::AutoExamSerializer.new(exam, params: { show_details: true }).to_j }, :ok)
+  end
+
   private
 
   def check_authorization_policy
@@ -71,12 +82,21 @@ class StaffPortal::ExamsController < ApplicationController
   end
 
   def create_exam_params
-    params.permit(:title, :duration, :is_auto, :course_id, exam_questions_attributes: %i[question_id score])
+    params.permit(:title, :duration, :is_auto, :course_id, :has_models, exam_questions_attributes: %i[question_id score])
           .merge(staff_id: @current_user.id)
   end
 
   def update_exam_params
-    params.permit(:title, :duration, exam_questions_attributes: %i[id _destroy question_id score])
+    params.permit(:title, :duration, :has_models, exam_questions_attributes: %i[id _destroy question_id score])
+  end
+
+  def auto_generate_exam_params
+    params.permit(:course_id, :title, :duration, :has_models).merge(is_auto: true, staff_id: @current_user.id)
+  end
+
+  def generate_questions_params
+    permitted_params = params.permit(question_type_topics: [:question_type_id, topic_ids: []])
+    permitted_params[:question_type_topics]
   end
 
   def policy_scope_class
