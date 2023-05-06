@@ -3,6 +3,8 @@ class Exam < ApplicationRecord
   # constants
   NEXT_VALID_TRANSITIONS = { unscheduled: %i[scheduled], scheduled: %i[unscheduled ongoing], ongoing: %i[pending_grading],
                              pending_grading: %i[graded] }.freeze
+  
+  DIFFICULTIES = %w[easy medium hard].freeze
 
   # enums
   enum status: { unscheduled: 0, scheduled: 1, ongoing: 2, pending_grading: 3, graded: 4}, _default: 'unscheduled'
@@ -36,6 +38,40 @@ class Exam < ApplicationRecord
   # Methods
   def valid_status_transition?(old_status, new_status)
     NEXT_VALID_TRANSITIONS[old_status.to_sym]&.include?(new_status.to_sym)
+  end
+
+  def generate_questions(question_type_topics = [])
+    check_if_can_create
+
+    questions_by_topic = nil
+    question_type_topics.each do |object|
+      selected_questions = Question.where(question_type_id: object[:question_type_id], topic_id: object[:topic_ids])
+      
+      questions_by_topic ||= selected_questions
+      questions_by_topic = questions_by_topic.or(selected_questions)
+    end
+
+    template = ExamTemplate.find_by(course_id: course_id)
+    question_types = course.question_types.where(id: question_type_topics.map { |object| object[:question_type_id] })
+    questions = nil
+
+    DIFFICULTIES.each do |difficulty|
+      mins = duration * template.send(difficulty) / 100
+      question_types.each do |type|
+        if type.ratio.positive? 
+          selected_questions = questions_by_topic.joins(:question_type)
+                                               .where(question_type: type, difficulty: difficulty)
+                                               .limit((mins * type.ratio / 100) / type.send("#{difficulty}_weight"))
+                                               .select("questions.id, question_types.#{difficulty}_weight as score")
+          questions ||= selected_questions
+          questions = questions.union(selected_questions)
+        end
+      end
+    end
+
+    questions.map { |question| exam_questions.new(question_id: question.id, score: question.score) }
+
+    self.total_score = exam_questions.sum(&:score)
   end
 
   private

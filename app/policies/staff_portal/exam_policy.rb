@@ -19,6 +19,10 @@ class StaffPortal::ExamPolicy < ApplicationPolicy
     user.instructor? || user.admin?
   end
 
+  def auto_generate?
+    user.instructor? || user.admin?
+  end
+
   class Scope < Scope
     def initialize(user, scope, params)
       super(user, scope)

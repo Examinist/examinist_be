@@ -29,7 +29,11 @@ Rails.application.routes.draw do
         get :user_info
       end
     end
-    resources :exams, only: %i[create update index show destroy]
+    resources :exams, only: %i[create update index show destroy] do
+      collection do
+        post :auto_generate
+      end
+    end
   end
 
   namespace :student_portal do

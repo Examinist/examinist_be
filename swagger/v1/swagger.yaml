@@ -222,7 +222,7 @@ paths:
       - staff_auth: []
       responses:
         '200':
-          description: Course Questions Listed successfully
+          description: Course Exams Listed successfully
           content:
             application/json:
               schema:
@@ -253,7 +253,7 @@ paths:
       - staff_auth: []
       responses:
         '201':
-          description: Course Question Created successfully
+          description: Course Exam Created successfully
           content:
             application/json:
               schema:
@@ -288,6 +288,9 @@ paths:
                 course_id:
                   type: integer
                   example: 1
+                has_models:
+                  type: boolean
+                  example: false
                 exam_questions_attributes:
                   type: array
                   items:
@@ -327,7 +330,7 @@ paths:
       - staff_auth: []
       responses:
         '201':
-          description: Course Question Deleted successfully
+          description: Course Exam Deleted successfully
           content:
             application/json:
               schema:
@@ -365,7 +368,7 @@ paths:
       - staff_auth: []
       responses:
         '201':
-          description: Course Question Updated successfully
+          description: Course Exam Updated successfully
           content:
             application/json:
               schema:
@@ -394,6 +397,9 @@ paths:
                 duration:
                   type: integer
                   example: 60
+                has_models:
+                  type: boolean
+                  example: false
                 exam_questions_attributes:
                   type: array
                   items:
@@ -462,7 +468,7 @@ paths:
       - staff_auth: []
       responses:
         '201':
-          description: Course Question Deleted successfully
+          description: Course Exam Deleted successfully
           content:
             application/json:
               schema:
@@ -479,6 +485,77 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/not_found"
+  "/staff_portal/exams/auto_generate":
+    post:
+      summary: Generate Exam Automatically
+      tags:
+      - Staff Portal / Exam
+      description: |-
+        This API is responsible for:
+
+              * Generate an Exam Automatically for a specific Course
+      operationId: autoGenerateExam
+      parameters: []
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Exam Automatically generated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Midterm
+                duration:
+                  type: integer
+                  example: 60
+                course_id:
+                  type: integer
+                  example: 1
+                has_models:
+                  type: boolean
+                  example: false
+                question_type_topics:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      question_type_id:
+                        type: integer
+                        example: 1
+                      topic_ids:
+                        type: array
+                        items:
+                          type: integer
+                        example:
+                        - 1
+                        - 2
+                        - 3
+              required:
+              - title
+              - duration
+              - course_id
+              - question_type_topics
   "/staff_portal/courses/{course_id}/question_types":
     get:
       summary: List Question Types of a specific Course
@@ -1813,6 +1890,9 @@ components:
         total_score:
           type: integer
           example: 40
+        has_models:
+          type: boolean
+          example: false
         created_at:
           type: datetime
           example: '2023-04-06T12:38:03.081+03:00'
@@ -1861,6 +1941,9 @@ components:
         total_score:
           type: integer
           example: 40
+        has_models:
+          type: boolean
+          example: false
         created_at:
           type: datetime
           example: '2023-04-06T12:38:03.081+03:00'
