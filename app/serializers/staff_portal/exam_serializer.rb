@@ -7,7 +7,7 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
   end
 
   attribute :creation_mode do |object|
-    get_creation_mode(object)
+    object&.is_auto ? 'Automatic' : 'Manual'
   end
 
   attribute :creator do |object|
@@ -23,14 +23,6 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
   end
 
   ####################### Methods ############################
-  def self.get_creation_mode(obj)
-    if obj&.is_auto
-      'Automatic'
-    else
-      'Manual'
-    end
-  end
-
   def self.get_questions(obj)
     exam_questions = []
     obj&.course&.question_types&.each do |type|
