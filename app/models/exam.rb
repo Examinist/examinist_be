@@ -47,7 +47,7 @@ class Exam < ApplicationRecord
   end
 
   def calculate_total_score
-    self.total_score = exam_questions.sum(:score)
+    update_column(:total_score, exam_questions.sum(:score))
   end
 
   def raise_error
