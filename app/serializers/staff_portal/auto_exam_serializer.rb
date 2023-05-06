@@ -25,9 +25,9 @@ class StaffPortal::AutoExamSerializer < ApplicationSerializer
   ####################### Methods ############################
   def self.get_questions(obj)
     exam_questions = []
-    questions = obj&.exam_questions&.group_by(&:question_type)
+    grouped_exam_questions = obj&.exam_questions&.group_by(&:question_type)
     obj&.course&.question_types&.each do |type|
-      records = questions[type]
+      records = grouped_exam_questions[type]
       exam_questions << { type.name.to_s => StaffPortal::ExamQuestionSerializer.new(records).to_j } if records.size.positive?
     end
     exam_questions
