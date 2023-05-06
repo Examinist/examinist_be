@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         get :user_info
       end
     end
+    resources :exams, only: %i[create update index show destroy]
   end
 
   namespace :student_portal do

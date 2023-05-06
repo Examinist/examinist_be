@@ -5,6 +5,10 @@ class Faculty < ApplicationRecord
   validates :faculty_name,  uniqueness: { scope: :university_name }
   validates_presence_of :faculty_name
   validates_presence_of :university_name
+
+  # Associations
+  has_many :courses, dependent: :destroy
+  has_many :exams, through: :courses
 end
 
 # == Schema Information

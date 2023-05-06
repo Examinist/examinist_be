@@ -274,8 +274,14 @@ RSpec.configure do |config|
               answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers'},
               question_type: { '$ref' => '#/components/schemas/question_type' },
               topic: { '$ref' => '#/components/schemas/topic' },
-              choices: { '$ref' => '#/components/schemas/choice' },
-              correct_answers: { '$ref' => '#/components/schemas/correct_answer' }
+              choices: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/choice' }
+              },
+              correct_answers: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/correct_answer' }
+              }
             },
             required: %w[id header difficulty answer_type question_type topic choices correct_answers]
           },
@@ -288,11 +294,70 @@ RSpec.configure do |config|
               answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers'},
               question_type: { '$ref' => '#/components/schemas/question_type' },
               topic: { '$ref' => '#/components/schemas/topic' },
-              choices: { '$ref' => '#/components/schemas/choice' },
-              correct_answers: { '$ref' => '#/components/schemas/correct_answer' },
+              choices: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/choice' }
+              },
+              correct_answers: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/correct_answer' }
+              },
               course: { '$ref' => '#/components/schemas/course' }
             },
             required: %w[id header difficulty answer_type question_type topic choices correct_answers course]
+          },
+          exam: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'Midterm' },
+              status: { type: :string, enum: %w[unscheduled scheduled ongoing pending_grading graded], example: 'unscheduled' },
+              duration: { type: :integer, example: 120 },
+              total_score: { type: :integer, example: 40 },
+              created_at: { type: :datetime, example: '2023-04-06T12:38:03.081+03:00' },
+              scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
+              creation_mode: { type: :string, example: 'Manual' },
+              creator: { '$ref' => '#/components/schemas/staff' },
+              course: { '$ref' => '#/components/schemas/course' }
+            },
+            required: %w[id title status duration total_score created_at scheduled_date creation_mode creator course]
+          },
+          detailed_exam: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'Midterm' },
+              status: { type: :string, enum: %w[unscheduled scheduled ongoing pending_grading graded], example: 'unscheduled' },
+              duration: { type: :integer, example: 120 },
+              total_score: { type: :integer, example: 40 },
+              created_at: { type: :datetime, example: '2023-04-06T12:38:03.081+03:00' },
+              scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
+              creation_mode: { type: :string, example: 'Manual' },
+              creator: { '$ref' => '#/components/schemas/staff' },
+              course: { '$ref' => '#/components/schemas/course' },
+              exam_questions: {
+                type: :array,
+                items: {
+                  type: :object,
+                  properties: {
+                    mcq: {
+                      type: :array,
+                      items: { '$ref' => '#/components/schemas/exam_question' }
+                    }
+                  }
+                }
+              }
+            },
+            required: %w[id title status duration total_score created_at scheduled_date creation_mode creator course exam_questions]
+          },
+          exam_question: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              score: { type: :integer, example: 22 },
+              question: { '$ref' => '#/components/schemas/question' }
+            },
+            required: %w[id score question]
           }
         },
         errors: {
@@ -471,7 +536,19 @@ RSpec.configure do |config|
                   }
                 }
               },
-              exam_template:{
+              exam: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  exam: { '$ref' => '#/components/schemas/detailed_exam' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              exam_template: {
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
@@ -564,6 +641,21 @@ RSpec.configure do |config|
                   questions: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/question' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              exams_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  exams: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/exam' }
                   },
                   message: {
                     type: :string,
