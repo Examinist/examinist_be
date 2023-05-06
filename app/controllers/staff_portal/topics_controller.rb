@@ -18,7 +18,7 @@ class StaffPortal::TopicsController < ApplicationController
   #######
   def create
     topic = @course.topics.create!(create_topic_params)
-    render_response({ topic: StaffPortal::TopicSerializer.new(topic, show_details: true).to_j }, :created)
+    render_response({ topic: StaffPortal::TopicSerializer.new(topic, params: { show_details: true }).to_j }, :created)
   end
 
   #######
@@ -28,7 +28,7 @@ class StaffPortal::TopicsController < ApplicationController
   #######
   def update
     @topic.update!(update_topic_params)
-    render_response({ topic: StaffPortal::TopicSerializer.new(@topic, show_details: true).to_j }, :ok)
+    render_response({ topic: StaffPortal::TopicSerializer.new(@topic, params: { show_details: true }).to_j }, :ok)
   end
 
   #######
@@ -38,7 +38,7 @@ class StaffPortal::TopicsController < ApplicationController
   #######
   def destroy
     @topic.destroy!
-    render_response({ topic: StaffPortal::TopicSerializer.new(@topic, show_details: true).to_j }, :ok)
+    render_response({ topic: StaffPortal::TopicSerializer.new(@topic, params: { show_details: true }).to_j }, :ok)
   end
 
 

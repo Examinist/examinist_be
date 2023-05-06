@@ -56,7 +56,7 @@ module ErrorHandler
 
     rescue_from ActiveRecord::RecordNotUnique do |err|
       model_name = err.message.match(/"index_([a-z_]+)_on_/)[1]
-      raise_error(:bad_request, I18n.t('activerecord.errors.duplicated', model_name: model_name))
+      raise_error(:bad_request, I18n.t('activerecord.errors.duplicated', model_name: model_name.titleize))
     end
   end
 end

@@ -189,6 +189,296 @@ paths:
                       ratio:
                         type: float
                         example: 25
+  "/staff_portal/exams":
+    get:
+      summary: List Exams
+      tags:
+      - Staff Portal / Exam
+      description: |-
+        This API is responsible for:
+
+              * Listing the Exams
+      operationId: listExams
+      parameters:
+      - name: filter_by_status
+        in: query
+        schema:
+          type: string
+          enum:
+          - unscheduled
+          - scheduled
+          - ongoing
+          - pending_grading
+          - graded
+        description: Filtering exams by status
+      - name: course_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        description: This is the course id given if the listing is in the course tab
+      - "$ref": "#/components/global_parameters/page_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Course Questions Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    post:
+      summary: Create Exam
+      tags:
+      - Staff Portal / Exam
+      description: |-
+        This API is responsible for:
+
+              * Create an Exam for a specific Course
+      operationId: createExam
+      parameters: []
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Question Created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Midterm
+                duration:
+                  type: integer
+                  example: 120
+                is_auto:
+                  type: boolean
+                  example: false
+                course_id:
+                  type: integer
+                  example: 1
+                exam_questions_attributes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      question_id:
+                        type: integer
+                        example: 1
+                      score:
+                        type: integer
+                        example: 7
+              required:
+              - title
+              - duration
+              - is_auto
+              - course_id
+              - exam_questions_attributes
+  "/staff_portal/exams/{id}":
+    get:
+      summary: Show Exam
+      tags:
+      - Staff Portal / Exam
+      description: |-
+        This API is responsible for:
+
+              * View an Exam
+      operationId: showExam
+      parameters:
+      - name: course_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        description: This is the course id given if the listing is in the course tab
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Question Deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    patch:
+      summary: Update Exam
+      tags:
+      - Staff Portal / Exam
+      description: |-
+        This API is responsible for:
+
+              * Update an Exam
+      operationId: updateExam
+      parameters:
+      - name: course_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        description: This is the course id given if the listing is in the course tab
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Question Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Final
+                duration:
+                  type: integer
+                  example: 60
+                exam_questions_attributes:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        question_id:
+                          type: integer
+                          example: 6
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        question_id:
+                          type: integer
+                          example: 7
+                        score:
+                          type: integer
+                          example: 9
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        score:
+                          type: integer
+                          example: 5
+                    - type: object
+                      properties:
+                        question_id:
+                          type: integer
+                          example: 10
+                        score:
+                          type: integer
+                          example: 10
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 7
+                        _destroy:
+                          type: boolean
+                          example: true
+    delete:
+      summary: Delete Exam
+      tags:
+      - Staff Portal / Exam
+      description: |-
+        This API is responsible for:
+
+              * Delete an Exam
+      operationId: deleteExam
+      parameters:
+      - name: course_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        description: This is the course id given if the listing is in the course tab
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Course Question Deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/staff_portal/courses/{course_id}/question_types":
     get:
       summary: List Question Types of a specific Course
@@ -1435,9 +1725,13 @@ components:
         topic:
           "$ref": "#/components/schemas/topic"
         choices:
-          "$ref": "#/components/schemas/choice"
+          type: array
+          items:
+            "$ref": "#/components/schemas/choice"
         correct_answers:
-          "$ref": "#/components/schemas/correct_answer"
+          type: array
+          items:
+            "$ref": "#/components/schemas/correct_answer"
       required:
       - id
       - header
@@ -1476,9 +1770,13 @@ components:
         topic:
           "$ref": "#/components/schemas/topic"
         choices:
-          "$ref": "#/components/schemas/choice"
+          type: array
+          items:
+            "$ref": "#/components/schemas/choice"
         correct_answers:
-          "$ref": "#/components/schemas/correct_answer"
+          type: array
+          items:
+            "$ref": "#/components/schemas/correct_answer"
         course:
           "$ref": "#/components/schemas/course"
       required:
@@ -1491,6 +1789,127 @@ components:
       - choices
       - correct_answers
       - course
+    exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Midterm
+        status:
+          type: string
+          enum:
+          - unscheduled
+          - scheduled
+          - ongoing
+          - pending_grading
+          - graded
+          example: unscheduled
+        duration:
+          type: integer
+          example: 120
+        total_score:
+          type: integer
+          example: 40
+        created_at:
+          type: datetime
+          example: '2023-04-06T12:38:03.081+03:00'
+        scheduled_date:
+          type: datetime
+          example: '2023-04-26T12:38:03.081+03:00'
+        creation_mode:
+          type: string
+          example: Manual
+        creator:
+          "$ref": "#/components/schemas/staff"
+        course:
+          "$ref": "#/components/schemas/course"
+      required:
+      - id
+      - title
+      - status
+      - duration
+      - total_score
+      - created_at
+      - scheduled_date
+      - creation_mode
+      - creator
+      - course
+    detailed_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Midterm
+        status:
+          type: string
+          enum:
+          - unscheduled
+          - scheduled
+          - ongoing
+          - pending_grading
+          - graded
+          example: unscheduled
+        duration:
+          type: integer
+          example: 120
+        total_score:
+          type: integer
+          example: 40
+        created_at:
+          type: datetime
+          example: '2023-04-06T12:38:03.081+03:00'
+        scheduled_date:
+          type: datetime
+          example: '2023-04-26T12:38:03.081+03:00'
+        creation_mode:
+          type: string
+          example: Manual
+        creator:
+          "$ref": "#/components/schemas/staff"
+        course:
+          "$ref": "#/components/schemas/course"
+        exam_questions:
+          type: array
+          items:
+            type: object
+            properties:
+              mcq:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/exam_question"
+      required:
+      - id
+      - title
+      - status
+      - duration
+      - total_score
+      - created_at
+      - scheduled_date
+      - creation_mode
+      - creator
+      - course
+      - exam_questions
+    exam_question:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        score:
+          type: integer
+          example: 22
+        question:
+          "$ref": "#/components/schemas/question"
+      required:
+      - id
+      - score
+      - question
   errors:
     invalid_credentials:
       type: object
@@ -1670,6 +2089,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        exam:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            exam:
+              "$ref": "#/components/schemas/detailed_exam"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
         exam_template:
           type: object
           properties:
@@ -1767,6 +2199,21 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/question"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        exams_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            exams:
+              type: array
+              items:
+                "$ref": "#/components/schemas/exam"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
