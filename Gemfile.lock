@@ -39,6 +39,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_record_union (1.3.0)
+      activerecord (>= 4.0)
     activejob (6.1.7.2)
       activesupport (= 6.1.7.2)
       globalid (>= 0.3.6)
@@ -379,6 +381,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  active_record_union
   activerecord-postgis-adapter
   annotate
   awesome_print

@@ -50,19 +50,24 @@ class Exam < ApplicationRecord
     end
 
     template = ExamTemplate.find_by(course_id: course_id)
-    question_types = course.question_types
-    question_ids = []
+    question_types = course.question_types.where(id: question_type_topics.map { |object| object[:question_type_id] })
+    questions = nil
 
     DIFFICULTIES.each do |difficulty|
       mins = duration * template.send(difficulty) / 100
       question_types.each do |type|
-        selected_questions = questions_by_topic.where(question_type: type, difficulty: difficulty)
+        if type.ratio > 0 
+          selected_questions = questions_by_topic.joins(:question_type)
+                                               .where(question_type: type, difficulty: difficulty)
                                                .limit((mins * type.ratio / 100) / type.send("#{difficulty}_weight"))
-        question_ids.push(*(selected_questions.ids))
+                                               .select("questions.id, question_types.#{difficulty}_weight as score")
+          questions ||= selected_questions
+          questions = questions.union(selected_questions)
+        end
       end
     end
 
-    return Question.where(id: question_ids)
+    questions.map { |question| exam_questions.new(question_id: question.id, score: question.score) }  
   end
 
   private
