@@ -463,6 +463,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
                   courses: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/course' }
@@ -580,6 +581,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
                   courses: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/course' }
@@ -640,6 +642,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
                   questions: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/question' }
@@ -655,6 +658,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
                   exams: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/exam' }
