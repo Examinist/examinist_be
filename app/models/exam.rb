@@ -33,7 +33,7 @@ class Exam < ApplicationRecord
   before_destroy :raise_error, unless: -> { unscheduled? }
   after_save :calculate_total_score, unless: ->{ is_auto }
   after_update_commit :update_exam_status, if: :saved_change_to_starts_at?
-  after_update_commit :end_exam, if: :saved_change_to_duration
+  after_update_commit :end_exam, if: -> { saved_change_to_duration? && starts_at.present? }
 
   # Methods
   def valid_status_transition?(old_status, new_status)

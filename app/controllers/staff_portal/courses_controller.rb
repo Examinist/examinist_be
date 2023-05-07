@@ -9,7 +9,8 @@ class StaffPortal::CoursesController < ApplicationController
   def index
     records = policy_scope([:staff_portal, Course])
     @pagy, records = pagy(records) unless params[:page].to_i == -1
-    render_response({ courses: StaffPortal::CourseSerializer.new(records).to_j }, :ok)
+    number_of_pages = @pagy.present? ? @pagy.pages : 1
+    render_response({ courses: StaffPortal::CourseSerializer.new(records).to_j }, :ok, pagination: number_of_pages)
   end
 
   #######

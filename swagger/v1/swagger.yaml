@@ -2096,6 +2096,9 @@ components:
             status:
               type: string
               example: success
+            number_of_pages:
+              type: integer
+              example: 4
             courses:
               type: array
               items:
@@ -2218,6 +2221,9 @@ components:
             status:
               type: string
               example: success
+            number_of_pages:
+              type: integer
+              example: 4
             courses:
               type: array
               items:
@@ -2278,6 +2284,9 @@ components:
             status:
               type: string
               example: success
+            number_of_pages:
+              type: integer
+              example: 4
             questions:
               type: array
               items:
@@ -2293,6 +2302,9 @@ components:
             status:
               type: string
               example: success
+            number_of_pages:
+              type: integer
+              example: 4
             exams:
               type: array
               items:
