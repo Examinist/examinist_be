@@ -5,7 +5,7 @@ class Choice < ApplicationRecord
   validates_presence_of :choice
 
   # Associations
-  belongs_to :question, inverse_of: :choices
+  belongs_to :question, inverse_of: :choices, touch: true
   has_one :correct_answer, dependent: :destroy
 
   # Hooks

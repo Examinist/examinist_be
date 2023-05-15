@@ -5,7 +5,7 @@ class CorrectAnswer < ApplicationRecord
   validates_presence_of :answer
 
   # Associations
-  belongs_to :question, inverse_of: :correct_answers
+  belongs_to :question, inverse_of: :correct_answers, touch: true
   belongs_to :choice, optional: true
 end
 

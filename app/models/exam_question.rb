@@ -6,7 +6,7 @@ class ExamQuestion < ApplicationRecord
                                                                model_name: 'exam_questions') }
 
   # Associations
-  belongs_to :exam
+  belongs_to :exam, touch: true
   belongs_to :question
   has_one :question_type, through: :question
 
