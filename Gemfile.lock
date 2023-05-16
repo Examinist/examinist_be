@@ -365,6 +365,7 @@ GEM
     thread (0.2.2)
     thread_safe (0.3.6)
     tilt (2.1.0)
+    timeliness (0.4.5)
     timeout (0.3.2)
     traco (5.3.3)
       activerecord (>= 4.2)
@@ -372,6 +373,9 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
     uniform_notifier (1.16.0)
+    validates_timeliness (6.0.1)
+      activemodel (>= 6.0.0, < 7)
+      timeliness (>= 0.3.10, < 1)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -420,6 +424,7 @@ DEPENDENCIES
   spring
   traco
   tzinfo-data
+  validates_timeliness
 
 BUNDLED WITH
    2.3.3

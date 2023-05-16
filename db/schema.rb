@@ -17,10 +17,12 @@ ActiveRecord::Schema.define(version: 2023_05_16_200715) do
 
   create_table "busy_labs", force: :cascade do |t|
     t.bigint "lab_id", null: false
+    t.bigint "exam_id", null: false
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["exam_id"], name: "index_busy_labs_on_exam_id"
     t.index ["lab_id"], name: "index_busy_labs_on_lab_id"
   end
 
@@ -210,6 +212,7 @@ ActiveRecord::Schema.define(version: 2023_05_16_200715) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "busy_labs", "exams"
   add_foreign_key "busy_labs", "labs"
   add_foreign_key "choices", "questions"
   add_foreign_key "coordinators", "universities"
