@@ -19,7 +19,7 @@ end
 #  faculty_name  :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  university_id :bigint
+#  university_id :bigint           not null
 #
 # Indexes
 #

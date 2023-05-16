@@ -13,7 +13,6 @@ class Staff < ApplicationRecord
   validates :password , length: { minimum: 6 }
   validates_presence_of :role
   validates_presence_of :faculty
-  has_secure_password
 
   # Associations
   belongs_to :faculty

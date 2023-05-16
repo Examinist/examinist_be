@@ -127,7 +127,7 @@ ActiveRecord::Schema.define(version: 2023_05_16_200715) do
     t.string "faculty_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "university_id"
+    t.bigint "university_id", null: false
     t.index ["university_id"], name: "index_faculties_on_university_id"
   end
 

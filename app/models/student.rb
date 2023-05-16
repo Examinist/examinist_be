@@ -10,7 +10,7 @@ class Student < ApplicationRecord
   validates :password , length: { minimum: 6 }
   validates :academic_id, presence: true, uniqueness: { scope: :faculty }
   validates_presence_of :faculty
-  has_secure_password
+
 
   # Associations
   belongs_to :faculty
