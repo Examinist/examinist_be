@@ -89,6 +89,12 @@ en:
           attributes:
             status:
               invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
+        busy_lab:
+          attributes:
+            end_date:
+              after: 'End Date must be after Start Date'
+            lab_id:
+              is_busy: 'This lab is busy at this interval'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"

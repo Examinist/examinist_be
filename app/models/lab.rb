@@ -1,29 +1,27 @@
-# frozen_string_literal: true
-
-class Faculty < ApplicationRecord
+class Lab < ApplicationRecord
   # Validations
-  validates :faculty_name,  uniqueness: { scope: :university }
-  validates_presence_of :faculty_name, :university_id
-
+  validates_presence_of :name, :capcity, :university_id
+  validates :name,  uniqueness: { scope: :university }
+  
   # Associations
   belongs_to :university
-  has_many :courses, dependent: :destroy
-  has_many :exams, through: :courses
+  has_many :busy_labs, dependent: :destroy
 end
 
 # == Schema Information
 #
-# Table name: faculties
+# Table name: labs
 #
 #  id            :bigint           not null, primary key
-#  faculty_name  :string
+#  capcity       :integer
+#  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  university_id :bigint           not null
 #
 # Indexes
 #
-#  index_faculties_on_university_id  (university_id)
+#  index_labs_on_university_id  (university_id)
 #
 # Foreign Keys
 #
