@@ -3,6 +3,7 @@ FactoryBot.define do
     lab
     start_date { (Time.current + 1.day).to_s  }
     end_date { (Time.current + 1.day + 2.hour).to_s  }
+    exam_id { Exam.first}
   end
 end
 

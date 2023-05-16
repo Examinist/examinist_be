@@ -5,7 +5,7 @@ class Lab < ApplicationRecord
   
   # Associations
   belongs_to :university
-  has_many :busy_labs
+  has_many :busy_labs, dependent: :destroy
 end
 
 # == Schema Information

@@ -20,6 +20,7 @@ class Exam < ApplicationRecord
   belongs_to :staff
   has_many :exam_questions, dependent: :destroy
   has_many :questions, through: :exam_questions
+  has_many :busy_labs, dependent: :destroy
   
   # Nested Attributes
   accepts_nested_attributes_for :exam_questions, allow_destroy: true

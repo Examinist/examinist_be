@@ -1,10 +1,11 @@
 class BusyLab < ApplicationRecord
   # Validations
   validates_presence_of :start_date, :end_date, :lab_id, :exam_id
-  validates_datetime :end_date, on_or_after: :start_date 
+  validates_datetime :end_date, after: :start_date 
   validate :lab_is_busy?
   # Associations
   belongs_to :lab
+  belongs_to :exam
 
   private
 
