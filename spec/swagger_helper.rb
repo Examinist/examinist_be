@@ -106,6 +106,7 @@ RSpec.configure do |config|
               id: { type: 'integer', example: 1 },
               username: { type: 'string', example: 'super' },
               email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
+              role: { type: :string, example: 'university_admin' },
               university: { '$ref' => '#/components/schemas/university' }
             },
             required: %w[id username email university]
@@ -116,6 +117,7 @@ RSpec.configure do |config|
               id: { type: 'integer', example: 1 },
               username: { type: 'string', example: 'super' },
               email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
+              role: { type: :string, example: 'university_admin' },
               university: { '$ref' => '#/components/schemas/university' },
               auth_token: { type: :string, example: "hgcscxmopjsecohsecophopshcijsic" }
             },

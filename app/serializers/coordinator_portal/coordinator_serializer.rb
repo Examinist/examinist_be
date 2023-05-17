@@ -2,6 +2,10 @@ class CoordinatorPortal::CoordinatorSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
   attributes :id, :username, :email
 
+  attribute :role do
+    'university_admin'
+  end
+
   attribute :university do |object|
     CoordinatorPortal::UniversitySerializer.new(object.university).to_j
   end

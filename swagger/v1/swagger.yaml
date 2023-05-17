@@ -1524,6 +1524,9 @@ components:
         email:
           type: string
           example: ahmed.gamal5551.ag@gmail.com
+        role:
+          type: string
+          example: university_admin
         university:
           "$ref": "#/components/schemas/university"
       required:
@@ -1543,6 +1546,9 @@ components:
         email:
           type: string
           example: ahmed.gamal5551.ag@gmail.com
+        role:
+          type: string
+          example: university_admin
         university:
           "$ref": "#/components/schemas/university"
         auth_token:
