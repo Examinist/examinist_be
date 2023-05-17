@@ -14,6 +14,11 @@ Rails.application.routes.draw do
 
   namespace :coordinator_portal do
     resources :sessions, only: %i[create]
+    resources :coordinators do
+      collection do
+        get :user_info
+      end
+    end
   end
 
   namespace :staff_portal do

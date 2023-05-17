@@ -459,7 +459,19 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  student: { '$ref' => '#/components/schemas/coordinator_session' },
+                  coordinator: { '$ref' => '#/components/schemas/coordinator_session' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              coordinator: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  coordinator: { '$ref' => '#/components/schemas/coordinator' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
