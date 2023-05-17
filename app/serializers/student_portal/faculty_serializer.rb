@@ -1,6 +1,10 @@
 class StudentPortal::FacultySerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :faculty_name, :university_name
+  attributes :id, :faculty_name
+
+  attribute :university do |object|
+    StudentPortal::UniversitySerializer.new(object.university).to_j
+  end
 end
 
 # == Schema Information

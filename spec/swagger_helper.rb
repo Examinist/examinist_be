@@ -35,6 +35,11 @@ RSpec.configure do |config|
       ],
       components: {
         securitySchemes: {
+          coordinator_auth: {
+            type: :http,
+            scheme: :bearer,
+            bearerFormat: :JWT
+          },
           staff_auth: {
             type: :http,
             scheme: :bearer,
@@ -78,14 +83,43 @@ RSpec.configure do |config|
           }
         },
         schemas: {
+          university: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer', example: 1 },
+              name: { type: 'string', example: 'Alexandria University' }
+            },
+            required: %w[id name]
+          },
           faculty: {
             type: 'object',
             properties: {
                 id: { type: 'integer', example: 1 },
                 faculty_name: { type: 'string', example: 'Faculty of Engineering' },
-                University_name: { type: 'string', example: 'Alexandria University'},
+                university: { '$ref' => '#/components/schemas/university' }
             },
-            required: %w[id faculty_name University_name]
+            required: %w[id faculty_name university]
+          },
+          coordinator: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer', example: 1 },
+              username: { type: 'string', example: 'super' },
+              email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
+              university: { '$ref' => '#/components/schemas/university' }
+            },
+            required: %w[id username email university]
+          },
+          coordinator_session: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer', example: 1 },
+              username: { type: 'string', example: 'super' },
+              email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
+              university: { '$ref' => '#/components/schemas/university' },
+              auth_token: { type: :string, example: "hgcscxmopjsecohsecophopshcijsic" }
+            },
+            required: %w[id username email university auth_token]
           },
           detailed_student: {
             type: 'object',
@@ -96,8 +130,8 @@ RSpec.configure do |config|
                 last_name: { type: 'string', example: 'Gamal' },
                 username: { type: 'string', example: '18010083' },
                 role: { type: :string, example: 'student' },
-                academic_id: { type: 'string', example: '18010083'},
-                faculty: { '$ref' => '#/components/schemas/faculty'  }
+                academic_id: { type: 'string', example: '18010083' },
+                faculty: { '$ref' => '#/components/schemas/faculty' }
             },
             required: %w[id email first_name last_name username faculty_id academic_id]
           },
@@ -419,6 +453,22 @@ RSpec.configure do |config|
           }
         },
         responses: {
+          coordinator_portal: {
+            show: {
+              coordinator_session: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  student: { '$ref' => '#/components/schemas/coordinator_session' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              }
+            }
+          },
           student_portal: {
             show: {
               student_session: {
