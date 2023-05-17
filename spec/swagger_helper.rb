@@ -91,6 +91,25 @@ RSpec.configure do |config|
             },
             required: %w[id name]
           },
+          lab: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Lab A' },
+              capacity: { type: :integer, example: 30 }
+            },
+            required: %w[id name capacity]
+          },
+          detailed_lab: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Lab A' },
+              capacity: { type: :integer, example: 30 },
+              university: { '$ref' => '#/components/schemas/university' }
+            },
+            required: %w[id name capacity university]
+          },
           faculty: {
             type: 'object',
             properties: {
@@ -474,6 +493,35 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   coordinator: { '$ref' => '#/components/schemas/coordinator' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              lab: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  lab: { '$ref' => '#/components/schemas/detailed_lab' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              }
+            },
+            list: {
+              labs_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  labs: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/lab' }
+                  },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',

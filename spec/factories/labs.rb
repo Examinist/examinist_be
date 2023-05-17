@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :lab do
     name { "Lab #{Random.rand(1...1000)}" }
-    capcity { Random.rand(1...200) }
+    capacity { Random.rand(1...200) }
     university
   end
 end
@@ -11,7 +11,7 @@ end
 # Table name: labs
 #
 #  id            :bigint           not null, primary key
-#  capcity       :integer
+#  capacity      :integer
 #  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

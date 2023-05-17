@@ -10,6 +10,7 @@ class Coordinator < ApplicationRecord
 
   # Associations
   belongs_to :university
+  has_many :labs, through: :university
 end
 
 # == Schema Information
