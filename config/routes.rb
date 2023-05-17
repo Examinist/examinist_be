@@ -12,6 +12,15 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
+  namespace :coordinator_portal do
+    resources :sessions, only: %i[create]
+    resources :coordinators do
+      collection do
+        get :user_info
+      end
+    end
+  end
+
   namespace :staff_portal do
     resources :sessions, only: %i[create destroy]
     resources :courses, only: %i[index show] do
