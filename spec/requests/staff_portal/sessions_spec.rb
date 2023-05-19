@@ -5,7 +5,7 @@ RSpec.describe 'staff_portal/sessions_controller', type: :request do
     post 'Staff Login' do
       tags 'Staff Portal / Session'
       description "This API is responsible for:\n
-      * Logging in the student and returning the staff's object\n
+      * Logging in the staff and returning the staff's object\n
       * returning the Authentication Bearer token"
 
       operationId 'staffLogin'

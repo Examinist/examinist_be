@@ -32,6 +32,9 @@
 en:
   activerecord:
     models:
+      university: "University"
+      faculty: "Faculty"
+      coordinator: "Coordinator"
       student: "Student"
       staff: "Staff"
       course: "Course"
@@ -45,6 +48,9 @@ en:
       choice: "Choice"
       exam: "Exam"
       examquestion: "Exam Question"
+      lab: "Lab"
+      busylab: "Busy Lab"
+
     errors:
       not_found: "Can not find %{model} with id %{id}"
       duplicated: "Duplication, there are two %{model_name} that are the same"
@@ -89,6 +95,12 @@ en:
           attributes:
             status:
               invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
+        busy_lab:
+          attributes:
+            end_date:
+              after: 'End Date must be after Start Date'
+            lab_id:
+              is_busy: 'This lab is busy at this interval'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"

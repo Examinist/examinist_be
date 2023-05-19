@@ -5,6 +5,230 @@ info:
   version: v1
   description: This is Examinist API documentation
 paths:
+  "/coordinator_portal/coordinators/user_info":
+    get:
+      summary: Coordinator user info
+      tags:
+      - Coordinator Portal / Coordinator
+      description: |-
+        This API is responsible for:
+
+              * Getting user info from the header
+      operationId: userInfo
+      security:
+      - coordinator_auth: []
+      responses:
+        '200':
+          description: user info returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/show/coordinator"
+        '401':
+          description: Suspicious token. Authorization failed!
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
+  "/coordinator_portal/labs":
+    get:
+      summary: List labs
+      tags:
+      - Coordinator Portal / Labs
+      description: |-
+        This API is responsible for:
+
+              * Listing the labs
+      operationId: listLabs
+      security:
+      - coordinator_auth: []
+      responses:
+        '200':
+          description: Labs Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/list/labs_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    post:
+      summary: Create Lab
+      tags:
+      - Coordinator Portal / Labs
+      description: |-
+        This API is responsible for:
+
+              * Creating a Lab
+      operationId: createLab
+      parameters: []
+      security:
+      - coordinator_auth: []
+      responses:
+        '201':
+          description: Lab Created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/show/lab"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Lab A
+                capacity:
+                  type: integer
+                  example: 30
+              required:
+              - name
+              - capacity
+  "/coordinator_portal/labs/{id}":
+    patch:
+      summary: Update a Lab
+      tags:
+      - Coordinator Portal / Labs
+      description: |-
+        This API is responsible for:
+
+              * Updating a Lab
+      operationId: updateLab
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - coordinator_auth: []
+      responses:
+        '201':
+          description: Lab Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/show/lab"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Lab A
+                capacity:
+                  type: integer
+                  example: 30
+              required:
+              - name
+              - capacity
+    delete:
+      summary: Delete Lab
+      tags:
+      - Coordinator Portal / Labs
+      description: |-
+        This API is responsible for:
+
+              * Deleting a Lab
+      operationId: deleteLab
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - coordinator_auth: []
+      responses:
+        '201':
+          description: Lab Deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/show/lab"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+  "/coordinator_portal/sessions":
+    post:
+      summary: Coordinator Login
+      tags:
+      - Coordinator Portal / Session
+      description: |-
+        This API is responsible for:
+
+              * Logging in the coordinator and returning:
+              1)  The coordinator's object
+
+              2)  The Authentication Bearer token
+      operationId: coordinatorLogin
+      parameters: []
+      responses:
+        '200':
+          description: Coordinator logged in successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/show/coordinator_session"
+        '401':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/invalid_credentials"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: super
+                password:
+                  type: string
+                  example: '123456'
+              required:
+              - username
+              - password
   "/staff_portal/courses/{course_id}/course_groups":
     get:
       summary: List Course Groups of a specific Course
@@ -1037,7 +1261,7 @@ paths:
       description: |-
         This API is responsible for:
 
-              * Logging in the student and returning the staff's object
+              * Logging in the staff and returning the staff's object
 
               * returning the Authentication Bearer token
       operationId: staffLogin
@@ -1380,6 +1604,10 @@ servers:
       default: localhost:3000/
 components:
   securitySchemes:
+    coordinator_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
     staff_auth:
       type: http
       scheme: bearer
@@ -1414,6 +1642,53 @@ components:
         type: number
         example: 1
   schemas:
+    university:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Alexandria University
+      required:
+      - id
+      - name
+    lab:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Lab A
+        capacity:
+          type: integer
+          example: 30
+      required:
+      - id
+      - name
+      - capacity
+    detailed_lab:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Lab A
+        capacity:
+          type: integer
+          example: 30
+        university:
+          "$ref": "#/components/schemas/university"
+      required:
+      - id
+      - name
+      - capacity
+      - university
     faculty:
       type: object
       properties:
@@ -1423,13 +1698,60 @@ components:
         faculty_name:
           type: string
           example: Faculty of Engineering
-        University_name:
-          type: string
-          example: Alexandria University
+        university:
+          "$ref": "#/components/schemas/university"
       required:
       - id
       - faculty_name
-      - University_name
+      - university
+    coordinator:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: super
+        email:
+          type: string
+          example: ahmed.gamal5551.ag@gmail.com
+        role:
+          type: string
+          example: university_admin
+        university:
+          "$ref": "#/components/schemas/university"
+      required:
+      - id
+      - username
+      - email
+      - university
+    coordinator_session:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: super
+        email:
+          type: string
+          example: ahmed.gamal5551.ag@gmail.com
+        role:
+          type: string
+          example: university_admin
+        university:
+          "$ref": "#/components/schemas/university"
+        auth_token:
+          type: string
+          example: hgcscxmopjsecohsecophopshcijsic
+      required:
+      - id
+      - username
+      - email
+      - university
+      - auth_token
     detailed_student:
       type: object
       properties:
@@ -2048,6 +2370,63 @@ components:
           type: string
           example: Bad Request, Error message mentioned above
   responses:
+    coordinator_portal:
+      show:
+        coordinator_session:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            coordinator:
+              "$ref": "#/components/schemas/coordinator_session"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        coordinator:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            coordinator:
+              "$ref": "#/components/schemas/coordinator"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        lab:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            lab:
+              "$ref": "#/components/schemas/detailed_lab"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+      list:
+        labs_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            labs:
+              type: array
+              items:
+                "$ref": "#/components/schemas/lab"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
     student_portal:
       show:
         student_session:

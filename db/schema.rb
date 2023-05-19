@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_05_002622) do
+ActiveRecord::Schema.define(version: 2023_05_17_204611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "busy_labs", force: :cascade do |t|
+    t.bigint "lab_id", null: false
+    t.bigint "exam_id", null: false
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["exam_id"], name: "index_busy_labs_on_exam_id"
+    t.index ["lab_id"], name: "index_busy_labs_on_lab_id"
+  end
 
   create_table "choices", force: :cascade do |t|
     t.bigint "question_id", null: false
@@ -22,6 +33,16 @@ ActiveRecord::Schema.define(version: 2023_05_05_002622) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "is_answer", default: false
     t.index ["question_id"], name: "index_choices_on_question_id"
+  end
+
+  create_table "coordinators", force: :cascade do |t|
+    t.string "username"
+    t.bigint "university_id", null: false
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["university_id"], name: "index_coordinators_on_university_id"
   end
 
   create_table "correct_answers", force: :cascade do |t|
@@ -106,9 +127,19 @@ ActiveRecord::Schema.define(version: 2023_05_05_002622) do
 
   create_table "faculties", force: :cascade do |t|
     t.string "faculty_name"
-    t.string "university_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "university_id", null: false
+    t.index ["university_id"], name: "index_faculties_on_university_id"
+  end
+
+  create_table "labs", force: :cascade do |t|
+    t.string "name"
+    t.integer "capacity"
+    t.bigint "university_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["university_id"], name: "index_labs_on_university_id"
   end
 
   create_table "question_types", force: :cascade do |t|
@@ -175,7 +206,16 @@ ActiveRecord::Schema.define(version: 2023_05_05_002622) do
     t.index ["course_id"], name: "index_topics_on_course_id"
   end
 
+  create_table "universities", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "busy_labs", "exams"
+  add_foreign_key "busy_labs", "labs"
   add_foreign_key "choices", "questions"
+  add_foreign_key "coordinators", "universities"
   add_foreign_key "correct_answers", "choices"
   add_foreign_key "correct_answers", "questions"
   add_foreign_key "course_groups", "courses"
@@ -185,6 +225,8 @@ ActiveRecord::Schema.define(version: 2023_05_05_002622) do
   add_foreign_key "exam_templates", "courses"
   add_foreign_key "exams", "courses"
   add_foreign_key "exams", "staffs"
+  add_foreign_key "faculties", "universities"
+  add_foreign_key "labs", "universities"
   add_foreign_key "question_types", "courses"
   add_foreign_key "questions", "courses"
   add_foreign_key "questions", "question_types"

@@ -1,25 +1,25 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
-  factory :faculty do
-    faculty_name { Faker::Educator.campus }
+  factory :lab do
+    name { "Lab #{Random.rand(1...1000)}" }
+    capacity { Random.rand(1...200) }
     university
   end
 end
 
 # == Schema Information
 #
-# Table name: faculties
+# Table name: labs
 #
 #  id            :bigint           not null, primary key
-#  faculty_name  :string
+#  capacity      :integer
+#  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  university_id :bigint           not null
 #
 # Indexes
 #
-#  index_faculties_on_university_id  (university_id)
+#  index_labs_on_university_id  (university_id)
 #
 # Foreign Keys
 #

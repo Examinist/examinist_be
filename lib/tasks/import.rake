@@ -1,8 +1,28 @@
 
 namespace :import do
+  desc "Create 1 university"
+  task university: :environment do
+    FactoryBot.create(:university, name: "Alexandria University")
+    p 'University are created'
+  end
+
+  desc "Create 1 coordinator"
+  task coordinator: :environment do
+    FactoryBot.create(:coordinator, university: University.first)
+    p 'Coordinator are created'
+  end
+
+  desc "Create 20 labs"
+  task labs: :environment do
+    FactoryBot.create_list(:lab, 20, university: University.first)
+    p 'labs are created'
+  end
+
   desc "Create 5 faculties"
   task faculties: :environment do
-    FactoryBot.create_list(:faculty, 5)
+    Faculties::Faculties[0..4].each do |faculty|
+      FactoryBot.create(:faculty, faculty_name: faculty[:name], university: University.first)
+    end
     p 'Faculties  are created'
   end
 
@@ -89,6 +109,14 @@ namespace :import do
     p 'One Question for each type is added for each course'
   end
 
+  desc "Create 1 admin for each faculty"
+  task admins: :environment do
+    Faculty.all.each do |faculty|
+      FactoryBot.create(:staff, faculty: faculty, role: :admin)
+    end
+    p 'Admins for each faculty are created'
+  end
+
   desc "Run all tasks"
-  task all: %i[environment faculties students staffs courses course_topics course_groups course_group_students course_group_staffs questions]
+  task all: %i[environment university coordinator labs faculties students staffs courses course_topics course_groups course_group_students course_group_staffs questions admins]
 end
