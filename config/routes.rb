@@ -19,6 +19,7 @@ Rails.application.routes.draw do
         get :user_info
       end
     end
+    resources :labs, only: %i[index create update destroy]
   end
 
   namespace :staff_portal do

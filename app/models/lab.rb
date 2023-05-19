@@ -1,6 +1,6 @@
 class Lab < ApplicationRecord
   # Validations
-  validates_presence_of :name, :capcity, :university_id
+  validates_presence_of :name, :capacity, :university_id
   validates :name,  uniqueness: { scope: :university }
   
   # Associations
@@ -13,7 +13,7 @@ end
 # Table name: labs
 #
 #  id            :bigint           not null, primary key
-#  capcity       :integer
+#  capacity      :integer
 #  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
