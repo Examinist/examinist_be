@@ -41,10 +41,13 @@ class Exam < ApplicationRecord
   before_update :update_exam_status_scheduled, if: -> { will_save_change_to_starts_at?(from: nil) }
   before_destroy :raise_error, unless: -> { unscheduled? }
   after_save :calculate_total_score, unless: ->{ is_auto }
-  after_save :check_labs_capacity, if: -> { saved_change_to_starts_at? && starts_at.present? }
-  after_save :check_student_conflicts, if: -> { saved_change_to_starts_at? && starts_at.present? }
+  after_save :check_labs_capacity, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
+  after_save :check_student_conflicts, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
   after_update_commit :update_exam_status, if: -> { saved_change_to_starts_at? && starts_at.present? }
   after_update_commit :end_exam, if: -> { saved_change_to_duration? && starts_at.present? }
+
+  # Non DB attributes
+  attr_accessor :_force
 
   # Methods
   def valid_status_transition?(old_status, new_status)
@@ -85,11 +88,14 @@ class Exam < ApplicationRecord
     self.total_score = exam_questions.sum(&:score)
   end
 
+  def _force
+    @_force || false
+  end
+
   private
 
   def nullify_scheduling_attributes!
     self.starts_at = nil
-    self.schedule_id = nil
     busy_labs.destroy_all
   end
 
@@ -136,19 +142,20 @@ class Exam < ApplicationRecord
     labs_capacity = labs.sum(:capacity)
     return unless labs_capacity < num_of_students
 
-    errors.add(:base, :capacity_not_enough)
+    errors.add(:base, :capacity_not_enough, strict: true)
   end
 
   def check_student_conflicts
     overlapped_studens = Student.joins(:exams)
                                 .where(faculty: course.faculty)
                                 .where.not('exams.id = :id', id: id)
+                                .where(exams: { status: %i[scheduled ongoing] })
                                 .where(':start <= exams.ends_at and :end >= exams.starts_at',
                                        start: starts_at, end: ends_at)
                         
     return unless overlapped_studens.present?
 
-    errors.add(:base, :student_conflict, num_of_students: overlapped_studens.size)                        
+    errors.add(:base, :student_conflict, num_of_students: overlapped_studens.size, strict: true)                        
   end
   
   def start_exam
