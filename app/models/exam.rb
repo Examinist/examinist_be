@@ -39,6 +39,7 @@ class Exam < ApplicationRecord
   before_update :nullify_scheduling_attributes!, if: ->{ will_save_change_to_status?(to: UNSCHEDULED) } 
   before_update :add_ends_at!, if: -> { will_save_change_to_starts_at? }
   before_update :update_exam_status_scheduled, if: -> { will_save_change_to_starts_at?(from: nil) }
+  before_destroy :raise_error, unless: -> { unscheduled? }
   after_save :calculate_total_score, unless: ->{ is_auto }
   after_save :check_labs_capacity, if: -> { saved_change_to_starts_at? && starts_at.present? }
   after_save :check_student_conflicts, if: -> { saved_change_to_starts_at? && starts_at.present? }
