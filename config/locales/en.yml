@@ -95,12 +95,19 @@ en:
           attributes:
             status:
               invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
+            base:
+              capacity_not_enough: "The labs capacity is less than the number of studens"
+              student_conflict: "There are %{num_of_students} students that have conflicts"
         busy_lab:
           attributes:
             end_date:
               after: 'End Date must be after Start Date'
             lab_id:
               is_busy: 'This lab is busy at this interval'
+        schedule:
+          attributes:
+            base:
+              cant_be_deleted: 'You can not delete this schedule'
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
