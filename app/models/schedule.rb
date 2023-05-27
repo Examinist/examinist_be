@@ -17,7 +17,7 @@ class Schedule < ApplicationRecord
   private
 
   def check_exams_status
-    return if exams.all? { |exam| exam.scheduled? || exam.unscheduled? }
+    return if exams.all? { |exam| exam.scheduled? }
 
     errors.add(:base, :cant_be_deleted, strict: true)
   end
@@ -25,7 +25,7 @@ class Schedule < ApplicationRecord
   def change_exams_status!
     Exam.transaction do
       exams.each do |exam|
-        exam.update!(status: :unscheduled, schedule_id: nil)
+        exam.unscheduled!
       end
     end
   end

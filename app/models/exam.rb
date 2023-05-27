@@ -96,6 +96,7 @@ class Exam < ApplicationRecord
 
   def nullify_scheduling_attributes!
     self.starts_at = nil
+    self.schedule_id = nil
     busy_labs.destroy_all
   end
 
@@ -165,7 +166,6 @@ class Exam < ApplicationRecord
   end
 
   def end_exam
-    ends_at = starts_at + duration.minutes
     UpdateExamStatusJob.set(wait_until: ends_at).perform_later({ exam_id: id,
                                                                  ends_at: ends_at,
                                                                  operation: 'end_exam' })
