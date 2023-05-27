@@ -1,6 +1,4 @@
 class UpdateExamStatusJob < ApplicationJob
-  unique :until_executed, on_conflict: :log
-
   def perform(args)
     exam = Exam.find_by_id(args[:exam_id])
     return unless exam.present?
