@@ -55,70 +55,70 @@ en:
       not_found: "Can not find %{model} with id %{id}"
       duplicated: "Duplication, there are two %{model_name} that are the same"
       course:
-        not_found_with_id: 'Unfortunately this course with id %{id} does not exist or you do not have permissions to access'
+        not_found_with_id: "Unfortunately this course with id %{id} does not exist or you do not have permissions to access"
 
       models:
         course_group_staff:
           attributes:
             staff_id:
-              staff_not_in_faculty: 'Unfortunately this staff is not in the faculty and can not be assigned to the course'
-              staff_can_not_be_assigned: 'Unfortunately this staff is not instructor or admin and can not be assigned to the course'
+              staff_not_in_faculty: "Unfortunately this staff is not in the faculty and can not be assigned to the course"
+              staff_can_not_be_assigned: "Unfortunately this staff is not instructor or admin and can not be assigned to the course"
         course_group_student:
           attributes:
             student_id:
-              student_not_in_faculty: 'Unfortunately this student is not in the faculty and can not be enrolled into the course'
-              student_already_enrolled_into_course: 'This student has already been enrolled into this course in another group'
+              student_not_in_faculty: "Unfortunately this student is not in the faculty and can not be enrolled into the course"
+              student_already_enrolled_into_course: "This student has already been enrolled into this course in another group"
         question_type:
           attributes:
             name:
-              cant_be_changed: 'can not be changed as it is a default question type'
+              cant_be_changed: "can not be changed as it is a default question type"
             base:
-              cant_be_deleted: 'You can not delete default question types'
+              cant_be_deleted: "You can not delete default question types"
         question:
           attributes:
             topic_id:
-              invalid_topic: 'The topic of this question is either not in this course or does not exist at all'
+              invalid_topic: "The topic of this question is either not in this course or does not exist at all"
             question_type_id:
-              invalid_question_type: 'The question type of this question is either not in this course or does not exist at all'
-              invalid_update: 'Can not update Question Type of the question'
+              invalid_question_type: "The question type of this question is either not in this course or does not exist at all"
+              invalid_update: "Can not update Question Type of the question"
             answer_type:
-              invalid_answer_type: 'The answer type is not compatible with the question type'
+              invalid_answer_type: "The answer type is not compatible with the question type"
             base:
-              choices_size: 'Number of actual choice fields does not match the total number of choices given'
-              invalid_correct_answer: 'The number of correct answers given is not compatible with the answer type'
+              choices_size: "Number of actual choice fields does not match the total number of choices given"
+              invalid_correct_answer: "The number of correct answers given is not compatible with the answer type"
               blank_correct_answer: "Correct Answer can't be blank"
         exam_template:
           attributes:
             base:
-              invalid_ratios: 'Invalid Ratios!! Sum does not add up to 100%'
-        exam: 
+              invalid_ratios: "Invalid Ratios!! Sum does not add up to 100%"
+        exam:
           attributes:
             status:
               invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
             base:
-              capacity_not_enough: "The labs capacity is less than the number of studens"
+              capacity_not_enough: "The labs capacity is less than the number of students by %{difference} seat(s)"
               student_conflict: "There are %{num_of_students} students that have conflicts"
         busy_lab:
           attributes:
             end_date:
-              after: 'End Date must be after Start Date'
+              after: "End Date must be after Start Date"
             lab_id:
-              is_busy: 'This lab is busy at this interval'
+              is_busy: "This lab is busy at this interval"
         schedule:
           attributes:
             base:
-              cant_be_deleted: 'You can not delete this schedule'
+              cant_be_deleted: "You can not delete this schedule"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
-    unauthorized_action: 'Unauthorized Action!'
-  authentication: 
+    unauthorized_action: "Unauthorized Action!"
+  authentication:
     invalid_credentials: "Invalid credentials"
 
   exam_template:
-    must_update_template: 'Weight ratios are not set! please update the course template'
-    invalid_question_types_ratios: 'Sum of Question types ratios are not 100'
-  exam:  
+    must_update_template: "Weight ratios are not set! please update the course template"
+    invalid_question_types_ratios: "Sum of Question types ratios are not 100"
+  exam:
     cant_create: "You are not assigned to this course, you can't create an exam"
     cant_update: "Exam can't be edited"
     cant_delete: "Exam can't be deleted"

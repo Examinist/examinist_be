@@ -143,7 +143,7 @@ class Exam < ApplicationRecord
     labs_capacity = labs.sum(:capacity)
     return unless labs_capacity < num_of_students
 
-    errors.add(:base, :capacity_not_enough, strict: true)
+    errors.add(:base, :capacity_not_enough, difference: num_of_students - labs_capacity, strict: true)
   end
 
   def check_student_conflicts
