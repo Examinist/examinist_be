@@ -781,6 +781,21 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
+              },
+              labs_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  labs: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/lab' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
               }
             }
           }

@@ -780,6 +780,37 @@ paths:
               - duration
               - course_id
               - question_type_topics
+  "/staff_portal/labs":
+    get:
+      summary: List labs
+      tags:
+      - Staff Portal / Labs
+      description: |-
+        This API is responsible for:
+
+              * Listing the labs
+      operationId: listLabs
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Labs Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/labs_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/staff_portal/courses/{course_id}/question_types":
     get:
       summary: List Question Types of a specific Course
@@ -2688,6 +2719,21 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/exam"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        labs_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            labs:
+              type: array
+              items:
+                "$ref": "#/components/schemas/lab"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
