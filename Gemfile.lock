@@ -44,6 +44,9 @@ GEM
     activejob (6.1.7.2)
       activesupport (= 6.1.7.2)
       globalid (>= 0.3.6)
+    activejob-uniqueness (0.2.5)
+      activejob (>= 4.2, < 7.1)
+      redlock (>= 1.2, < 2)
     activemodel (6.1.7.2)
       activesupport (= 6.1.7.2)
     activerecord (6.1.7.2)
@@ -287,6 +290,8 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.3.0)
       redis (>= 2.2)
+    redlock (1.3.2)
+      redis (>= 3.0.0, < 6.0)
     regexp_parser (2.7.0)
     rexml (3.2.5)
     rgeo (3.0.0)
@@ -386,6 +391,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_union
+  activejob-uniqueness
   activerecord-postgis-adapter
   annotate
   awesome_print
