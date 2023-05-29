@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       end
     end
     resources :labs, only: %i[index]
+    resources :schedules, only: %i[index show create update destroy]
   end
 
   namespace :student_portal do

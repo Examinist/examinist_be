@@ -13,6 +13,26 @@ class Schedule < ApplicationRecord
   before_destroy :check_exams_status
   before_destroy :change_exams_status!
 
+  def self.schedule_bulk_exams(params)
+    schedule = Schedule.new
+    schedule.handle_bulk_exams(params)
+  end
+
+  def handle_bulk_exams(params)
+    ActiveRecord::Base.transaction do
+      schedule = Schedule.create!(title: params[:title], faculty_id: params[:faculty_id])
+      exams_with_course = Exam.includes(:course).where('courses.faculty_id = ?', params[:faculty_id]).references(:course)
+      exams = params[:exams]
+      exams.each do |exam_obj|
+        exam = exams_with_course.find(exam_obj[:id])
+        errors.add(:base, :exam_already_scheduled, strict: true) if exam.scheduled?
+
+        exam.update!(schedule_id: schedule.id, _force: exam_obj[:_force], starts_at: exam_obj[:starts_at], busy_labs_attributes: exam_obj[:busy_labs_attributes])
+      end
+      schedule
+    end
+  end
+
   # Methods
   private
 

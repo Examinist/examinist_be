@@ -25,6 +25,7 @@ class Staff < ApplicationRecord
   has_many :exams, dependent: :destroy
   has_many :courses_exams, through: :assigned_courses, source: :exams
   has_many :labs, through: :faculty
+  has_many :schedules, through: :faculty
 
   # Scopes
   scope :filter_by_role, ->(role) { where(role: role) }

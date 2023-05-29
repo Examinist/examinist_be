@@ -100,6 +100,14 @@ RSpec.configure do |config|
             },
             required: %w[id name capacity]
           },
+          busy_lab: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Lab A' }
+            },
+            required: %w[id name]
+          },
           detailed_lab: {
             type: :object,
             properties: {
@@ -374,7 +382,12 @@ RSpec.configure do |config|
               scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
               creation_mode: { type: :string, example: 'Manual' },
               creator: { '$ref' => '#/components/schemas/staff' },
-              course: { '$ref' => '#/components/schemas/course' }
+              course: { '$ref' => '#/components/schemas/course' },
+              number_of_students: { type: :integer, example: 40 },
+              busy_labs: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/busy_lab' }
+              }
             },
             required: %w[id title status duration total_score created_at scheduled_date creation_mode creator course]
           },
@@ -392,6 +405,11 @@ RSpec.configure do |config|
               creation_mode: { type: :string, example: 'Manual' },
               creator: { '$ref' => '#/components/schemas/staff' },
               course: { '$ref' => '#/components/schemas/course' },
+              number_of_students: { type: :integer, example: 40 },
+              busy_labs: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/busy_lab' }
+              },
               exam_questions: {
                 type: :array,
                 items: {
@@ -415,6 +433,26 @@ RSpec.configure do |config|
               question: { '$ref' => '#/components/schemas/question' }
             },
             required: %w[id score question]
+          },
+          schedule: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'CSED-Midterm' }
+            },
+            required: %w[id title]
+          },
+          detailed_schedule: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'CSED-Midterm' },
+              exams: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/exam' }
+              }
+            },
+            required: %w[id title exams]
           }
         },
         errors: {
@@ -686,6 +724,18 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
+              },
+              schedule: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  schedule: { '$ref' => '#/components/schemas/detailed_schedule' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
               }
             },
             list: {
@@ -789,6 +839,21 @@ RSpec.configure do |config|
                   labs: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/lab' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              schedules_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  schedules: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/schedule' }
                   },
                   message: {
                     type: :string,

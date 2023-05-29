@@ -3,7 +3,7 @@ class Exam < ApplicationRecord
   # constants
   NEXT_VALID_TRANSITIONS = { unscheduled: %i[scheduled], scheduled: %i[unscheduled ongoing], ongoing: %i[pending_grading],
                              pending_grading: %i[graded] }.freeze
-  
+
   DIFFICULTIES = %w[easy medium hard].freeze
   UNSCHEDULED = 'unscheduled'
 
@@ -25,7 +25,7 @@ class Exam < ApplicationRecord
   has_many :busy_labs, dependent: :destroy
   has_many :labs, through: :busy_labs
   has_many :students, through: :course
-  
+
   # Nested Attributes
   accepts_nested_attributes_for :exam_questions, allow_destroy: true
   accepts_nested_attributes_for :busy_labs, allow_destroy: true
@@ -34,10 +34,10 @@ class Exam < ApplicationRecord
   scope :filter_by_status, ->(status) { where(status: status) }
 
   # Hooks
+  before_validation :add_ends_at!, if: -> { will_save_change_to_starts_at? && starts_at.present? }
   before_create :check_if_can_create
   before_update :raise_error, unless: ->{ will_save_change_to_status? || %w[unscheduled scheduled].include?(status_was) }
-  before_update :nullify_scheduling_attributes!, if: ->{ will_save_change_to_status?(to: UNSCHEDULED) } 
-  before_update :add_ends_at!, if: -> { will_save_change_to_starts_at? }
+  before_update :nullify_scheduling_attributes!, if: ->{ will_save_change_to_status?(to: UNSCHEDULED) }
   before_update :update_exam_status_scheduled, if: -> { will_save_change_to_starts_at?(from: nil) }
   before_destroy :raise_error, unless: -> { unscheduled? }
   after_save :calculate_total_score, unless: ->{ is_auto }
@@ -60,7 +60,7 @@ class Exam < ApplicationRecord
     questions_by_topic = nil
     question_type_topics.each do |object|
       selected_questions = Question.where(question_type_id: object[:question_type_id], topic_id: object[:topic_ids])
-      
+
       questions_by_topic ||= selected_questions
       questions_by_topic = questions_by_topic.or(selected_questions)
     end
@@ -92,20 +92,22 @@ class Exam < ApplicationRecord
     @_force || false
   end
 
+  def number_of_students
+    students.size
+  end
+
   private
 
   def nullify_scheduling_attributes!
     self.starts_at = nil
     self.schedule_id = nil
+    self.ends_at = nil
     busy_labs.destroy_all
   end
 
   def add_ends_at!
-    if starts_at.nil?
-      self.ends_at = nil
-    else
-      self.ends_at = starts_at + duration.minutes
-    end
+    self.ends_at = starts_at + duration.minutes
+    busy_labs.map { |lab| lab.save! }
   end
 
   def validate_state_transition
@@ -139,7 +141,7 @@ class Exam < ApplicationRecord
   end
 
   def check_labs_capacity
-    num_of_students = students.size()
+    num_of_students = students.size
     labs_capacity = labs.sum(:capacity)
     return unless labs_capacity < num_of_students
 
@@ -153,15 +155,15 @@ class Exam < ApplicationRecord
                                 .where(exams: { status: %i[scheduled ongoing] })
                                 .where(':start <= exams.ends_at and :end >= exams.starts_at',
                                        start: starts_at, end: ends_at)
-                        
+
     return unless overlapped_studens.present?
 
-    errors.add(:base, :student_conflict, num_of_students: overlapped_studens.size, strict: true)                        
+    errors.add(:base, :student_conflict, num_of_students: overlapped_studens.size, strict: true)
   end
-  
+
   def start_exam
-    UpdateExamStatusJob.set(wait_until: self.starts_at).perform_later({ exam_id: id,
-                                                                   starts_at: self.starts_at,
+    UpdateExamStatusJob.set(wait_until: starts_at).perform_later({ exam_id: id,
+                                                                   starts_at: starts_at,
                                                                    operation: 'start_exam' })
   end
 

@@ -50,6 +50,7 @@ en:
       examquestion: "Exam Question"
       lab: "Lab"
       busylab: "Busy Lab"
+      schedule: "Schedule"
 
     errors:
       not_found: "Can not find %{model} with id %{id}"
@@ -107,7 +108,8 @@ en:
         schedule:
           attributes:
             base:
-              cant_be_deleted: "You can not delete this schedule"
+              cant_be_deleted: "You can not delete this schedule because one of the exams has already started"
+              exam_already_scheduled: "One of the exams is already scheduled"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
