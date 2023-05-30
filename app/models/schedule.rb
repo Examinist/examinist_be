@@ -20,16 +20,19 @@ class Schedule < ApplicationRecord
 
   def handle_bulk_exams(params)
     ActiveRecord::Base.transaction do
-      schedule = Schedule.create!(title: params[:title], faculty_id: params[:faculty_id])
-      exams_with_course = Exam.includes(:course).where('courses.faculty_id = ?', params[:faculty_id]).references(:course)
+      self.title = params[:title]
+      self.faculty_id = params[:faculty_id]
+      exams_with_course = Exam.joins(:course).where('courses.faculty_id = ?', params[:faculty_id])
       exams = params[:exams]
       exams.each do |exam_obj|
         exam = exams_with_course.find(exam_obj[:id])
         errors.add(:base, :exam_already_scheduled, strict: true) if exam.scheduled?
 
-        exam.update!(schedule_id: schedule.id, _force: exam_obj[:_force], starts_at: exam_obj[:starts_at], busy_labs_attributes: exam_obj[:busy_labs_attributes])
+        exam.update!(_force: exam_obj[:_force], starts_at: exam_obj[:starts_at], busy_labs_attributes: exam_obj[:busy_labs_attributes])
+        self.exams << exam
       end
-      schedule
+      save!
+      self
     end
   end
 
