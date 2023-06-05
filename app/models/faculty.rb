@@ -9,6 +9,8 @@ class Faculty < ApplicationRecord
   belongs_to :university
   has_many :courses, dependent: :destroy
   has_many :exams, through: :courses
+  has_many :schedules, dependent: :destroy
+  has_many :labs, through: :university
 end
 
 # == Schema Information

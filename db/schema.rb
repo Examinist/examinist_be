@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_17_204611) do
+ActiveRecord::Schema.define(version: 2023_05_26_225841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,7 +121,10 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
     t.boolean "has_models", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "schedule_id"
+    t.datetime "ends_at"
     t.index ["course_id"], name: "index_exams_on_course_id"
+    t.index ["schedule_id"], name: "index_exams_on_schedule_id"
     t.index ["staff_id"], name: "index_exams_on_staff_id"
   end
 
@@ -166,6 +169,14 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
     t.index ["course_id"], name: "index_questions_on_course_id"
     t.index ["question_type_id"], name: "index_questions_on_question_type_id"
     t.index ["topic_id"], name: "index_questions_on_topic_id"
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "faculty_id", null: false
+    t.index ["faculty_id"], name: "index_schedules_on_faculty_id"
   end
 
   create_table "staffs", force: :cascade do |t|
@@ -224,6 +235,7 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
   add_foreign_key "exam_questions", "questions"
   add_foreign_key "exam_templates", "courses"
   add_foreign_key "exams", "courses"
+  add_foreign_key "exams", "schedules"
   add_foreign_key "exams", "staffs"
   add_foreign_key "faculties", "universities"
   add_foreign_key "labs", "universities"
@@ -231,6 +243,7 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
   add_foreign_key "questions", "courses"
   add_foreign_key "questions", "question_types"
   add_foreign_key "questions", "topics"
+  add_foreign_key "schedules", "faculties"
   add_foreign_key "staffs", "faculties"
   add_foreign_key "students", "faculties"
   add_foreign_key "topics", "courses"

@@ -1,11 +1,16 @@
 class BusyLab < ApplicationRecord
   # Validations
-  validates_presence_of :start_date, :end_date, :lab_id, :exam_id
-  validates_datetime :end_date, after: :start_date 
-  validate :lab_is_busy?
+  validates_presence_of :lab_id, :exam_id, :start_date, :end_date
+  validates_datetime :end_date, after: :start_date
+  validate :lab_is_busy?, if: -> { !exam._force }
+
   # Associations
   belongs_to :lab
   belongs_to :exam
+  delegate :name, to: :lab
+
+  # Hooks
+  before_validation :add_dates!
 
   private
 
@@ -16,7 +21,12 @@ class BusyLab < ApplicationRecord
                                          start: start_date, end: end_date)
     return unless overlapped_busy_labs.present?
 
-    errors.add(:lab_id, :is_busy)
+    errors.add(:lab_id, :is_busy, strict: true)
+  end
+
+  def add_dates!
+    self.start_date = exam.starts_at
+    self.end_date = exam.ends_at
   end
 end
 

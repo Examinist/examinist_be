@@ -17,6 +17,14 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
   attribute :course do |object|
     StaffPortal::CourseSerializer.new(object.course).to_j
   end
+
+  attribute :number_of_students do |object|
+    object.number_of_students
+  end
+
+  attribute :busy_labs do |object|
+    StaffPortal::BusyLabSerializer.new(object.busy_labs).to_j
+  end
   ####################### Show Details ############################
   attribute :exam_questions, if: proc { |_record, params| params && params[:show_details] } do |object|
     get_questions(object)
