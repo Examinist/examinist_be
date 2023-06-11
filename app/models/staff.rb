@@ -13,7 +13,6 @@ class Staff < ApplicationRecord
   validates :password , length: { minimum: 6 }
   validates_presence_of :role
   validates_presence_of :faculty
-  has_secure_password
 
   # Associations
   belongs_to :faculty
@@ -25,6 +24,12 @@ class Staff < ApplicationRecord
   has_many :course_questions, through: :assigned_courses, source: :questions
   has_many :exams, dependent: :destroy
   has_many :courses_exams, through: :assigned_courses, source: :exams
+  has_many :labs, through: :faculty
+  has_many :schedules, through: :faculty
+
+  # Scopes
+  scope :filter_by_role, ->(role) { where(role: role) }
+  scope :filter_by_faculty_id, ->(faculty_id) { where(faculty_id: faculty_id) }
 end
 
 # == Schema Information

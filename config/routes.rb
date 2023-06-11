@@ -12,6 +12,16 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
+  namespace :coordinator_portal do
+    resources :sessions, only: %i[create]
+    resources :coordinators do
+      collection do
+        get :user_info
+      end
+    end
+    resources :labs, only: %i[index create update destroy]
+  end
+
   namespace :staff_portal do
     resources :sessions, only: %i[create destroy]
     resources :courses, only: %i[index show] do
@@ -34,6 +44,8 @@ Rails.application.routes.draw do
         post :auto_generate
       end
     end
+    resources :labs, only: %i[index]
+    resources :schedules, only: %i[index show create update destroy]
   end
 
   namespace :student_portal do

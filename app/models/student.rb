@@ -10,13 +10,14 @@ class Student < ApplicationRecord
   validates :password , length: { minimum: 6 }
   validates :academic_id, presence: true, uniqueness: { scope: :faculty }
   validates_presence_of :faculty
-  has_secure_password
+
 
   # Associations
   belongs_to :faculty
   has_many :course_group_students
   has_many :course_groups, through: :course_group_students
   has_many :enrolled_courses, -> { distinct }, through: :course_groups, source: :course
+  has_many :exams, through: :enrolled_courses
 end
 
 # == Schema Information

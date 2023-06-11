@@ -103,7 +103,7 @@ RSpec.describe 'staff_portal/exams', type: :request do
 
       security [staff_auth: []]
 
-      response 201, 'Course Exam Deleted successfully' do
+      response 201, 'Course Exam Showed successfully' do
         schema '$ref' => '#/components/responses/staff_portal/show/exam'
         run_test!
       end

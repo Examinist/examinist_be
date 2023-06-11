@@ -35,6 +35,11 @@ RSpec.configure do |config|
       ],
       components: {
         securitySchemes: {
+          coordinator_auth: {
+            type: :http,
+            scheme: :bearer,
+            bearerFormat: :JWT
+          },
           staff_auth: {
             type: :http,
             scheme: :bearer,
@@ -78,14 +83,72 @@ RSpec.configure do |config|
           }
         },
         schemas: {
+          university: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer', example: 1 },
+              name: { type: 'string', example: 'Alexandria University' }
+            },
+            required: %w[id name]
+          },
+          lab: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Lab A' },
+              capacity: { type: :integer, example: 30 }
+            },
+            required: %w[id name capacity]
+          },
+          busy_lab: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Lab A' }
+            },
+            required: %w[id name]
+          },
+          detailed_lab: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Lab A' },
+              capacity: { type: :integer, example: 30 },
+              university: { '$ref' => '#/components/schemas/university' }
+            },
+            required: %w[id name capacity university]
+          },
           faculty: {
             type: 'object',
             properties: {
                 id: { type: 'integer', example: 1 },
                 faculty_name: { type: 'string', example: 'Faculty of Engineering' },
-                University_name: { type: 'string', example: 'Alexandria University'},
+                university: { '$ref' => '#/components/schemas/university' }
             },
-            required: %w[id faculty_name University_name]
+            required: %w[id faculty_name university]
+          },
+          coordinator: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer', example: 1 },
+              username: { type: 'string', example: 'super' },
+              email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
+              role: { type: :string, example: 'university_admin' },
+              university: { '$ref' => '#/components/schemas/university' }
+            },
+            required: %w[id username email university]
+          },
+          coordinator_session: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer', example: 1 },
+              username: { type: 'string', example: 'super' },
+              email: { type: 'string', example: 'ahmed.gamal5551.ag@gmail.com' },
+              role: { type: :string, example: 'university_admin' },
+              university: { '$ref' => '#/components/schemas/university' },
+              auth_token: { type: :string, example: "hgcscxmopjsecohsecophopshcijsic" }
+            },
+            required: %w[id username email university auth_token]
           },
           detailed_student: {
             type: 'object',
@@ -96,8 +159,8 @@ RSpec.configure do |config|
                 last_name: { type: 'string', example: 'Gamal' },
                 username: { type: 'string', example: '18010083' },
                 role: { type: :string, example: 'student' },
-                academic_id: { type: 'string', example: '18010083'},
-                faculty: { '$ref' => '#/components/schemas/faculty'  }
+                academic_id: { type: 'string', example: '18010083' },
+                faculty: { '$ref' => '#/components/schemas/faculty' }
             },
             required: %w[id email first_name last_name username faculty_id academic_id]
           },
@@ -319,7 +382,12 @@ RSpec.configure do |config|
               scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
               creation_mode: { type: :string, example: 'Manual' },
               creator: { '$ref' => '#/components/schemas/staff' },
-              course: { '$ref' => '#/components/schemas/course' }
+              course: { '$ref' => '#/components/schemas/course' },
+              number_of_students: { type: :integer, example: 40 },
+              busy_labs: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/busy_lab' }
+              }
             },
             required: %w[id title status duration total_score created_at scheduled_date creation_mode creator course]
           },
@@ -337,6 +405,11 @@ RSpec.configure do |config|
               creation_mode: { type: :string, example: 'Manual' },
               creator: { '$ref' => '#/components/schemas/staff' },
               course: { '$ref' => '#/components/schemas/course' },
+              number_of_students: { type: :integer, example: 40 },
+              busy_labs: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/busy_lab' }
+              },
               exam_questions: {
                 type: :array,
                 items: {
@@ -360,6 +433,26 @@ RSpec.configure do |config|
               question: { '$ref' => '#/components/schemas/question' }
             },
             required: %w[id score question]
+          },
+          schedule: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'CSED-Midterm' }
+            },
+            required: %w[id title]
+          },
+          detailed_schedule: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'CSED-Midterm' },
+              exams: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/exam' }
+              }
+            },
+            required: %w[id title exams]
           }
         },
         errors: {
@@ -419,6 +512,63 @@ RSpec.configure do |config|
           }
         },
         responses: {
+          coordinator_portal: {
+            show: {
+              coordinator_session: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  coordinator: { '$ref' => '#/components/schemas/coordinator_session' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              coordinator: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  coordinator: { '$ref' => '#/components/schemas/coordinator' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              lab: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  lab: { '$ref' => '#/components/schemas/detailed_lab' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              }
+            },
+            list: {
+              labs_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  labs: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/lab' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              }
+            }
+          },
           student_portal: {
             show: {
               student_session: {
@@ -574,6 +724,18 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
+              },
+              schedule: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  schedule: { '$ref' => '#/components/schemas/detailed_schedule' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
               }
             },
             list: {
@@ -662,6 +824,36 @@ RSpec.configure do |config|
                   exams: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/exam' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              labs_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  labs: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/lab' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              schedules_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  schedules: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/schedule' }
                   },
                   message: {
                     type: :string,
