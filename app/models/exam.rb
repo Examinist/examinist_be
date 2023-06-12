@@ -5,7 +5,8 @@ class Exam < ApplicationRecord
                              pending_grading: %i[graded] }.freeze
 
   DIFFICULTIES = %w[easy medium hard].freeze
-  UNSCHEDULED = 'unscheduled'
+  UNSCHEDULED = 'unscheduled'.freeze
+  SCHEDULED = 'scheduled'.freeze
 
   # enums
   enum status: { unscheduled: 0, scheduled: 1, ongoing: 2, pending_grading: 3, graded: 4}, _default: 'unscheduled'
@@ -25,6 +26,7 @@ class Exam < ApplicationRecord
   has_many :busy_labs, dependent: :destroy
   has_many :labs, through: :busy_labs
   has_many :students, through: :course
+  has_many :student_exams, dependent: :destroy
 
   # Nested Attributes
   accepts_nested_attributes_for :exam_questions, allow_destroy: true
@@ -43,8 +45,9 @@ class Exam < ApplicationRecord
   after_save :calculate_total_score, unless: ->{ is_auto }
   after_save :check_labs_capacity, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
   after_save :check_student_conflicts, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
-  after_update_commit :update_exam_status, if: -> { saved_change_to_starts_at? && starts_at.present? }
+  after_update_commit :fire_jobs, if: -> { saved_change_to_starts_at? && starts_at.present? }
   after_update_commit :end_exam, if: -> { saved_change_to_duration? && starts_at.present? }
+  after_update_commit :create_student_exams, if: -> { saved_change_to_status?(to: SCHEDULED) }
 
   # Non DB attributes
   attr_accessor :_force
@@ -103,6 +106,7 @@ class Exam < ApplicationRecord
     self.schedule_id = nil
     self.ends_at = nil
     busy_labs.destroy_all
+    student_exams.destroy_all
   end
 
   def add_ends_at!
@@ -135,9 +139,10 @@ class Exam < ApplicationRecord
     self.status = :scheduled
   end
 
-  def update_exam_status
+  def fire_jobs
     start_exam
     end_exam
+    create_student_answers
   end
 
   def check_labs_capacity
@@ -171,6 +176,19 @@ class Exam < ApplicationRecord
     UpdateExamStatusJob.set(wait_until: ends_at).perform_later({ exam_id: id,
                                                                  ends_at: ends_at,
                                                                  operation: 'end_exam' })
+  end
+
+  def create_student_answers
+    tte = starts_at - 2.hours
+    CreateStudentAnswerJob.set(wait_until: tte).perform_later({ exam_id: id,
+                                                                starts_at: starts_at})
+  end
+
+  def create_student_exams
+    student_exams_to_create = students.map do |student|
+      { student_id: student.id }
+    end
+    student_exams.create!(student_exams_to_create)
   end
 end
 

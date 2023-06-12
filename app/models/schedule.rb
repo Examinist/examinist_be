@@ -19,6 +19,7 @@ class Schedule < ApplicationRecord
   end
 
   def handle_bulk_exams(params)
+    updated_exams = []
     ActiveRecord::Base.transaction do
       self.title = params[:title]
       self.faculty_id = params[:faculty_id]
@@ -29,11 +30,12 @@ class Schedule < ApplicationRecord
         errors.add(:base, :exam_already_scheduled, strict: true) if exam.scheduled?
 
         exam.update!(_force: exam_obj[:_force], starts_at: exam_obj[:starts_at], busy_labs_attributes: exam_obj[:busy_labs_attributes])
-        self.exams << exam
+        updated_exams << exam
       end
-      save!
-      self
     end
+    self.exams << updated_exams
+    save!
+    self
   end
 
   # Methods

@@ -21,5 +21,6 @@ class UpdateExamStatusJob < ApplicationJob
   def end_exam(args, exam)
     return unless exam.ends_at&.round(0) == args[:ends_at].round(0) && exam.valid_status_transition?(exam.status, 'pending_grading')
     exam.update!(status: 'pending_grading')
+    exam.busy_labs.destroy_all
   end
 end
