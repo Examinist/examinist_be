@@ -1872,6 +1872,60 @@ paths:
               required:
               - username
               - password
+  "/student_portal/student_exams":
+    get:
+      summary: List Student Exams
+      tags:
+      - Student Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Listing the Student Exams
+      operationId: listStudentExams
+      parameters:
+      - "$ref": "#/components/global_parameters/page_param"
+      security:
+      - student_auth: []
+      responses:
+        '200':
+          description: Student Exams Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/list/student_exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+  "/student_portal/student_exams/sixty_minutes_exams":
+    get:
+      summary: List 60 Minutes Student Exams
+      tags:
+      - Student Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Listing the 60 minutes Student Exams
+      operationId: listSixtyMinutesStudentExams
+      parameters:
+      - "$ref": "#/components/global_parameters/page_param"
+      security:
+      - student_auth: []
+      responses:
+        '200':
+          description: Student Exams Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/list/student_exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
   "/student_portal/students/user_info":
     get:
       summary: Student user info
@@ -2670,6 +2724,45 @@ components:
       - id
       - title
       - exams
+    student_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        grade:
+          type: float
+          example: 50
+        status:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+          example: upcoming
+        exam_id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Midterm
+        total_score:
+          type: integer
+          example: 40
+        scheduled_date:
+          type: datetime
+          example: '2023-04-26T12:38:03.081+03:00'
+        ends_at:
+          type: datetime
+          example: '2023-04-26T14:38:03.081+03:00'
+        duration:
+          type: integer
+          example: 120
+        course:
+          "$ref": "#/components/schemas/course"
+        busy_lab:
+          "$ref": "#/components/schemas/busy_lab"
   errors:
     invalid_credentials:
       type: object
@@ -2837,6 +2930,24 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/course"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        student_exams_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            number_of_pages:
+              type: integer
+              example: 4
+            courses:
+              type: array
+              items:
+                "$ref": "#/components/schemas/student_exam"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

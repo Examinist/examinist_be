@@ -1,0 +1,43 @@
+require 'net/http'
+
+class StudentPortal::StudentExamsController < ApplicationController
+  include Pundit
+  before_action :check_authorization_policy
+  #######
+  # List Student Exams
+  # GET: /student_portal/student_exams
+  #######
+  def index
+    records = policy_scope([:student_portal, StudentExam])
+    @pagy, records = pagy(records) unless params[:page].to_i == -1
+    number_of_pages = @pagy.present? ? @pagy.pages : 1
+    render_response({ student_exams: StudentPortal::StudentExamSerializer.new(records, params: { list_exams: true }).to_j },
+                      :ok, pagination: number_of_pages)
+  end
+
+  #######
+  # List Student Exams (upcoming within 60 minutes & ongoing)
+  # GET: /student_portal/student_exams/sixty_minutes_exams
+  #######
+  def sixty_minutes_exams
+    records = policy_scope([:student_portal, StudentExam]).sixty_minutes
+    @pagy, records = pagy(records) unless params[:page].to_i == -1
+    number_of_pages = @pagy.present? ? @pagy.pages : 1
+    render_response({ student_exams: StudentPortal::StudentExamSerializer.new(records, params: { list_exams: true }).to_j },
+                      :ok, pagination: number_of_pages)
+  end
+
+  private
+
+  def pundit_user
+    uri = URI('http://checkip.amazonaws.com')
+    response = Net::HTTP.get_response(uri)
+    public_ip = response.body.strip
+
+    UserContext.new(@current_user, public_ip)
+  end
+
+  def check_authorization_policy
+    authorize([:student_portal, StudentExam])
+  end
+end

@@ -23,7 +23,14 @@ class StudentExam < ApplicationRecord
   has_many :student_answers, dependent: :destroy
 
   # Nested Attributes
-  accepts_nested_attributes_for :student_answers
+  accepts_nested_attributes_for :student_answers\
+
+  # Scopes
+  scope :sixty_minutes, lambda { 
+    joins(:exam)
+    .where('exams.starts_at <= :date', date: Time.now + 60.minutes) 
+    .where('exams.ends_at >= :current_date', current_date: Time.now)
+  }
 
   # Hooks
   before_update :raise_error, unless: -> { will_save_change_to_status? || %w[ongoing pending_grading].include?(status_was) }
