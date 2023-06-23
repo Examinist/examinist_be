@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_22_230204) do
+ActiveRecord::Schema.define(version: 2023_06_23_224608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 2023_06_22_230204) do
   end
 
   create_table "student_exams", force: :cascade do |t|
-    t.bigint "student_id", null: false
+    t.bigint "student_id"
     t.bigint "exam_id", null: false
     t.float "grade"
     t.integer "status", default: 0

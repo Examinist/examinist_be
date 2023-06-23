@@ -33,11 +33,8 @@ class StudentPortal::StudentExamsController < ApplicationController
   private
 
   def pundit_user
-    uri = URI('http://checkip.amazonaws.com')
-    response = Net::HTTP.get_response(uri)
-    public_ip = response.body.strip
-
-    UserContext.new(@current_user, public_ip)
+    client_ip = request.headers['X-Forwarded-For'] || request.remote_ip
+    UserContext.new(@current_user, client_ip)
   end
 
   def check_authorization_policy

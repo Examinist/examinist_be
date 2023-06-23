@@ -18,7 +18,7 @@ class StudentExam < ApplicationRecord
   end
 
   # Associations
-  belongs_to :student
+  belongs_to :student, optional: true
   belongs_to :exam
   has_many :student_answers, dependent: :destroy
 
@@ -94,7 +94,7 @@ end
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  exam_id    :bigint           not null
-#  student_id :bigint           not null
+#  student_id :bigint
 #
 # Indexes
 #
