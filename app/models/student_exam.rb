@@ -23,7 +23,7 @@ class StudentExam < ApplicationRecord
   has_many :student_answers, dependent: :destroy
 
   # Nested Attributes
-  accepts_nested_attributes_for :student_answers\
+  accepts_nested_attributes_for :student_answers
 
   # Scopes
   scope :sixty_minutes, lambda { 
