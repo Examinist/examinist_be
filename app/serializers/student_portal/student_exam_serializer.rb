@@ -2,10 +2,6 @@ class StudentPortal::StudentExamSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
   attributes :id, :grade, :status
 
-  attribute :exam_id, if: proc { |_record, params| params && params[:list_exams] } do |object|
-    object.exam.id
-  end
-
   attribute :title, if: proc { |_record, params| params && params[:list_exams] } do |object|
     object.exam.title
   end

@@ -22,7 +22,7 @@ class StudentPortal::StudentExamPolicy < ApplicationPolicy
     end
 
     def resolve
-      @user.student_exams.includes(:exam)
+      @user.student_exams.includes(exam: [:course, :students, busy_labs: :lab])
     end
   end
 end

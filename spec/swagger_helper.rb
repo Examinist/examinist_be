@@ -454,13 +454,12 @@ RSpec.configure do |config|
             },
             required: %w[id title exams]
           },
-          student_exam: {
+          student_portal_student_exam: {
             type: 'object',
             properties: {
               id: { type: :integer, example: 1 },
               grade: { type: :float, example: 50 },
               status: { type: :string, enum: %w[upcoming ongoing pending_grading graded], example: 'upcoming' },
-              exam_id: { type: :integer, example: 1 },
               title: { type: :string, example: 'Midterm' },
               total_score: { type: :integer, example: 40 },
               scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
@@ -646,9 +645,9 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   number_of_pages: { type: :integer, example: 4 },
-                  courses: {
+                  student_exams: {
                     type: :array,
-                    items: { '$ref' => '#/components/schemas/student_exam' }
+                    items: { '$ref' => '#/components/schemas/student_portal_student_exam' }
                   },
                   message: {
                     type: :string,

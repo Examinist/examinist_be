@@ -31,6 +31,7 @@ class StudentExam < ApplicationRecord
     .where('exams.starts_at <= :date', date: Time.now + 60.minutes) 
     .where('exams.ends_at >= :current_date', current_date: Time.now)
   }
+  scope :filter_by_status, ->(status) { where(status: status) }
 
   # Hooks
   before_update :raise_error, unless: -> { will_save_change_to_status? || %w[ongoing pending_grading].include?(status_was) }
@@ -46,9 +47,9 @@ class StudentExam < ApplicationRecord
   end
 
   def assigned_busy_lab
-    all_students = exam.students.order(academic_id: :asc)
+    all_students = exam.students.sort_by { |student| student.academic_id }
     index = all_students.find_index { |student| student.id == student_id }
-    available_busy_labs = exam.busy_labs.order(id: :asc)
+    available_busy_labs = exam.busy_labs.sort_by { |busy_lab| busy_lab.id }
     sum = 0
     available_busy_labs.each do |bl|
       return bl if (index + 1) <= (bl.lab.capacity + sum)

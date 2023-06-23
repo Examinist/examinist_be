@@ -13,6 +13,10 @@ RSpec.describe 'student_portal/student_exams', type: :request do
 
       parameter '$ref' => '#/components/global_parameters/page_param'
 
+      parameter name: :filter_by_status, in: :query,
+                schema: { type: :string, enum: %w[upcoming ongoing pending_grading graded] },
+                description: 'Filtering exams by status'
+
       security [student_auth: []]
 
       response 200, 'Student Exams Listed successfully' do

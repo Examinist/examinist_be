@@ -9,6 +9,9 @@ class StudentPortal::StudentExamsController < ApplicationController
   #######
   def index
     records = policy_scope([:student_portal, StudentExam])
+    filtering_params.each do |key, value|
+      records = records.send(key, value) if value.present?
+    end
     @pagy, records = pagy(records) unless params[:page].to_i == -1
     number_of_pages = @pagy.present? ? @pagy.pages : 1
     render_response({ student_exams: StudentPortal::StudentExamSerializer.new(records, params: { list_exams: true }).to_j },
@@ -39,5 +42,9 @@ class StudentPortal::StudentExamsController < ApplicationController
 
   def check_authorization_policy
     authorize([:student_portal, StudentExam])
+  end
+
+  def filtering_params
+    params.permit(:filter_by_status)
   end
 end
