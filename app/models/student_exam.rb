@@ -9,9 +9,11 @@ class StudentExam < ApplicationRecord
   enum status: { upcoming: 0, ongoing: 1, pending_grading: 2, graded: 3 }, _default: 'upcoming'
 
   # validations
-  validates_presence_of :student, :exam
-  validates :student, uniqueness: { scope: :exam, message: I18n.t('activerecord.errors.duplicated',
-                                                                  model_name: 'Student Exam') }
+  validates_presence_of :exam
+  with_options if: :student_id do
+    validates :student, uniqueness: { scope: :exam, message: I18n.t('activerecord.errors.duplicated',
+                                                                    model_name: 'Student Exam') }
+  end
   validates :grade, numericality: { greater_than_or_equal_to: 0.0 }, if: -> { grade.present? }
   with_options on: :update do
     validate :validate_state_transition, if: :will_save_change_to_status?
