@@ -16,6 +16,7 @@ class Exam < ApplicationRecord
   with_options on: :update do
     validate :validate_state_transition, if: :will_save_change_to_status?
   end
+  validates_datetime :starts_at, after: lambda { Time.now + 1.day }, if: :starts_at
 
   # Associations
   belongs_to :course

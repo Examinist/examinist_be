@@ -15,7 +15,10 @@ class UpdateExamStatusJob < ApplicationJob
 
   def start_exam(args, exam)
     return unless exam.starts_at&.round(0) == args[:starts_at].round(0) && exam.valid_status_transition?(exam.status, 'ongoing')
-    exam.update!(status: 'ongoing')
+    ActiveRecord::Base.transaction do
+      exam.update!(status: 'ongoing')
+      exam.student_exams.map { |student_exam| student_exam.ongoing! }
+    end
   end
 
   def end_exam(args, exam)

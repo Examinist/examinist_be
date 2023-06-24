@@ -467,8 +467,68 @@ RSpec.configure do |config|
               duration: { type: :integer, example: 120 },
               course: { '$ref' => '#/components/schemas/course' },
               busy_lab: {'$ref' => '#/components/schemas/busy_lab' }
+            }
+          },
+          student_portal_question_type: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'MCQ' }
+            }
+          },
+          student_portal_choice: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              choice: { type: :string, example: 'choice' }
             },
+            required: %w[id choice]
+          },
+          student_portal_question: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              header: { type: :string, example: 'header' },
+              difficulty: { type: :string, enum: %w[easy medium hard], example: 'easy' },
+              answer_type: { type: :string, enum: %w[single_answer multiple_answers text_answer pdf_answer], example: 'multiple_answers'},
+              question_type: { '$ref' => '#/components/schemas/student_portal_question_type' },
+              topic: { '$ref' => '#/components/schemas/topic' },
+              choices: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/student_portal_choice' }
+              }
+            },
+            required: %w[id header difficulty answer_type question_type topic choices]
+          },
+          student_portal_student_answer: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              answers: {
+                type: :array,
+                items: { type: :string },
+                example: ['choice_one', 'choice_two']
+              },
+              question: { '$ref' => '#/components/schemas/student_portal_question' }
+            }
+          },
+          student_portal_detailed_student_exam: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              grade: { type: :float, example: 50 },
+              status: { type: :string, enum: %w[upcoming ongoing pending_grading graded], example: 'upcoming' },
+              title: { type: :string, example: 'Midterm' },
+              total_score: { type: :integer, example: 40 },
+              scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
+              ends_at: { type: :datetime, example: '2023-04-26T14:38:03.081+03:00' },
+              duration: { type: :integer, example: 120 },
+              course: { '$ref' => '#/components/schemas/course' },
+              busy_lab: { '$ref' => '#/components/schemas/busy_lab' },
+              answers: { '$ref' => '#/components/schemas/student_portal_student_answer' }
+            }
           }
+        
         },
         errors: {
           invalid_credentials: {
@@ -615,6 +675,18 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   student: { '$ref' => '#/components/schemas/student' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              student_exam: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  student_exam: { '$ref' => '#/components/schemas/student_portal_detailed_student_exam' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',

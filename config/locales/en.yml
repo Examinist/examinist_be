@@ -101,6 +101,8 @@ en:
             base:
               capacity_not_enough: "The labs capacity is less than the number of students by %{difference} seat(s)"
               student_conflict: "There are %{num_of_students} students that have conflicts"
+            starts_at:
+              after: "Start Date must be greater than today "
         busy_lab:
           attributes:
             end_date:
