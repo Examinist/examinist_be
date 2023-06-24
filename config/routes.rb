@@ -56,7 +56,7 @@ Rails.application.routes.draw do
         get :user_info
       end
     end
-    resources :student_exams, only: %i[index] do
+    resources :student_exams, only: %i[index show update] do
       collection do
         get :sixty_minutes_exams
       end

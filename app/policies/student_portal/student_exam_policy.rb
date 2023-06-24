@@ -11,6 +11,14 @@ class StudentPortal::StudentExamPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    @ip == ENV['IP_ADDRESS']
+  end
+
+  def update?
+    @ip == ENV['IP_ADDRESS']
+  end
+
   def sixty_minutes_exams?
     @ip == ENV['IP_ADDRESS']
   end

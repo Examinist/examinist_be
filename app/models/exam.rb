@@ -41,6 +41,7 @@ class Exam < ApplicationRecord
   before_update :raise_error, unless: ->{ will_save_change_to_status? || %w[unscheduled scheduled].include?(status_was) }
   before_update :nullify_scheduling_attributes!, if: ->{ will_save_change_to_status?(to: UNSCHEDULED) }
   before_update :update_exam_status_scheduled, if: -> { will_save_change_to_starts_at?(from: nil) }
+  before_update :check_starts_at_validty, if: -> { will_save_change_to_starts_at? && starts_at.present? }
   before_destroy :raise_error, unless: -> { unscheduled? }
   after_save :calculate_total_score, unless: ->{ is_auto }
   after_save :check_labs_capacity, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
@@ -133,6 +134,12 @@ class Exam < ApplicationRecord
     return if staff.assigned_courses.include? course
 
     raise(ErrorHandler::GeneralRequestError, I18n.t('exam.cant_create'))
+  end
+
+  def check_starts_at_validty
+    return unless starts_at < Time.now + 5.hours
+
+    errors.add(:starts_at, :old_starts_at, strict: true)
   end
 
   def update_exam_status_scheduled
