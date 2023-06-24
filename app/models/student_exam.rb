@@ -9,21 +9,31 @@ class StudentExam < ApplicationRecord
   enum status: { upcoming: 0, ongoing: 1, pending_grading: 2, graded: 3 }, _default: 'upcoming'
 
   # validations
-  validates_presence_of :student, :exam
-  validates :student, uniqueness: { scope: :exam, message: I18n.t('activerecord.errors.duplicated',
-                                                                  model_name: 'Student Exam') }
+  validates_presence_of :exam
+  with_options if: :student_id do
+    validates :student, uniqueness: { scope: :exam, message: I18n.t('activerecord.errors.duplicated',
+                                                                    model_name: 'Student Exam') }
+  end
   validates :grade, numericality: { greater_than_or_equal_to: 0.0 }, if: -> { grade.present? }
   with_options on: :update do
     validate :validate_state_transition, if: :will_save_change_to_status?
   end
 
   # Associations
-  belongs_to :student
+  belongs_to :student, optional: true
   belongs_to :exam
   has_many :student_answers, dependent: :destroy
 
   # Nested Attributes
   accepts_nested_attributes_for :student_answers
+
+  # Scopes
+  scope :sixty_minutes, lambda { 
+    joins(:exam)
+    .where('exams.starts_at <= :date', date: Time.now + 60.minutes) 
+    .where('exams.ends_at >= :current_date', current_date: Time.now)
+  }
+  scope :filter_by_status, ->(status) { where(status: status) }
 
   # Hooks
   before_update :raise_error, unless: -> { will_save_change_to_status? || %w[ongoing pending_grading].include?(status_was) }
@@ -39,9 +49,9 @@ class StudentExam < ApplicationRecord
   end
 
   def assigned_busy_lab
-    all_students = exam.students.order(academic_id: :asc)
+    all_students = exam.students.sort_by { |student| student.academic_id }
     index = all_students.find_index { |student| student.id == student_id }
-    available_busy_labs = exam.busy_labs.order(id: :asc)
+    available_busy_labs = exam.busy_labs.sort_by { |busy_lab| busy_lab.id }
     sum = 0
     available_busy_labs.each do |bl|
       return bl if (index + 1) <= (bl.lab.capacity + sum)
@@ -86,7 +96,7 @@ end
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  exam_id    :bigint           not null
-#  student_id :bigint           not null
+#  student_id :bigint
 #
 # Indexes
 #

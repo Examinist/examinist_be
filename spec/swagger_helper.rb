@@ -453,6 +453,21 @@ RSpec.configure do |config|
               }
             },
             required: %w[id title exams]
+          },
+          student_portal_student_exam: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              grade: { type: :float, example: 50 },
+              status: { type: :string, enum: %w[upcoming ongoing pending_grading graded], example: 'upcoming' },
+              title: { type: :string, example: 'Midterm' },
+              total_score: { type: :integer, example: 40 },
+              scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
+              ends_at: { type: :datetime, example: '2023-04-26T14:38:03.081+03:00' },
+              duration: { type: :integer, example: 120 },
+              course: { '$ref' => '#/components/schemas/course' },
+              busy_lab: {'$ref' => '#/components/schemas/busy_lab' }
+            },
           }
         },
         errors: {
@@ -617,6 +632,22 @@ RSpec.configure do |config|
                   courses: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/course' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              student_exams_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
+                  student_exams: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/student_portal_student_exam' }
                   },
                   message: {
                     type: :string,

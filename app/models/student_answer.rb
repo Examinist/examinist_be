@@ -17,7 +17,7 @@ end
 # Table name: student_answers
 #
 #  id               :bigint           not null, primary key
-#  answer           :string
+#  answer           :string           default([]), is an Array
 #  score            :float
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
