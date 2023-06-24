@@ -56,5 +56,10 @@ Rails.application.routes.draw do
         get :user_info
       end
     end
+    resources :student_exams, only: %i[index] do
+      collection do
+        get :sixty_minutes_exams
+      end
+    end
   end
 end

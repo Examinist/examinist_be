@@ -51,6 +51,8 @@ en:
       lab: "Lab"
       busylab: "Busy Lab"
       schedule: "Schedule"
+      studentexam: "Student Exam"
+      studentanswer: "Student Answer"
 
     errors:
       not_found: "Can not find %{model} with id %{id}"
@@ -110,6 +112,10 @@ en:
             base:
               cant_be_deleted: "You can not delete this schedule because one of the exams has already started"
               exam_already_scheduled: "One of the exams is already scheduled"
+        student_exam:
+          attributes:
+            status:
+              invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"
@@ -124,3 +130,5 @@ en:
     cant_create: "You are not assigned to this course, you can't create an exam"
     cant_update: "Exam can't be edited"
     cant_delete: "Exam can't be deleted"
+  student_exam:
+    cant_update: "The exam of the student can't be edited due to the status of his exam."

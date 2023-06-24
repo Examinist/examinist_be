@@ -35,3 +35,6 @@
 
 # Ignore Schema.
 /db/schema.rb
+
+# Ignore .env
+/.env

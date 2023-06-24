@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_26_225841) do
+ActiveRecord::Schema.define(version: 2023_06_23_224608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,6 +194,28 @@ ActiveRecord::Schema.define(version: 2023_05_26_225841) do
     t.index ["faculty_id"], name: "index_staffs_on_faculty_id"
   end
 
+  create_table "student_answers", force: :cascade do |t|
+    t.bigint "student_exam_id", null: false
+    t.bigint "exam_question_id", null: false
+    t.float "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "answer", default: [], array: true
+    t.index ["exam_question_id"], name: "index_student_answers_on_exam_question_id"
+    t.index ["student_exam_id"], name: "index_student_answers_on_student_exam_id"
+  end
+
+  create_table "student_exams", force: :cascade do |t|
+    t.bigint "student_id"
+    t.bigint "exam_id", null: false
+    t.float "grade"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["exam_id"], name: "index_student_exams_on_exam_id"
+    t.index ["student_id"], name: "index_student_exams_on_student_id"
+  end
+
   create_table "students", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
@@ -245,6 +267,10 @@ ActiveRecord::Schema.define(version: 2023_05_26_225841) do
   add_foreign_key "questions", "topics"
   add_foreign_key "schedules", "faculties"
   add_foreign_key "staffs", "faculties"
+  add_foreign_key "student_answers", "exam_questions"
+  add_foreign_key "student_answers", "student_exams"
+  add_foreign_key "student_exams", "exams"
+  add_foreign_key "student_exams", "students"
   add_foreign_key "students", "faculties"
   add_foreign_key "topics", "courses"
 end
