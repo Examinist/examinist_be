@@ -90,6 +90,8 @@ en:
               choices_size: "Number of actual choice fields does not match the total number of choices given"
               invalid_correct_answer: "The number of correct answers given is not compatible with the answer type"
               blank_correct_answer: "Correct Answer can't be blank"
+              cannot_update: "This question can not be updated because it belongs to ongoring or pending grading exam"
+              cannot_destroy: "This question can not be destroyed because it belongs to exam"
         exam_template:
           attributes:
             base:
@@ -101,6 +103,7 @@ en:
             base:
               capacity_not_enough: "The labs capacity is less than the number of students by %{difference} seat(s)"
               student_conflict: "There are %{num_of_students} students that have conflicts"
+              question_doesnot_belong_to_course: "Question with id: %{question_id} doesn't belong to course"
             starts_at:
               old_starts_at: "Start DateTime must be greater than 5 hours from now"
         busy_lab:
