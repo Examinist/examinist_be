@@ -114,7 +114,6 @@ class StudentExam < ApplicationRecord
   end
 
   def check_parent_exam_completion
-    byebug
     student_exams_except_current = exam.student_exams.where.not(id: id)
     return unless student_exams_except_current.all? { |student_exam| student_exam.status == 'graded' }
 
