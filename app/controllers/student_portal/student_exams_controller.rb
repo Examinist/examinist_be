@@ -71,6 +71,6 @@ class StudentPortal::StudentExamsController < ApplicationController
   end
 
   def update_student_exam_params
-    params.permit(:is_submitting, student_answers_attributes: [:id, answer: []])
+    params.permit(:is_submitting, student_answers_attributes: [:id, :marked, :solved, answer: []])
   end
 end
