@@ -88,10 +88,7 @@ class StudentExam < ApplicationRecord
 
   def calculate_grade_and_transition
     computed_grade = student_answers.sum(:score)
-
-    transition_status = status
-    transition_status = :graded if student_answers.all? { |student_answer| student_answer.score.present? }
-
+    transition_status = student_answers.all? { |student_answer| student_answer.score.present? } ? :graded : status
     update!(status: transition_status, grade: computed_grade)
   end
 
