@@ -509,6 +509,8 @@ RSpec.configure do |config|
                 items: { type: :string },
                 example: ['choice_one', 'choice_two']
               },
+              marked: { type: :boolean, example: true },
+              solved: { type: :boolean, example: false },
               question: { '$ref' => '#/components/schemas/student_portal_question' }
             }
           },

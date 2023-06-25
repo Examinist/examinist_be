@@ -18,7 +18,9 @@ end
 #
 #  id               :bigint           not null, primary key
 #  answer           :string           default([]), is an Array
+#  marked           :boolean          default(FALSE)
 #  score            :float
+#  solved           :boolean          default(FALSE)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  exam_question_id :bigint           not null

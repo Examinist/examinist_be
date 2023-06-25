@@ -111,7 +111,9 @@ RSpec.describe 'student_portal/student_exams', type: :request do
                   type: :array,
                   items: { type: :string },
                   example: ['choice_one', 'choice_two']
-                }
+                },
+                marked: { type: :boolean, example: true },
+                solved: { type: :boolean, example: false }
               }
             }
           }

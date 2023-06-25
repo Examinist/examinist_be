@@ -2024,6 +2024,12 @@ paths:
                         example:
                         - choice_one
                         - choice_two
+                      marked:
+                        type: boolean
+                        example: true
+                      solved:
+                        type: boolean
+                        example: false
   "/student_portal/students/user_info":
     get:
       summary: Student user info
@@ -2932,6 +2938,12 @@ components:
           example:
           - choice_one
           - choice_two
+        marked:
+          type: boolean
+          example: true
+        solved:
+          type: boolean
+          example: false
         question:
           "$ref": "#/components/schemas/student_portal_question"
     student_portal_detailed_student_exam:
