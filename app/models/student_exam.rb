@@ -5,6 +5,9 @@ class StudentExam < ApplicationRecord
   # constants
   NEXT_VALID_TRANSITIONS = { upcoming: %i[ongoing], ongoing: %i[pending_grading], pending_grading: %i[graded] }.freeze
 
+  ATTENDED = 'Attended'.freeze
+  ABSENT = 'Absent'.freeze
+
   # enums
   enum status: { upcoming: 0, ongoing: 1, pending_grading: 2, graded: 3 }, _default: 'upcoming'
 
@@ -63,9 +66,9 @@ class StudentExam < ApplicationRecord
   end
 
   def student_status
-    return 'Attended' if grade.present?
+    return ATTENDED if grade.present?
 
-    'Absent'
+    ABSENT
   end
 
   def partial_graded_questions
@@ -73,7 +76,9 @@ class StudentExam < ApplicationRecord
   end
 
   def partial_score
-    student_answers.sum(:score)
+    return 0.0 if grade.nil?
+
+    grade
   end
 
   def total_score

@@ -27,7 +27,6 @@ class StaffPortal::StudentExamsController < ApplicationController
   end
 
   def policy_scope_class
-    'StaffPortal::StudentExamPolicy::Scope'.constantize
-                                           .new(@current_user, StudentExam, { exam_id: params[:exam_id] })
+    StaffPortal::StudentExamPolicy::Scope.new(@current_user, StudentExam, { exam_id: params[:exam_id] })
   end
 end
