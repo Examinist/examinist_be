@@ -9,6 +9,7 @@ class ExamQuestion < ApplicationRecord
   belongs_to :exam, touch: true
   belongs_to :question
   has_one :question_type, through: :question
+  has_many :student_answers, dependent: :destroy
 
 end
 

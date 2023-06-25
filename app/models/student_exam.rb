@@ -41,7 +41,8 @@ class StudentExam < ApplicationRecord
 
   # Hooks
   before_update :raise_error, unless: -> { will_save_change_to_status? || %w[ongoing pending_grading].include?(status_was) }
-  before_update :check_final_submission
+  before_update :check_final_submission, if: -> { @is_submitting.present? }
+  after_update :calculate_grade_and_transition, if: -> { pending_grading? && !saved_change_to_grade? }
   after_update_commit :check_parent_exam_completion, if: -> { graded? }
 
   # Non DB attributes
@@ -85,6 +86,12 @@ class StudentExam < ApplicationRecord
     exam_questions.sum(:score)
   end
 
+  def calculate_grade_and_transition
+    computed_grade = student_answers.sum(:score)
+    transition_status = student_answers.all? { |student_answer| student_answer.score.present? } ? :graded : status
+    update!(status: transition_status, grade: computed_grade)
+  end
+
   private
 
   def validate_state_transition
@@ -98,14 +105,16 @@ class StudentExam < ApplicationRecord
   end
 
   def check_final_submission
-    self.status = :pending_grading if @is_submitting
-    # TODO: Activate the grading process
+    self.status = :pending_grading
+    AutoGradingJob.set(wait_until: Time.now + 5.minutes).perform_later({ student_exam_id: id })
+    @is_submitting = nil
   end
 
   def check_parent_exam_completion
     student_exams_except_current = exam.student_exams.where.not(id: id)
     return unless student_exams_except_current.all? { |student_exam| student_exam.status == 'graded' }
 
+    exam.busy_labs&.destroy_all
     exam.update!(status: :graded)
   end
 end
