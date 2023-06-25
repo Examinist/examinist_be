@@ -5,6 +5,9 @@ class StudentExam < ApplicationRecord
   # constants
   NEXT_VALID_TRANSITIONS = { upcoming: %i[ongoing], ongoing: %i[pending_grading], pending_grading: %i[graded] }.freeze
 
+  ATTENDED = 'Attended'.freeze
+  ABSENT = 'Absent'.freeze
+
   # enums
   enum status: { upcoming: 0, ongoing: 1, pending_grading: 2, graded: 3 }, _default: 'upcoming'
 
@@ -23,6 +26,7 @@ class StudentExam < ApplicationRecord
   belongs_to :student, optional: true
   belongs_to :exam
   has_many :student_answers, dependent: :destroy
+  has_many :exam_questions, through: :student_answers
 
   # Nested Attributes
   accepts_nested_attributes_for :student_answers
@@ -59,6 +63,26 @@ class StudentExam < ApplicationRecord
       sum += bl.lab.capacity
     end
     available_busy_labs.last
+  end
+
+  def student_status
+    return ATTENDED if grade.present?
+
+    ABSENT
+  end
+
+  def partial_graded_questions
+    student_answers.where.not(score: nil).size
+  end
+
+  def partial_score
+    return 0.0 if grade.nil?
+
+    grade
+  end
+
+  def total_score
+    exam_questions.sum(:score)
   end
 
   private
