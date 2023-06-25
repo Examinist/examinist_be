@@ -80,6 +80,16 @@ RSpec.configure do |config|
               type: :number,
               example: 1
             }
+          },
+          exam_id_param: {
+            name: 'exam_id',
+            in: :path,
+            description: 'The exam id to fetch with',
+            required: true,
+            schema: {
+              type: :number,
+              example: 1
+            }
           }
         },
         schemas: {
@@ -527,8 +537,20 @@ RSpec.configure do |config|
               busy_lab: { '$ref' => '#/components/schemas/busy_lab' },
               answers: { '$ref' => '#/components/schemas/student_portal_student_answer' }
             }
+          },
+          student_exam: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              status: { type: :string, enum: %w[upcoming ongoing pending_grading graded], example: 'upcoming' },
+              student_status: { type: :string, example: 'Attended' },
+              total_score: { type: :integer, example: 40 },
+              partial_score: { type: :integer, example: 25 },
+              total_graded_questions: { type: :integer, example: 10 },
+              partial_graded_questions: { type: :integer, example: 5 },
+              student: { '$ref' => '#/components/schemas/detailed_student' }
+            }
           }
-        
         },
         errors: {
           invalid_credentials: {
@@ -957,6 +979,22 @@ RSpec.configure do |config|
                   schedules: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/schedule' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              student_exams_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
+                  student_exams: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/student_exam' }
                   },
                   message: {
                     type: :string,

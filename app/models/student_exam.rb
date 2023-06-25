@@ -23,6 +23,7 @@ class StudentExam < ApplicationRecord
   belongs_to :student, optional: true
   belongs_to :exam
   has_many :student_answers, dependent: :destroy
+  has_many :exam_questions, through: :student_answers
 
   # Nested Attributes
   accepts_nested_attributes_for :student_answers
@@ -59,6 +60,24 @@ class StudentExam < ApplicationRecord
       sum += bl.lab.capacity
     end
     available_busy_labs.last
+  end
+
+  def student_status
+    return 'Attended' if grade.present?
+
+    'Absent'
+  end
+
+  def partial_graded_questions
+    student_answers.where.not(score: nil).size
+  end
+
+  def partial_score
+    student_answers.sum(:score)
+  end
+
+  def total_score
+    exam_questions.sum(:score)
   end
 
   private

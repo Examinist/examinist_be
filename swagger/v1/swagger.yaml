@@ -1619,6 +1619,44 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/invalid_credentials"
+  "/staff_portal/exams/{exam_id}/student_exams":
+    get:
+      summary: List Student Exams
+      tags:
+      - Staff Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Listing the Student Exams
+      operationId: listStudentExams
+      parameters:
+      - "$ref": "#/components/global_parameters/exam_id_param"
+      - "$ref": "#/components/global_parameters/page_param"
+      - name: filter_by_status
+        in: query
+        schema:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+        description: Filtering student exams by status
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Student Exams Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/student_exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
   "/staff_portal/courses/{course_id}/topics":
     get:
       summary: List Topics of a specific Course
@@ -2035,7 +2073,7 @@ paths:
               * Getting user info from the header
       operationId: userInfo
       security:
-      - staff_auth: []
+      - student_auth: []
       responses:
         '200':
           description: user info returned successfully
@@ -2089,6 +2127,14 @@ components:
       name: course_id
       in: path
       description: The course id to fetch with
+      required: true
+      schema:
+        type: number
+        example: 1
+    exam_id_param:
+      name: exam_id
+      in: path
+      description: The exam id to fetch with
       required: true
       schema:
         type: number
@@ -2972,6 +3018,37 @@ components:
           "$ref": "#/components/schemas/busy_lab"
         answers:
           "$ref": "#/components/schemas/student_portal_student_answer"
+    student_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        status:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+          example: upcoming
+        student_status:
+          type: string
+          example: Attended
+        total_score:
+          type: integer
+          example: 40
+        partial_score:
+          type: integer
+          example: 25
+        total_graded_questions:
+          type: integer
+          example: 10
+        partial_graded_questions:
+          type: integer
+          example: 5
+        student:
+          "$ref": "#/components/schemas/detailed_student"
   errors:
     invalid_credentials:
       type: object
@@ -3419,6 +3496,24 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/schedule"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        student_exams_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            number_of_pages:
+              type: integer
+              example: 4
+            student_exams:
+              type: array
+              items:
+                "$ref": "#/components/schemas/student_exam"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
