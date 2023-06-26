@@ -17,6 +17,8 @@ class Student < ApplicationRecord
   has_many :course_group_students
   has_many :course_groups, through: :course_group_students
   has_many :enrolled_courses, -> { distinct }, through: :course_groups, source: :course
+  has_many :exams, through: :enrolled_courses
+  has_many :student_exams, dependent: :nullify
 end
 
 # == Schema Information

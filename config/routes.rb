@@ -43,10 +43,13 @@ Rails.application.routes.draw do
       end
     end
     resources :exams, only: %i[create update index show destroy] do
+      resources :student_exams, only: %i[index]
       collection do
         post :auto_generate
       end
     end
+    resources :labs, only: %i[index]
+    resources :schedules, only: %i[index show create update destroy]
   end
 
   namespace :student_portal do
@@ -55,6 +58,11 @@ Rails.application.routes.draw do
     resources :students do
       collection do
         get :user_info
+      end
+    end
+    resources :student_exams, only: %i[index show update] do
+      collection do
+        get :sixty_minutes_exams
       end
     end
   end

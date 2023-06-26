@@ -1,0 +1,25 @@
+attributes:
+  - primary_keys
+  - content
+  - foreign_keys
+  - inheritance
+  - timestamps
+disconnected: true
+filename: erd
+filetype: pdf
+indirect: false
+inheritance: false
+notation: simple
+sort: true
+warn: true
+title: Examinist ERD
+exclude: null
+only: null
+only_recursion_depth: null
+prepend_primary: false
+cluster: false
+splines: spline
+fonts:
+  normal: "Arial"
+  bold: "Arial Bold"
+  italic: "Arial Italic"

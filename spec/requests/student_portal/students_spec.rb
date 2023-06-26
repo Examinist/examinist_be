@@ -10,7 +10,7 @@ RSpec.describe 'student_portal/students_controller', type: :request do
       operationId 'userInfo'
       produces 'application/json'
 
-      security [staff_auth: []]
+      security [student_auth: []]
 
       response 200, 'user info returned successfully' do
         schema '$ref' => '#/components/responses/student_portal/show/student'

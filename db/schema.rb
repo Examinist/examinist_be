@@ -121,7 +121,10 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
     t.boolean "has_models", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "schedule_id"
+    t.datetime "ends_at"
     t.index ["course_id"], name: "index_exams_on_course_id"
+    t.index ["schedule_id"], name: "index_exams_on_schedule_id"
     t.index ["staff_id"], name: "index_exams_on_staff_id"
   end
 
@@ -168,6 +171,14 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
     t.index ["topic_id"], name: "index_questions_on_topic_id"
   end
 
+  create_table "schedules", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "faculty_id", null: false
+    t.index ["faculty_id"], name: "index_schedules_on_faculty_id"
+  end
+
   create_table "staffs", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
@@ -181,6 +192,30 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
     t.string "username"
     t.index ["email"], name: "index_staffs_on_email", unique: true
     t.index ["faculty_id"], name: "index_staffs_on_faculty_id"
+  end
+
+  create_table "student_answers", force: :cascade do |t|
+    t.bigint "student_exam_id", null: false
+    t.bigint "exam_question_id", null: false
+    t.float "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "answer", default: [], array: true
+    t.boolean "marked", default: false
+    t.boolean "solved", default: false
+    t.index ["exam_question_id"], name: "index_student_answers_on_exam_question_id"
+    t.index ["student_exam_id"], name: "index_student_answers_on_student_exam_id"
+  end
+
+  create_table "student_exams", force: :cascade do |t|
+    t.bigint "student_id"
+    t.bigint "exam_id", null: false
+    t.float "grade"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["exam_id"], name: "index_student_exams_on_exam_id"
+    t.index ["student_id"], name: "index_student_exams_on_student_id"
   end
 
   create_table "students", force: :cascade do |t|
@@ -224,6 +259,7 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
   add_foreign_key "exam_questions", "questions"
   add_foreign_key "exam_templates", "courses"
   add_foreign_key "exams", "courses"
+  add_foreign_key "exams", "schedules"
   add_foreign_key "exams", "staffs"
   add_foreign_key "faculties", "universities"
   add_foreign_key "labs", "universities"
@@ -231,7 +267,12 @@ ActiveRecord::Schema.define(version: 2023_05_17_204611) do
   add_foreign_key "questions", "courses"
   add_foreign_key "questions", "question_types"
   add_foreign_key "questions", "topics"
+  add_foreign_key "schedules", "faculties"
   add_foreign_key "staffs", "faculties"
+  add_foreign_key "student_answers", "exam_questions"
+  add_foreign_key "student_answers", "student_exams"
+  add_foreign_key "student_exams", "exams"
+  add_foreign_key "student_exams", "students"
   add_foreign_key "students", "faculties"
   add_foreign_key "topics", "courses"
 end

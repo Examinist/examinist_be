@@ -65,6 +65,7 @@ gem 'activerecord-postgis-adapter'
 
 gem 'active_record_union'
 gem 'validates_timeliness'
+gem 'activejob-uniqueness', require: 'active_job/uniqueness/sidekiq_patch'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -73,6 +74,8 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-rails'
+  gem 'dotenv-rails'
+  gem 'rails-erd'
 end
 
 

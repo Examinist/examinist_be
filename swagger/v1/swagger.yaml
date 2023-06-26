@@ -665,7 +665,7 @@ paths:
       - staff_auth: []
       responses:
         '201':
-          description: Course Exam Deleted successfully
+          description: Course Exam Showed successfully
           content:
             application/json:
               schema:
@@ -891,6 +891,37 @@ paths:
               - duration
               - course_id
               - question_type_topics
+  "/staff_portal/labs":
+    get:
+      summary: List labs
+      tags:
+      - Staff Portal / Labs
+      description: |-
+        This API is responsible for:
+
+              * Listing the labs
+      operationId: listLabs
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Labs Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/labs_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/staff_portal/courses/{course_id}/question_types":
     get:
       summary: List Question Types of a specific Course
@@ -1364,6 +1395,275 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/not_found"
+  "/staff_portal/schedules":
+    get:
+      summary: List Schedules
+      tags:
+      - Staff Portal / Schedule
+      description: |-
+        This API is responsible for:
+
+              * Listing the Schedules
+      operationId: listSchedules
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Schedules Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/schedules_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    post:
+      summary: Create Schedule
+      tags:
+      - Staff Portal / Schedule
+      description: |-
+        This API is responsible for:
+
+              * Create a Schedule
+      operationId: createSchedule
+      parameters: []
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Schedule Created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/schedule"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: CSED-Midterm
+                exams:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      starts_at:
+                        type: datetime
+                        example: '2023-06-06T12:38:03.081+03:00'
+                      _force:
+                        type: boolean
+                        example: false
+                      busy_labs_attributes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            lab_id:
+                              type: integer
+                              example: 1
+              required:
+              - title
+              - exams
+  "/staff_portal/schedules/{id}":
+    get:
+      summary: Show Schedule
+      tags:
+      - Staff Portal / Schedule
+      description: |-
+        This API is responsible for:
+
+              * View a Schedule
+      operationId: showSchedule
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Schedule Showed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/schedule"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    patch:
+      summary: Update Schedule
+      tags:
+      - Staff Portal / Schedule
+      description: |-
+        This API is responsible for:
+
+              * Update a Schedule
+      operationId: updateSchedule
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Schedule Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/schedule"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: CSED-Final
+                exams_attributes:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        starts_at:
+                          type: datetime
+                          example: '2023-06-06T12:38:03.081+03:00'
+                        _force:
+                          type: boolean
+                          example: false
+                        busy_labs_attributes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              lab_id:
+                                type: integer
+                                example: 1
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        starts_at:
+                          type: datetime
+                          example: '2023-06-06T12:38:03.081+03:00'
+                        _force:
+                          type: boolean
+                          example: false
+                        busy_labs_attributes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 5
+                              lab_id:
+                                type: integer
+                                example: 6
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        starts_at:
+                          type: datetime
+                          example: '2023-06-06T12:38:03.081+03:00'
+                        _force:
+                          type: boolean
+                          example: false
+                        busy_labs_attributes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 5
+                              _destroy:
+                                type: boolean
+                                example: true
+    delete:
+      summary: Delete Schedule
+      tags:
+      - Staff Portal / Schedule
+      description: |-
+        This API is responsible for:
+
+              * Delete a Schedule
+      operationId: deleteSchedule
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Schedule Deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/schedule"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/staff_portal/sessions":
     post:
       summary: Staff Login
@@ -1430,6 +1730,44 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/invalid_credentials"
+  "/staff_portal/exams/{exam_id}/student_exams":
+    get:
+      summary: List Student Exams
+      tags:
+      - Staff Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Listing the Student Exams
+      operationId: listStudentExams
+      parameters:
+      - "$ref": "#/components/global_parameters/exam_id_param"
+      - "$ref": "#/components/global_parameters/page_param"
+      - name: filter_by_status
+        in: query
+        schema:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+        description: Filtering student exams by status
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Student Exams Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/student_exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
   "/staff_portal/courses/{course_id}/topics":
     get:
       summary: List Topics of a specific Course
@@ -1683,6 +2021,164 @@ paths:
               required:
               - username
               - password
+  "/student_portal/student_exams":
+    get:
+      summary: List Student Exams
+      tags:
+      - Student Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Listing the Student Exams
+      operationId: listStudentExams
+      parameters:
+      - "$ref": "#/components/global_parameters/page_param"
+      - name: filter_by_status
+        in: query
+        schema:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+        description: Filtering exams by status
+      security:
+      - student_auth: []
+      responses:
+        '200':
+          description: Student Exams Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/list/student_exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+  "/student_portal/student_exams/sixty_minutes_exams":
+    get:
+      summary: List 60 Minutes Student Exams
+      tags:
+      - Student Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Listing the 60 minutes Student Exams
+      operationId: listSixtyMinutesStudentExams
+      parameters:
+      - "$ref": "#/components/global_parameters/page_param"
+      security:
+      - student_auth: []
+      responses:
+        '200':
+          description: Student Exams Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/list/student_exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+  "/student_portal/student_exams/{id}":
+    get:
+      summary: Show Student Exam
+      tags:
+      - Student Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Showing the Student Exam
+      operationId: showStudentExam
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - student_auth: []
+      responses:
+        '200':
+          description: Student Exam Showed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/show/student_exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this student exam or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    patch:
+      summary: Update Student Exam
+      tags:
+      - Student Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Update a Student Exam (backup and submit)
+      operationId: updateStudentExam
+      parameters:
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - student_auth: []
+      responses:
+        '201':
+          description: Student Exam Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/student_portal/show/student_exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this student exam or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_submitting:
+                  type: boolean
+                  example: false
+                student_answers_attributes:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: bigint
+                        example: 1
+                      answer:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - choice_one
+                        - choice_two
+                      marked:
+                        type: boolean
+                        example: true
+                      solved:
+                        type: boolean
+                        example: false
   "/student_portal/students/user_info":
     get:
       summary: Student user info
@@ -1694,7 +2190,7 @@ paths:
               * Getting user info from the header
       operationId: userInfo
       security:
-      - staff_auth: []
+      - student_auth: []
       responses:
         '200':
           description: user info returned successfully
@@ -1752,6 +2248,14 @@ components:
       schema:
         type: number
         example: 1
+    exam_id_param:
+      name: exam_id
+      in: path
+      description: The exam id to fetch with
+      required: true
+      schema:
+        type: number
+        example: 1
     faculty_id_param:
       name: faculty_id
       in: path
@@ -1789,6 +2293,18 @@ components:
       - id
       - name
       - capacity
+    busy_lab:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Lab A
+      required:
+      - id
+      - name
     detailed_lab:
       type: object
       properties:
@@ -2367,6 +2883,13 @@ components:
           "$ref": "#/components/schemas/staff"
         course:
           "$ref": "#/components/schemas/course"
+        number_of_students:
+          type: integer
+          example: 40
+        busy_labs:
+          type: array
+          items:
+            "$ref": "#/components/schemas/busy_lab"
       required:
       - id
       - title
@@ -2418,6 +2941,13 @@ components:
           "$ref": "#/components/schemas/staff"
         course:
           "$ref": "#/components/schemas/course"
+        number_of_students:
+          type: integer
+          example: 40
+        busy_labs:
+          type: array
+          items:
+            "$ref": "#/components/schemas/busy_lab"
         exam_questions:
           type: array
           items:
@@ -2467,6 +2997,222 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/staff_short"
+    schedule:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: CSED-Midterm
+      required:
+      - id
+      - title
+    detailed_schedule:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: CSED-Midterm
+        exams:
+          type: array
+          items:
+            "$ref": "#/components/schemas/exam"
+      required:
+      - id
+      - title
+      - exams
+    student_portal_student_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        grade:
+          type: float
+          example: 50
+        status:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+          example: upcoming
+        title:
+          type: string
+          example: Midterm
+        total_score:
+          type: integer
+          example: 40
+        scheduled_date:
+          type: datetime
+          example: '2023-04-26T12:38:03.081+03:00'
+        ends_at:
+          type: datetime
+          example: '2023-04-26T14:38:03.081+03:00'
+        duration:
+          type: integer
+          example: 120
+        course:
+          "$ref": "#/components/schemas/course"
+        busy_lab:
+          "$ref": "#/components/schemas/busy_lab"
+    student_portal_question_type:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: MCQ
+    student_portal_choice:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        choice:
+          type: string
+          example: choice
+      required:
+      - id
+      - choice
+    student_portal_question:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        header:
+          type: string
+          example: header
+        difficulty:
+          type: string
+          enum:
+          - easy
+          - medium
+          - hard
+          example: easy
+        answer_type:
+          type: string
+          enum:
+          - single_answer
+          - multiple_answers
+          - text_answer
+          - pdf_answer
+          example: multiple_answers
+        question_type:
+          "$ref": "#/components/schemas/student_portal_question_type"
+        topic:
+          "$ref": "#/components/schemas/topic"
+        choices:
+          type: array
+          items:
+            "$ref": "#/components/schemas/student_portal_choice"
+      required:
+      - id
+      - header
+      - difficulty
+      - answer_type
+      - question_type
+      - topic
+      - choices
+    student_portal_student_answer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        answers:
+          type: array
+          items:
+            type: string
+          example:
+          - choice_one
+          - choice_two
+        marked:
+          type: boolean
+          example: true
+        solved:
+          type: boolean
+          example: false
+        question:
+          "$ref": "#/components/schemas/student_portal_question"
+    student_portal_detailed_student_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        grade:
+          type: float
+          example: 50
+        status:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+          example: upcoming
+        title:
+          type: string
+          example: Midterm
+        total_score:
+          type: integer
+          example: 40
+        scheduled_date:
+          type: datetime
+          example: '2023-04-26T12:38:03.081+03:00'
+        ends_at:
+          type: datetime
+          example: '2023-04-26T14:38:03.081+03:00'
+        duration:
+          type: integer
+          example: 120
+        course:
+          "$ref": "#/components/schemas/course"
+        busy_lab:
+          "$ref": "#/components/schemas/busy_lab"
+        answers:
+          "$ref": "#/components/schemas/student_portal_student_answer"
+    student_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        status:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+          example: upcoming
+        student_status:
+          type: string
+          example: Attended
+        total_score:
+          type: integer
+          example: 40
+        partial_score:
+          type: integer
+          example: 25
+        total_graded_questions:
+          type: integer
+          example: 10
+        partial_graded_questions:
+          type: integer
+          example: 5
+        student:
+          "$ref": "#/components/schemas/detailed_student"
   errors:
     invalid_credentials:
       type: object
@@ -2663,6 +3409,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        student_exam:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            student_exam:
+              "$ref": "#/components/schemas/student_portal_detailed_student_exam"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
       list:
         courses_list:
           type: object
@@ -2677,6 +3436,24 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/course"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        student_exams_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            number_of_pages:
+              type: integer
+              example: 4
+            student_exams:
+              type: array
+              items:
+                "$ref": "#/components/schemas/student_portal_student_exam"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
@@ -2788,6 +3565,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        schedule:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            schedule:
+              "$ref": "#/components/schemas/detailed_schedule"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
       list:
         courses_list:
           type: object
@@ -2883,6 +3673,54 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/exam"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        labs_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            labs:
+              type: array
+              items:
+                "$ref": "#/components/schemas/lab"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        schedules_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            schedules:
+              type: array
+              items:
+                "$ref": "#/components/schemas/schedule"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        student_exams_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            number_of_pages:
+              type: integer
+              example: 4
+            student_exams:
+              type: array
+              items:
+                "$ref": "#/components/schemas/student_exam"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"
