@@ -48,6 +48,11 @@ en:
       choice: "Choice"
       exam: "Exam"
       examquestion: "Exam Question"
+      lab: "Lab"
+      busylab: "Busy Lab"
+      schedule: "Schedule"
+      studentexam: "Student Exam"
+      studentanswer: "Student Answer"
     errors:
       not_found: "Can not find %{model} with id %{id}"
       duplicated: "Duplication, there are two %{model_name} that are the same"
