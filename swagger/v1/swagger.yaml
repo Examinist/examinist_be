@@ -30,6 +30,37 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/invalid_credentials"
+  "/coordinator_portal/faculties":
+    get:
+      summary: List Faculties
+      tags:
+      - Coordinator Portal / Faculties
+      description: |-
+        This API is responsible for:
+
+              * Listing the University Faculties
+      operationId: listFaculties
+      security:
+      - coordinator_auth: []
+      responses:
+        '200':
+          description: Faculties Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/list/faculties_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/coordinator_portal/labs":
     get:
       summary: List labs
@@ -229,6 +260,86 @@ paths:
               required:
               - username
               - password
+  "/coordinator_portal/faculties/{faculty_id}/staffs":
+    get:
+      summary: List Staff
+      tags:
+      - Coordinator Portal / Staff
+      description: |-
+        This API is responsible for:
+
+              * Listing the Faculty Staff Instructors
+      operationId: listStaff
+      parameters:
+      - "$ref": "#/components/global_parameters/faculty_id_param"
+      security:
+      - coordinator_auth: []
+      responses:
+        '200':
+          description: Staff Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/coordinator_portal/list/staffs_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+  "/coordinator_portal/faculties/{faculty_id}/staffs/{id}":
+    patch:
+      summary: Update Staff
+      tags:
+      - Coordinator Portal / Staff
+      description: |-
+        This API is responsible for:
+
+              * Update Instructor to admin
+              * Update admin to instructor
+      operationId: updateStaff
+      parameters:
+      - "$ref": "#/components/global_parameters/faculty_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - coordinator_auth: []
+      responses:
+        '201':
+          description: Faculty Staff Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/staff"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum:
+                  - admin
+                  - instructor
+                  example: admin
   "/staff_portal/courses/{course_id}/course_groups":
     get:
       summary: List Course Groups of a specific Course
@@ -2145,6 +2256,14 @@ components:
       schema:
         type: number
         example: 1
+    faculty_id_param:
+      name: faculty_id
+      in: path
+      description: The faculty id to fetch with
+      required: true
+      schema:
+        type: number
+        example: 1
   schemas:
     university:
       type: object
@@ -2437,6 +2556,26 @@ components:
       - username
       - role
       - auth_token
+    staff_short:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: Ahmed
+        last_name:
+          type: string
+          example: Gamal
+        username:
+          type: string
+          example: jimmy
+      required:
+      - id
+      - first_name
+      - last_name
+      - username
     course:
       type: object
       properties:
@@ -2845,6 +2984,19 @@ components:
       - id
       - score
       - question
+    university_faculty:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        faculty_name:
+          type: string
+          example: Faculty of Engineering
+        admins:
+          type: array
+          items:
+            "$ref": "#/components/schemas/staff_short"
     schedule:
       type: object
       properties:
@@ -3157,6 +3309,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        staff:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            staff:
+              "$ref": "#/components/schemas/staff_short"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
       list:
         labs_list:
           type: object
@@ -3168,6 +3333,36 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/lab"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        faculties_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            faculties:
+              type: array
+              items:
+                "$ref": "#/components/schemas/university_faculty"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        staffs_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            staffs:
+              type: array
+              items:
+                "$ref": "#/components/schemas/staff_short"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

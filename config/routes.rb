@@ -20,6 +20,9 @@ Rails.application.routes.draw do
       end
     end
     resources :labs, only: %i[index create update destroy]
+    resources :faculties, only: %i[index] do
+      resources :staffs, only: %i[index update]
+    end
   end
 
   namespace :staff_portal do

@@ -11,6 +11,7 @@ class Faculty < ApplicationRecord
   has_many :exams, through: :courses
   has_many :schedules, dependent: :destroy
   has_many :labs, through: :university
+  has_many :staffs, dependent: :destroy
 end
 
 # == Schema Information
