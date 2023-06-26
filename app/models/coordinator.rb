@@ -6,11 +6,13 @@ class Coordinator < ApplicationRecord
   validates_presence_of :username, :university_id
   validates_uniqueness_of :username
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  validates :password , length: { minimum: 6 }
+  validates :password , length: { minimum: 6 }, if: :will_save_change_to_password_digest?
 
   # Associations
   belongs_to :university
   has_many :labs, through: :university
+  has_many :faculties, through: :university
+  has_many :staffs, through: :faculties
 end
 
 # == Schema Information
