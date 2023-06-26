@@ -260,6 +260,20 @@ paths:
               required:
               - username
               - password
+    delete:
+      summary: Coordinator Logout
+      tags:
+      - Coordinator Portal / Session
+      description: |-
+        This API is responsible for:
+
+              * Logging out the coordinator
+      operationId: coordinatorLogout
+      security:
+      - coordinator_auth: []
+      responses:
+        '200':
+          description: Coordinator logged out successfully
   "/coordinator_portal/faculties/{faculty_id}/staffs":
     get:
       summary: List Staff
@@ -1705,6 +1719,20 @@ paths:
               required:
               - username
               - password
+    delete:
+      summary: Staff Logout
+      tags:
+      - Staff Portal / Session
+      description: |-
+        This API is responsible for:
+
+              * Logging out the staff
+      operationId: staffLogout
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Staff logged out successfully
   "/staff_portal/staffs/user_info":
     get:
       summary: Staff user info
@@ -2021,6 +2049,20 @@ paths:
               required:
               - username
               - password
+    delete:
+      summary: Student Logout
+      tags:
+      - Student Portal / Session
+      description: |-
+        This API is responsible for:
+
+              * Logging out the student
+      operationId: studentLogout
+      security:
+      - student_auth: []
+      responses:
+        '200':
+          description: Student logged out successfully
   "/student_portal/student_exams":
     get:
       summary: List Student Exams

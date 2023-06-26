@@ -11,4 +11,14 @@ class CoordinatorPortal::SessionsController < ApplicationController
     render_response({ coordinator: CoordinatorPortal::CoordinatorSerializer.new(coordinator,
                                                                           params: { auth_token: auth_token }).to_j }, :ok)
   end
+
+  #######
+  # Log out
+  # DELETE: /coordinator_portal/sessions
+  # Auth: any coordinator
+  #######
+  def destroy
+    @current_user.increment!(:token_version)
+    render_response({}, :ok)
+  end
 end

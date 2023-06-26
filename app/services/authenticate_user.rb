@@ -24,7 +24,7 @@ class AuthenticateUser
   end
 
   def get_access_token(user)
-    JsonWebToken.encode(user_id: user.id, type: type, namespace: namespace)
+    JsonWebToken.encode(user_id: user.id, type: type, namespace: namespace, token_version: user.token_version)
   end
 
   def raise_invalid_credentails

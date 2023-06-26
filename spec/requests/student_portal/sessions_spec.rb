@@ -31,5 +31,20 @@ RSpec.describe 'student_portal/sessions_controller', type: :request do
         run_test!
       end
     end
+
+    delete 'Student Logout' do
+      tags 'Student Portal / Session'
+      description "This API is responsible for:\n
+      * Logging out the student"
+
+      operationId 'studentLogout'
+      produces 'application/json'
+
+      security [student_auth: []]
+
+      response 200, 'Student logged out successfully' do
+        run_test!
+      end
+    end
   end
 end
