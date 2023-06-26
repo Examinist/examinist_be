@@ -22,6 +22,7 @@ end
 #  last_name            :string
 #  must_change_password :boolean          default(TRUE)
 #  password_digest      :string
+#  token_version        :bigint           default(0)
 #  username             :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

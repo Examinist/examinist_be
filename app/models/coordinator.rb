@@ -20,6 +20,7 @@ end
 #  id              :bigint           not null, primary key
 #  email           :string
 #  password_digest :string
+#  token_version   :bigint           default(0)
 #  username        :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

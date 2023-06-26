@@ -44,6 +44,7 @@ end
 #  must_change_password :boolean          default(TRUE)
 #  password_digest      :string
 #  role                 :integer
+#  token_version        :bigint           default(0)
 #  username             :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

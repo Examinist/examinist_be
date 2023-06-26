@@ -31,5 +31,20 @@ RSpec.describe 'staff_portal/sessions_controller', type: :request do
         run_test!
       end
     end
+
+    delete 'Staff Logout' do
+      tags 'Staff Portal / Session'
+      description "This API is responsible for:\n
+      * Logging out the staff"
+
+      operationId 'staffLogout'
+      produces 'application/json'
+
+      security [staff_auth: []]
+
+      response 200, 'Staff logged out successfully' do
+        run_test!
+      end
+    end
   end
 end
