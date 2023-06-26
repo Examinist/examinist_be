@@ -103,7 +103,6 @@ en:
             base:
               capacity_not_enough: "The labs capacity is less than the number of students by %{difference} seat(s)"
               student_conflict: "There are %{num_of_students} students that have conflicts"
-              question_doesnot_belong_to_course: "Question with id: %{question_id} doesn't belong to course"
             starts_at:
               old_starts_at: "Start DateTime must be greater than 5 hours from now"
         busy_lab:
@@ -121,6 +120,10 @@ en:
           attributes:
             status:
               invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
+        exam_question:
+          attributes:
+            question_id:
+              question_doesnot_belong_to_course: "Question with id: %{question_id} doesn't belong to course"
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"

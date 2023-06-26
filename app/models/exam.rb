@@ -43,7 +43,6 @@ class Exam < ApplicationRecord
   before_update :update_exam_status_scheduled, if: -> { will_save_change_to_starts_at?(from: nil) }
   before_update :check_starts_at_validty, if: -> { will_save_change_to_starts_at? && starts_at.present? }
   before_destroy :raise_error, unless: -> { unscheduled? }
-  after_save :check_questions_belong_to_course
   after_save :calculate_total_score, unless: ->{ is_auto }
   after_save :check_labs_capacity, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
   after_save :check_student_conflicts, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
@@ -135,12 +134,6 @@ class Exam < ApplicationRecord
     return if staff.assigned_courses.include? course
 
     raise(ErrorHandler::GeneralRequestError, I18n.t('exam.cant_create'))
-  end
-
-  def check_questions_belong_to_course
-    questions.each do |question| 
-      errors.add(:base, :question_doesnot_belong_to_course, question_id: question.id, strict: true) if question.course_id != course_id
-    end
   end
 
   def check_starts_at_validty
