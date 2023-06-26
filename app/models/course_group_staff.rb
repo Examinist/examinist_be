@@ -14,11 +14,11 @@ class CourseGroupStaff < ApplicationRecord
   private
 
   def validate_staff_in_faculty  
-    errors.add(:staff_id, :staff_not_in_faculty) unless staff.faculty_id == course_group.course_faculty_id
+    errors.add(:staff_id, :staff_not_in_faculty) unless staff&.faculty_id == course_group&.course_faculty_id
   end
 
   def validate_staff_ability_to_be_assigned
-    errors.add(:staff_id, :staff_can_not_be_assigned) unless staff.instructor? || staff.admin?
+    errors.add(:staff_id, :staff_can_not_be_assigned) unless staff&.instructor? || staff&.admin?
   end
 end
 
