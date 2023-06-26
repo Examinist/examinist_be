@@ -225,7 +225,7 @@ RSpec.configure do |config|
             },
             required: %w[id first_name last_name username role auth_token]
           },
-          staff_short: {
+          coordinator_staff: {
             type: 'object',
             properties: {
                 id: { type: 'integer', example: 1 },
@@ -443,7 +443,7 @@ RSpec.configure do |config|
               faculty_name: { type: :string, example: "Faculty of Engineering" },
               admins: { 
                 type: :array,
-                items: { '$ref' => '#/components/schemas/staff_short' }
+                items: { '$ref' => '#/components/schemas/coordinator_staff' }
               }
             }
           }
@@ -547,7 +547,7 @@ RSpec.configure do |config|
                 type: :object,
                 properties: {
                   status: { type: :string, example: 'success' },
-                  staff: { '$ref' => '#/components/schemas/staff_short' },
+                  staff: { '$ref' => '#/components/schemas/coordinator_staff' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
@@ -593,7 +593,7 @@ RSpec.configure do |config|
                   status: { type: :string, example: 'success' },
                   staffs: {
                     type: :array,
-                    items: { '$ref' => '#/components/schemas/staff_short' }
+                    items: { '$ref' => '#/components/schemas/coordinator_staff' }
                   },
                   message: {
                     type: :string,
