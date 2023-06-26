@@ -32,7 +32,9 @@ class Question < ApplicationRecord
   # Hooks
   after_create :check_presence_of_correct_answer
   after_create :validate_correct_answer_with_answer_type
+  before_update :can_update?
   before_update :check_question_type_change
+  before_destroy :can_destroy?
   after_update :check_presence_of_correct_answer
   after_update :validate_correct_answer_with_answer_type
 
@@ -92,6 +94,22 @@ class Question < ApplicationRecord
 
   def check_presence_of_correct_answer
     errors.add(:base, :blank_correct_answer, strict: true) unless correct_answers.present?
+  end
+
+  def can_update?
+    exam_questions = ExamQuestion.joins(:exam)
+                                 .where(question_id: id)
+                                 .where(exam: { status: %i[ongoing pending_grading] })
+    
+    return unless exam_questions.present?
+
+    errors.add(:base, :cannot_update, strict: true)
+  end
+
+  def can_destroy?
+    return unless ExamQuestion.where(question_id: id).present?
+
+    errors.add(:base, :cannot_destroy, strict: true)
   end
 end
 
