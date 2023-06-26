@@ -118,6 +118,12 @@ en:
           attributes:
             status:
               invalid_status_transition: "Invalid next status, cant go from %{from} to %{to}"
+        student_answer:
+          attributes:
+            base:
+              invalid_question_type: "You can't manually grade MCQ or T/F Questions."
+            score:
+              invalid_score: "Grading score can't exceed the maximum score of the question."
   authorization:
     decode_error: "Suspicious token. Authorization failed!"
     invalid_credentials: "Invalid credentials"

@@ -21,7 +21,7 @@ class AutoGradingJob < ApplicationJob
       full_mark = student_answer.exam_question.score
       score = probability * correctly_answered_choices.size * full_mark
 
-      student_answer.update!(score: score)
+      student_answer.update!(score: score, auto_grading: true)
     end
   end
 end
