@@ -11,6 +11,18 @@ class ExamQuestion < ApplicationRecord
   has_one :question_type, through: :question
   has_many :student_answers, dependent: :destroy
 
+  # Hooks
+  before_save :check_questions_belong_to_course
+
+  private
+
+  # Methods
+  def check_questions_belong_to_course
+    return if exam.course_id == question.course_id
+
+    errors.add(:question_id, :question_doesnot_belong_to_course, question_id: question_id, strict: true)
+  end
+
 end
 
 # == Schema Information

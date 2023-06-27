@@ -90,6 +90,16 @@ RSpec.configure do |config|
               type: :number,
               example: 1
             }
+          },
+          faculty_id_param: {
+            name: 'faculty_id',
+            in: :path,
+            description: 'The faculty id to fetch with',
+            required: true,
+            schema: {
+              type: :number,
+              example: 1
+            }
           }
         },
         schemas: {
@@ -232,6 +242,16 @@ RSpec.configure do |config|
                 auth_token: { type: :string, example: "hgcscxmopjsecohsecophopshcijsic" }
             },
             required: %w[id first_name last_name username role auth_token]
+          },
+          coordinator_staff: {
+            type: 'object',
+            properties: {
+                id: { type: 'integer', example: 1 },
+                first_name: { type: 'string', example: 'Ahmed' },
+                last_name: { type: 'string', example: 'Gamal' },
+                username: { type: 'string', example: 'jimmy' }
+            },
+            required: %w[id first_name last_name username]
           },
           course: {
             type: 'object',
@@ -585,6 +605,17 @@ RSpec.configure do |config|
               score: { type: :float, example: 2.5 },
               question: { '$ref' => '#/components/schemas/question' }
             }
+          },
+          university_faculty: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              faculty_name: { type: :string, example: "Faculty of Engineering" },
+              admins: { 
+                type: :array,
+                items: { '$ref' => '#/components/schemas/coordinator_staff' }
+              }
+            }
           }
         },
         errors: {
@@ -681,6 +712,18 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
+              },
+              staff: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  staff: { '$ref' => '#/components/schemas/coordinator_staff' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
               }
             },
             list: {
@@ -691,6 +734,36 @@ RSpec.configure do |config|
                   labs: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/lab' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              faculties_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  faculties: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/university_faculty' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              staffs_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  staffs: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/coordinator_staff' }
                   },
                   message: {
                     type: :string,

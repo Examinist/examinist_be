@@ -10,7 +10,7 @@ class Staff < ApplicationRecord
   validates_presence_of :first_name, :last_name, :username
   validates_uniqueness_of :username
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  validates :password , length: { minimum: 6 }
+  validates :password , length: { minimum: 6 }, if: :will_save_change_to_password_digest?
   validates_presence_of :role
   validates_presence_of :faculty
 
@@ -44,6 +44,7 @@ end
 #  must_change_password :boolean          default(TRUE)
 #  password_digest      :string
 #  role                 :integer
+#  token_version        :bigint           default(0)
 #  username             :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

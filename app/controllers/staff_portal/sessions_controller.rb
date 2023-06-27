@@ -7,5 +7,7 @@ class StaffPortal::SessionsController < ApplicationController
   end
 
   def destroy
+    @current_user.increment!(:token_version)
+    render_response({}, :ok)
   end
 end

@@ -10,7 +10,7 @@ class AuthorizeRequest
     raise_invalid_token unless decoded_jwt_token
 
     current_user = find_user(decoded_jwt_token)
-    raise_invalid_token if current_user.nil?
+    raise_invalid_token unless current_user.present? && current_user&.token_version == decoded_jwt_token[:token_version]
     current_user
   rescue ActiveRecord::RecordNotFound
     raise_invalid_token

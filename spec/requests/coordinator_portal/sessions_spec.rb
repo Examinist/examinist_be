@@ -32,5 +32,20 @@ RSpec.describe 'coordinator_portal/sessions_controller', type: :request do
         run_test!
       end
     end
+
+    delete 'Coordinator Logout' do
+      tags 'Coordinator Portal / Session'
+      description "This API is responsible for:\n
+      * Logging out the coordinator"
+
+      operationId 'coordinatorLogout'
+      produces 'application/json'
+
+      security [coordinator_auth: []]
+
+      response 200, 'Coordinator logged out successfully' do
+        run_test!
+      end
+    end
   end
 end

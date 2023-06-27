@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_25_005647) do
+ActiveRecord::Schema.define(version: 2023_06_26_002227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2023_06_25_005647) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "token_version", default: 0
     t.index ["university_id"], name: "index_coordinators_on_university_id"
   end
 
@@ -190,6 +191,7 @@ ActiveRecord::Schema.define(version: 2023_06_25_005647) do
     t.string "first_name"
     t.string "last_name"
     t.string "username"
+    t.bigint "token_version", default: 0
     t.index ["email"], name: "index_staffs_on_email", unique: true
     t.index ["faculty_id"], name: "index_staffs_on_faculty_id"
   end
@@ -229,6 +231,7 @@ ActiveRecord::Schema.define(version: 2023_06_25_005647) do
     t.string "first_name"
     t.string "last_name"
     t.string "username"
+    t.bigint "token_version", default: 0
     t.index ["email"], name: "index_students_on_email", unique: true
     t.index ["faculty_id"], name: "index_students_on_faculty_id"
   end

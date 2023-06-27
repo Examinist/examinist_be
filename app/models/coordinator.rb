@@ -6,11 +6,13 @@ class Coordinator < ApplicationRecord
   validates_presence_of :username, :university_id
   validates_uniqueness_of :username
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  validates :password , length: { minimum: 6 }
+  validates :password , length: { minimum: 6 }, if: :will_save_change_to_password_digest?
 
   # Associations
   belongs_to :university
   has_many :labs, through: :university
+  has_many :faculties, through: :university
+  has_many :staffs, through: :faculties
 end
 
 # == Schema Information
@@ -20,6 +22,7 @@ end
 #  id              :bigint           not null, primary key
 #  email           :string
 #  password_digest :string
+#  token_version   :bigint           default(0)
 #  username        :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

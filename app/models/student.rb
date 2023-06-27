@@ -7,7 +7,7 @@ class Student < ApplicationRecord
   validates_presence_of :first_name, :last_name, :username
   validates_uniqueness_of :username
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  validates :password , length: { minimum: 6 }
+  validates :password , length: { minimum: 6 }, if: :will_save_change_to_password_digest?
   validates :academic_id, presence: true, uniqueness: { scope: :faculty }
   validates_presence_of :faculty
 
@@ -31,6 +31,7 @@ end
 #  last_name            :string
 #  must_change_password :boolean          default(TRUE)
 #  password_digest      :string
+#  token_version        :bigint           default(0)
 #  username             :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
