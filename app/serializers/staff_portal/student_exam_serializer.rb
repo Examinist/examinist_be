@@ -26,4 +26,15 @@ class StaffPortal::StudentExamSerializer < ApplicationSerializer
   attribute :total_score do |object|
     object&.total_score
   end
+
+  ####################### Show Details ############################
+  attribute :student_answers, if: proc { |_record, params| params && params[:show_details] } do |object|
+    get_sorted_student_answers(object)
+  end
+
+  ####################### Methods ############################
+  def self.get_sorted_student_answers(obj)
+    sorted_records = obj.student_answers.joins(exam_question: :question_type).order('question_types.name ASC')
+    StaffPortal::StudentAnswerSerializer.new(sorted_records).to_j
+  end
 end

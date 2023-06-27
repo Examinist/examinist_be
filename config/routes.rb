@@ -51,7 +51,7 @@ Rails.application.routes.draw do
       end
     end
     resources :exams, only: %i[create update index show destroy] do
-      resources :student_exams, only: %i[index]
+      resources :student_exams, only: %i[index show update]
       collection do
         post :auto_generate
       end

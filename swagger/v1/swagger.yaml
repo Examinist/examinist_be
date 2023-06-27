@@ -1796,6 +1796,89 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/unauthorized"
+  "/staff_portal/exams/{exam_id}/student_exams/{id}":
+    get:
+      summary: Show Student Exam
+      tags:
+      - Staff Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Showing the Student Exam
+      operationId: showStudentExam
+      parameters:
+      - "$ref": "#/components/global_parameters/exam_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Student Exam Showed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/student_exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this student exam or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+    patch:
+      summary: Update Student Exam
+      tags:
+      - Staff Portal / Student Exams
+      description: |-
+        This API is responsible for:
+
+              * Update the Score of Student Exam
+      operationId: updateStudentExam
+      parameters:
+      - "$ref": "#/components/global_parameters/exam_id_param"
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Student Exam Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/student_exam"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this student exam or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                student_answers_attributes:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: bigint
+                        example: 1
+                      score:
+                        type: float
+                        example: 2.5
   "/staff_portal/courses/{course_id}/topics":
     get:
       summary: List Topics of a specific Course
@@ -3223,7 +3306,9 @@ components:
         busy_lab:
           "$ref": "#/components/schemas/busy_lab"
         answers:
-          "$ref": "#/components/schemas/student_portal_student_answer"
+          type: array
+          items:
+            "$ref": "#/components/schemas/student_portal_student_answer"
     student_exam:
       type: object
       properties:
@@ -3255,6 +3340,59 @@ components:
           example: 5
         student:
           "$ref": "#/components/schemas/detailed_student"
+    detailed_student_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        status:
+          type: string
+          enum:
+          - upcoming
+          - ongoing
+          - pending_grading
+          - graded
+          example: upcoming
+        student_status:
+          type: string
+          example: Attended
+        total_score:
+          type: integer
+          example: 40
+        partial_score:
+          type: integer
+          example: 25
+        total_graded_questions:
+          type: integer
+          example: 10
+        partial_graded_questions:
+          type: integer
+          example: 5
+        student:
+          "$ref": "#/components/schemas/detailed_student"
+        answers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/student_answer"
+    student_answer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        answers:
+          type: array
+          items:
+            type: string
+          example:
+          - choice_one
+          - choice_two
+        score:
+          type: float
+          example: 2.5
+        question:
+          "$ref": "#/components/schemas/question"
   errors:
     invalid_credentials:
       type: object
@@ -3615,6 +3753,19 @@ components:
               example: success
             schedule:
               "$ref": "#/components/schemas/detailed_schedule"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        student_exam:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            student_exam:
+              "$ref": "#/components/schemas/detailed_student_exam"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

@@ -1,7 +1,7 @@
 class Exam < ApplicationRecord
 
   # constants
-  NEXT_VALID_TRANSITIONS = { unscheduled: %i[scheduled], scheduled: %i[unscheduled ongoing], ongoing: %i[pending_grading],
+  NEXT_VALID_TRANSITIONS = { unscheduled: %i[scheduled], scheduled: %i[unscheduled ongoing], ongoing: %i[pending_grading graded],
                              pending_grading: %i[graded] }.freeze
 
   DIFFICULTIES = %w[easy medium hard].freeze

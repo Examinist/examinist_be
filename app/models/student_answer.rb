@@ -7,9 +7,28 @@ class StudentAnswer < ApplicationRecord
                                                                                 model_name: 'Student Answer') }
   validates :score, numericality: { greater_than_or_equal_to: 0.0 }, if: -> { score.present? }
 
+  # Hooks
+  before_update :check_score_validaty, if: -> { will_save_change_to_score? }
+  before_update :check_question_type_grading_validaty, if: -> { will_save_change_to_score? && @auto_grading.nil? }
+
   # Associations
   belongs_to :student_exam
   belongs_to :exam_question
+
+  # Non DB Attribute
+  attr_accessor :auto_grading
+
+  # Methods
+  private
+
+  def check_score_validaty
+    errors.add(:score, :invalid_score, strict: true) if score > exam_question.score
+  end
+
+  def check_question_type_grading_validaty
+    eq = exam_question.question
+    errors.add(:base, :invalid_question_type, strict: true) if eq.mcq? || eq.true_or_false?
+  end
 end
 
 # == Schema Information
