@@ -37,7 +37,7 @@ class StaffPortal::ExamPolicy < ApplicationPolicy
                   user.courses_exams
                 end
       records = records.where(course_id: @course_id) if @course_id.present?
-      records
+      records.includes(:busy_labs)
     end
   end
 end

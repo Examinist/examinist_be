@@ -1,6 +1,6 @@
 class StaffPortal::ExamSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :title, :status, :duration, :total_score, :has_models, :created_at
+  attributes :id, :title, :status, :duration, :total_score, :has_models, :created_at, :pending_labs_assignment
 
   attribute :scheduled_date do |object|
     object&.starts_at
@@ -23,7 +23,7 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
   end
 
   attribute :busy_labs do |object|
-    StaffPortal::BusyLabSerializer.new(object.busy_labs).to_j
+    StaffPortal::BusyLabSerializer.new(object.busy_labs, params: {show_details: true}).to_j
   end
   ####################### Show Details ############################
   attribute :exam_questions, if: proc { |_record, params| params && params[:show_details] } do |object|
