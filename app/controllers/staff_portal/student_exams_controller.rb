@@ -14,7 +14,7 @@ class StaffPortal::StudentExamsController < ApplicationController
     end
     @pagy, records = pagy(records) unless params[:page].to_i == -1
     number_of_pages = @pagy.present? ? @pagy.pages : 1
-    render_response({ student_exams: StaffPortal::StudentExamSerializer.new(records).to_j }, :ok, pagination: number_of_pages)
+    render_response({ student_exams: StaffPortal::StudentExamSerializer.new(records.includes(:student)).to_j }, :ok, pagination: number_of_pages)
   end
 
   #######
