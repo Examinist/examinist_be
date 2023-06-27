@@ -13,9 +13,9 @@ class BusyLab < ApplicationRecord
 
   # Hooks
   before_validation :add_dates!
-  before_update :can_assign_proctor?, if: -> { will_save_change_to_staff_id? }
-  before_update :check_staff_is_proctor, if: -> { will_save_change_to_staff_id? }
-  before_update :check_proctor_belongs_to_faculty, if: -> { will_save_change_to_staff_id? }
+  before_update :can_assign_proctor?, if: -> { will_save_change_to_staff_id? && staff_id.present? }
+  before_update :check_staff_is_proctor, if: -> { will_save_change_to_staff_id? && staff_id.present? }
+  before_update :check_proctor_belongs_to_faculty, if: -> { will_save_change_to_staff_id? && staff_id.present? }
 
   private
 
