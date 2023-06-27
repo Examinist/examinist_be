@@ -4,6 +4,14 @@ class StaffPortal::StudentExamPolicy < ApplicationPolicy
     @user.instructor? || @user.admin?
   end
 
+  def show?
+    user.admin? || user.instructor?
+  end
+
+  def update?
+    user.admin? || user.instructor?
+  end
+
   class Scope < Scope
     def initialize(user, scope, params)
       super(user, scope)

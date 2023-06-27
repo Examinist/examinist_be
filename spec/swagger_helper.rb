@@ -537,7 +537,10 @@ RSpec.configure do |config|
               duration: { type: :integer, example: 120 },
               course: { '$ref' => '#/components/schemas/course' },
               busy_lab: { '$ref' => '#/components/schemas/busy_lab' },
-              answers: { '$ref' => '#/components/schemas/student_portal_student_answer' }
+              answers: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/student_portal_student_answer' }
+              }
             }
           },
           student_exam: {
@@ -551,6 +554,36 @@ RSpec.configure do |config|
               total_graded_questions: { type: :integer, example: 10 },
               partial_graded_questions: { type: :integer, example: 5 },
               student: { '$ref' => '#/components/schemas/detailed_student' }
+            }
+          },
+          detailed_student_exam: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              status: { type: :string, enum: %w[upcoming ongoing pending_grading graded], example: 'upcoming' },
+              student_status: { type: :string, example: 'Attended' },
+              total_score: { type: :integer, example: 40 },
+              partial_score: { type: :integer, example: 25 },
+              total_graded_questions: { type: :integer, example: 10 },
+              partial_graded_questions: { type: :integer, example: 5 },
+              student: { '$ref' => '#/components/schemas/detailed_student' },
+              answers: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/student_answer' }
+              }
+            }
+          },
+          student_answer: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              answers: {
+                type: :array,
+                items: { type: :string },
+                example: ['choice_one', 'choice_two']
+              },
+              score: { type: :float, example: 2.5 },
+              question: { '$ref' => '#/components/schemas/question' }
             }
           }
         },
@@ -857,6 +890,18 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   schedule: { '$ref' => '#/components/schemas/detailed_schedule' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              student_exam: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  student_exam: { '$ref' => '#/components/schemas/detailed_student_exam' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
