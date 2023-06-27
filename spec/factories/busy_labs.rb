@@ -18,14 +18,17 @@ end
 #  updated_at :datetime         not null
 #  exam_id    :bigint           not null
 #  lab_id     :bigint           not null
+#  staff_id   :bigint
 #
 # Indexes
 #
-#  index_busy_labs_on_exam_id  (exam_id)
-#  index_busy_labs_on_lab_id   (lab_id)
+#  index_busy_labs_on_exam_id   (exam_id)
+#  index_busy_labs_on_lab_id    (lab_id)
+#  index_busy_labs_on_staff_id  (staff_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (exam_id => exams.id)
 #  fk_rails_...  (lab_id => labs.id)
+#  fk_rails_...  (staff_id => staffs.id)
 #

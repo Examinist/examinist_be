@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_26_002227) do
+ActiveRecord::Schema.define(version: 2023_06_27_122130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,8 +22,10 @@ ActiveRecord::Schema.define(version: 2023_06_26_002227) do
     t.datetime "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "staff_id"
     t.index ["exam_id"], name: "index_busy_labs_on_exam_id"
     t.index ["lab_id"], name: "index_busy_labs_on_lab_id"
+    t.index ["staff_id"], name: "index_busy_labs_on_staff_id"
   end
 
   create_table "choices", force: :cascade do |t|
@@ -252,6 +254,7 @@ ActiveRecord::Schema.define(version: 2023_06_26_002227) do
 
   add_foreign_key "busy_labs", "exams"
   add_foreign_key "busy_labs", "labs"
+  add_foreign_key "busy_labs", "staffs"
   add_foreign_key "choices", "questions"
   add_foreign_key "coordinators", "universities"
   add_foreign_key "correct_answers", "choices"
