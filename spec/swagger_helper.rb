@@ -603,7 +603,7 @@ RSpec.configure do |config|
                 example: ['choice_one', 'choice_two']
               },
               score: { type: :float, example: 2.5 },
-              question: { '$ref' => '#/components/schemas/question' }
+              exam_question: { '$ref' => '#/components/schemas/exam_question' }
             }
           },
           university_faculty: {
