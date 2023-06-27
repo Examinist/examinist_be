@@ -27,6 +27,9 @@ class Staff < ApplicationRecord
   has_many :labs, through: :faculty
   has_many :schedules, through: :faculty
   has_many :student_exams, through: :courses_exams
+  has_many :proctored_busy_labs, class_name: 'BusyLab', dependent: :nullify
+  has_many :proctored_exams, through: :proctored_busy_labs, source: :exam
+  has_many :proctored_student_exams, through: :proctored_exams, source: :student_exams
 
   # Scopes
   scope :filter_by_role, ->(role) { where(role: role) }
