@@ -1,6 +1,7 @@
 class BusyLab < ApplicationRecord
   # Validations
   validates_presence_of :lab_id, :exam_id, :start_date, :end_date
+  validates_presence_of :staff, if: :staff_id
   validates_datetime :end_date, after: :start_date
   validate :lab_is_busy?, if: -> { !exam._force && will_save_change_to_lab_id? }
 
@@ -13,6 +14,7 @@ class BusyLab < ApplicationRecord
   # Hooks
   before_validation :add_dates!
   before_update :can_assign_proctor?, if: -> { will_save_change_to_staff_id? }
+  before_update :check_staff_is_proctor, if: -> { will_save_change_to_staff_id? }
 
   private
 
@@ -35,6 +37,12 @@ class BusyLab < ApplicationRecord
     return if exam.scheduled?
 
     errors.add(:staff_id, :cannot_assign_proctor, strict: true)
+  end
+
+  def check_staff_is_proctor
+    return if staff.proctor?
+
+    errors.add(:staff_id, :staff_not_proctor, strict: true)
   end
 end
 
