@@ -113,6 +113,7 @@ en:
             staff_id:
               cannot_assign_proctor: "The proctor can not be assigned because exam is not in scheduled status"
               staff_not_proctor: "This staff is not proctor"
+              proctor_doesnot_belong_to_faculty: "This proctor doesn't belong to faculty"
         schedule:
           attributes:
             base:

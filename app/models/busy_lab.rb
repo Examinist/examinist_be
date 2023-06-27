@@ -15,6 +15,7 @@ class BusyLab < ApplicationRecord
   before_validation :add_dates!
   before_update :can_assign_proctor?, if: -> { will_save_change_to_staff_id? }
   before_update :check_staff_is_proctor, if: -> { will_save_change_to_staff_id? }
+  before_update :check_proctor_belongs_to_faculty, if: -> { will_save_change_to_staff_id? }
 
   private
 
@@ -43,6 +44,12 @@ class BusyLab < ApplicationRecord
     return if staff.proctor?
 
     errors.add(:staff_id, :staff_not_proctor, strict: true)
+  end
+
+  def check_proctor_belongs_to_faculty
+    return if staff.faculty_id == exam.course.faculty_id
+
+    errors.add(:staff_id, :proctor_doesnot_belong_to_faculty, strict: true)    
   end
 end
 
