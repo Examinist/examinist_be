@@ -67,12 +67,6 @@ class StudentExam < ApplicationRecord
     available_busy_labs.last
   end
 
-  def student_status
-    return ATTENDED if grade.present?
-
-    ABSENT
-  end
-
   def partial_graded_questions
     student_answers.where.not(score: nil).size
   end

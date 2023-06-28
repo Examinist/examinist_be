@@ -29,7 +29,7 @@ class StaffPortal::StudentExamsController < ApplicationController
   #######
   # Update Score of Student Exam
   # PATCH: /staff_portal/exams/:exam_id/student_exams/:id
-  # Auth: Admin and Instructor
+  # Auth: Admin and Instructor and Proctor
   #######
   def update
     @student_exam.update!(update_student_exam_params)

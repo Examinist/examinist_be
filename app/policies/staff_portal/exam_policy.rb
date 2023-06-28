@@ -37,7 +37,6 @@ class StaffPortal::ExamPolicy < ApplicationPolicy
 
   class Scope < Scope
     def initialize(context, scope, params)
-      p context
       @user = context.user
       super(@user, scope)
       @action_name = params[:action_name]
@@ -45,7 +44,7 @@ class StaffPortal::ExamPolicy < ApplicationPolicy
     end
 
     def resolve
-      return user.proctored_exams if user.proctor?
+      return @user.proctored_exams if @user.proctor?
 
       records = if @action_name == 'index' && @user.admin?
                   @user.faculty.exams

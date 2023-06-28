@@ -8,7 +8,7 @@ class StaffPortal::StudentExamPolicy < ApplicationPolicy
   end
 
   def update?
-    user.admin? || user.instructor?
+    true
   end
 
   def permitted_attributes_for_update
