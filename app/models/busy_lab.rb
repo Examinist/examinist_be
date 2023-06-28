@@ -39,7 +39,7 @@ class BusyLab < ApplicationRecord
     proctors = Staff.left_outer_joins(:proctored_busy_labs)
                     .where(role: :proctor, faculty_id: exam.course.faculty_id)
                     .where(':start > busy_labs.end_date or :end < busy_labs.start_date or busy_labs.id is NULL',
-                            start: start_date, end: end_date)
+                           start: start_date, end: end_date)
                     .distinct         
   end
 
