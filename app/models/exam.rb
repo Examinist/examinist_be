@@ -32,8 +32,12 @@ class Exam < ApplicationRecord
   accepts_nested_attributes_for :exam_questions, allow_destroy: true
   accepts_nested_attributes_for :busy_labs, allow_destroy: true
 
-  # scopes
+  # Scopes
   scope :filter_by_status, ->(status) { where(status: status) }
+  scope :sixty_minutes, lambda {
+    where('starts_at <= :date', date: Time.now + 60.minutes)
+    .where('ends_at >= :current_date', current_date: Time.now)
+  }
 
   # Hooks
   before_validation :add_ends_at!, if: -> { will_save_change_to_starts_at? && starts_at.present? }

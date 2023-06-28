@@ -1,11 +1,6 @@
 class StaffPortal::StudentExamSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :status
-
-  attribute :student_status do |object|
-    # TODO: get this attribute from the control module
-    object&.student_status
-  end
+  attributes :id, :status, :student_status
 
   attribute :student do |object|
     StaffPortal::StudentSerializer.new(object.student).to_j

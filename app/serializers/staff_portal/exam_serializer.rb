@@ -22,8 +22,8 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
     object.number_of_students
   end
 
-  attribute :busy_labs do |object|
-    StaffPortal::BusyLabSerializer.new(object.busy_labs, params: {show_details: true}).to_j
+  attribute :busy_labs do |object, params|
+    get_busy_labs(object, params)
   end
   ####################### Show Details ############################
   attribute :exam_questions, if: proc { |_record, params| params && params[:show_details] } do |object|
@@ -38,5 +38,13 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
       exam_questions << { type.name.to_s => StaffPortal::ExamQuestionSerializer.new(records).to_j } if records.size.positive?
     end
     exam_questions
+  end
+
+  def self.get_busy_labs(obj, params)
+    if params[:proctoring_lab]
+      return StaffPortal::BusyLabSerializer.new(params[:user].proctored_busy_labs.find_by(exam_id: obj.id),
+                                                params: { show_details: true }).to_j
+    end
+    StaffPortal::BusyLabSerializer.new(obj.busy_labs, params: { show_details: true }).to_j
   end
 end

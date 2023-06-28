@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       resources :student_exams, only: %i[index show update]
       collection do
         post :auto_generate
+        get :sixty_minutes_exams
       end
     end
     resources :labs, only: %i[index]

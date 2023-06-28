@@ -291,4 +291,30 @@ RSpec.describe 'staff_portal/exams', type: :request do
       end
     end
   end
+
+  path '/staff_portal/exams/sixty_minutes_exams' do
+    get 'List 60 Minutes Exams' do
+      tags 'Staff Portal / Exam'
+      description "This API is responsible for:\n
+      * Listing the 60 minutes Exams"
+
+      operationId 'listSixtyMinutesExams'
+      consumes 'application/json'
+      produces 'application/json'
+
+      parameter '$ref' => '#/components/global_parameters/page_param'
+
+      security [staff_auth: []]
+
+      response 200, 'Exams Listed successfully' do
+        schema '$ref' => '#/components/responses/staff_portal/list/exams_list'
+        run_test!
+      end
+
+      response 401, 'One of the following errors' do
+        schema '$ref' => '#/components/errors/unauthorized'
+        run_test!
+      end
+    end
+  end
 end
