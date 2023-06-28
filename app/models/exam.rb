@@ -207,20 +207,21 @@ end
 #
 # Table name: exams
 #
-#  id          :bigint           not null, primary key
-#  duration    :integer
-#  ends_at     :datetime
-#  has_models  :boolean          default(FALSE)
-#  is_auto     :boolean          default(FALSE)
-#  starts_at   :datetime
-#  status      :integer
-#  title       :string
-#  total_score :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  course_id   :bigint           not null
-#  schedule_id :bigint
-#  staff_id    :bigint           not null
+#  id                      :bigint           not null, primary key
+#  duration                :integer
+#  ends_at                 :datetime
+#  has_models              :boolean          default(FALSE)
+#  is_auto                 :boolean          default(FALSE)
+#  pending_labs_assignment :boolean          default(TRUE)
+#  starts_at               :datetime
+#  status                  :integer
+#  title                   :string
+#  total_score             :integer
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  course_id               :bigint           not null
+#  schedule_id             :bigint
+#  staff_id                :bigint           not null
 #
 # Indexes
 #

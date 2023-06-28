@@ -354,6 +354,135 @@ paths:
                   - admin
                   - instructor
                   example: admin
+  "/staff_portal/busy_labs/{id}":
+    patch:
+      summary: Update Busy Lab
+      tags:
+      - Staff Portal / Busy Labs
+      description: |-
+        This API is responsible for:
+
+              * Updating a Busy lab for a specific Exam (assign and unassign proctor)
+      operationId: updateBusyLab
+      parameters:
+      - name: exam_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        required: true
+        description: This is the exam id given
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Busy Lab Updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/busy_lab"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                staff_id:
+                  type: integer
+                  example: 3
+  "/staff_portal/busy_labs/{id}/students":
+    get:
+      summary: List Students in Busy Lab
+      tags:
+      - Staff Portal / Busy Labs
+      description: |-
+        This API is responsible for:
+
+              * List Students in Busy Lab
+      operationId: getBusyLabStudents
+      parameters:
+      - name: exam_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        required: true
+        description: This is the exam id given
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: List Students successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/students_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+  "/staff_portal/busy_labs/{id}/available_proctors":
+    get:
+      summary: List Available Proctors for Busy Lab
+      tags:
+      - Staff Portal / Busy Labs
+      description: |-
+        This API is responsible for:
+
+              * List Available Proctors for Busy Lab
+      operationId: getBusyLabAvailableProctors
+      parameters:
+      - name: exam_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        required: true
+        description: This is the exam id given
+      - "$ref": "#/components/global_parameters/id_param"
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: List Available Proctors successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/proctors_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
   "/staff_portal/courses/{course_id}/course_groups":
     get:
       summary: List Course Groups of a specific Course
@@ -566,6 +695,14 @@ paths:
           type: integer
           example: 1
         description: This is the course id given if the listing is in the course tab
+      - name: order_by_pending_labs_assignment
+        in: query
+        schema:
+          type: string
+          enum:
+          - desc
+        description: Ordering exams by pending labs assignment status (true elements
+          first)
       - "$ref": "#/components/global_parameters/page_param"
       security:
       - staff_auth: []
@@ -2468,6 +2605,20 @@ components:
       required:
       - id
       - name
+    detailed_busy_lab:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Lab A
+        proctor:
+          "$ref": "#/components/schemas/staff"
+      required:
+      - id
+      - name
     detailed_lab:
       type: object
       properties:
@@ -3036,6 +3187,9 @@ components:
         created_at:
           type: datetime
           example: '2023-04-06T12:38:03.081+03:00'
+        pending_labs_assignment:
+          type: boolean
+          example: true
         scheduled_date:
           type: datetime
           example: '2023-04-26T12:38:03.081+03:00'
@@ -3094,6 +3248,9 @@ components:
         created_at:
           type: datetime
           example: '2023-04-06T12:38:03.081+03:00'
+        pending_labs_assignment:
+          type: boolean
+          example: true
         scheduled_date:
           type: datetime
           example: '2023-04-26T12:38:03.081+03:00'
@@ -3809,6 +3966,19 @@ components:
               description: 'This message is the error message in case of status: "error"
                 otherwise it is null'
               example: 
+        busy_lab:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            busy_lab:
+              "$ref": "#/components/schemas/detailed_busy_lab"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
       list:
         courses_list:
           type: object
@@ -3952,6 +4122,42 @@ components:
               type: array
               items:
                 "$ref": "#/components/schemas/student_exam"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        students_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            number_of_pages:
+              type: integer
+              example: 4
+            students:
+              type: array
+              items:
+                "$ref": "#/components/schemas/student"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        proctors_list:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            number_of_pages:
+              type: integer
+              example: 4
+            proctors:
+              type: array
+              items:
+                "$ref": "#/components/schemas/staff"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

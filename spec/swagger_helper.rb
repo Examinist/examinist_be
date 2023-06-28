@@ -128,6 +128,15 @@ RSpec.configure do |config|
             },
             required: %w[id name]
           },
+          detailed_busy_lab: {
+            type: :object,
+            properties: {
+              id: { type: :integer, example: 1 },
+              name: { type: :string, example: 'Lab A' },
+              proctor: { '$ref' => '#/components/schemas/staff' }
+            },
+            required: %w[id name]
+          },
           detailed_lab: {
             type: :object,
             properties: {
@@ -409,6 +418,7 @@ RSpec.configure do |config|
               total_score: { type: :integer, example: 40 },
               has_models: { type: :boolean, example: false },
               created_at: { type: :datetime, example: '2023-04-06T12:38:03.081+03:00' },
+              pending_labs_assignment: { type: :boolean, example: true },
               scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
               creation_mode: { type: :string, example: 'Manual' },
               creator: { '$ref' => '#/components/schemas/staff' },
@@ -431,6 +441,7 @@ RSpec.configure do |config|
               total_score: { type: :integer, example: 40 },
               has_models: { type: :boolean, example: false },
               created_at: { type: :datetime, example: '2023-04-06T12:38:03.081+03:00' },
+              pending_labs_assignment: { type: :boolean, example: true },
               scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
               creation_mode: { type: :string, example: 'Manual' },
               creator: { '$ref' => '#/components/schemas/staff' },
@@ -981,6 +992,18 @@ RSpec.configure do |config|
                     example: nil
                   }
                 }
+              },
+              busy_lab: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  busy_lab: { '$ref' => '#/components/schemas/detailed_busy_lab' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
               }
             },
             list: {
@@ -1115,6 +1138,38 @@ RSpec.configure do |config|
                   student_exams: {
                     type: :array,
                     items: { '$ref' => '#/components/schemas/student_exam' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              students_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
+                  students: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/student' }
+                  },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              proctors_list: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  number_of_pages: { type: :integer, example: 4 },
+                  proctors: {
+                    type: :array,
+                    items: { '$ref' => '#/components/schemas/staff' }
                   },
                   message: {
                     type: :string,

@@ -1,6 +1,6 @@
 class StaffPortal::ExamSerializer < ApplicationSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :title, :status, :duration, :total_score, :has_models, :created_at
+  attributes :id, :title, :status, :duration, :total_score, :has_models, :created_at, :pending_labs_assignment
 
   attribute :scheduled_date do |object|
     object&.starts_at

@@ -15,10 +15,13 @@ class StaffPortal::ExamsController < ApplicationController
     filtering_params.each do |key, value|
       records = records.send(key, value) if value.present?
     end
+    ordering_params.each do |key, value|
+      records = records.order("#{key.split('order_by_')[1]} #{value.capitalize}")
+    end
     @pagy, records = pagy(records) unless params[:page].to_i == -1
     number_of_pages = @pagy.present? ? @pagy.pages : 1
     proctoring_lab = @current_user.proctor? ? true : nil
-    render_response({ exams: StaffPortal::ExamSerializer.new(records.order(updated_at: :desc),
+    render_response({ exams: StaffPortal::ExamSerializer.new(records,
                                                              params: { proctoring_lab: proctoring_lab, user: @current_user }).to_j },
                     :ok, pagination: number_of_pages)
   end
@@ -127,5 +130,11 @@ class StaffPortal::ExamsController < ApplicationController
   def policy_scope_class
     'StaffPortal::ExamPolicy::Scope'.constantize
                                     .new(pundit_user, Exam, { action_name: action_name, course_id: params[:course_id] })
+  end
+
+  def ordering_params
+    permitted_params = params.permit(:order_by_pending_labs_assignment)
+
+    permitted_params.empty? ? permitted_params.merge(order_by_updated_at: :desc) : permitted_params
   end
 end

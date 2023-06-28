@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(version: 2023_06_28_053943) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "schedule_id"
     t.datetime "ends_at"
+    t.boolean "pending_labs_assignment", default: true
     t.index ["course_id"], name: "index_exams_on_course_id"
     t.index ["schedule_id"], name: "index_exams_on_schedule_id"
     t.index ["staff_id"], name: "index_exams_on_staff_id"
