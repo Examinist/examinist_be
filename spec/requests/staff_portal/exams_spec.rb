@@ -16,6 +16,9 @@ RSpec.describe 'staff_portal/exams', type: :request do
       parameter name: :course_id, in: :query,
                 schema: { type: :integer, example: 1 },
                 description: 'This is the course id given if the listing is in the course tab'
+      parameter name: :order_by_pending_labs_assignment, in: :query,
+                schema: { type: :string, enum: %i[desc]  },
+                description: 'Ordering exams by pending labs assignment status (true elements first)'
 
       parameter '$ref' => '#/components/global_parameters/page_param'
 
