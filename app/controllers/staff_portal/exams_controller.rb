@@ -1,5 +1,3 @@
-require 'net/http'
-
 class StaffPortal::ExamsController < ApplicationController
   include Pundit
   before_action :check_authorization_policy
@@ -128,8 +126,7 @@ class StaffPortal::ExamsController < ApplicationController
   end
 
   def policy_scope_class
-    'StaffPortal::ExamPolicy::Scope'.constantize
-                                    .new(pundit_user, Exam, { action_name: action_name, course_id: params[:course_id] })
+    StaffPortal::ExamPolicy::Scope.new(pundit_user, Exam, { action_name: action_name, course_id: params[:course_id] })
   end
 
   def ordering_params

@@ -1,5 +1,3 @@
-require 'net/http'
-
 class StudentPortal::StudentExamsController < ApplicationController
   include Pundit
   before_action :check_authorization_policy
