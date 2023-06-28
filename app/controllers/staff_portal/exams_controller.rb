@@ -12,11 +12,11 @@ class StaffPortal::ExamsController < ApplicationController
     filtering_params.each do |key, value|
       records = records.send(key, value) if value.present?
     end
-    @pagy, records = pagy(records) unless params[:page].to_i == -1
-    number_of_pages = @pagy.present? ? @pagy.pages : 1
     ordering_params.each do |key, value|
       records = records.order("#{key.split('order_by_')[1]} #{value.capitalize}")
     end
+    @pagy, records = pagy(records) unless params[:page].to_i == -1
+    number_of_pages = @pagy.present? ? @pagy.pages : 1
     render_response({ exams: StaffPortal::ExamSerializer.new(records).to_j }, :ok, pagination: number_of_pages)
   end
 

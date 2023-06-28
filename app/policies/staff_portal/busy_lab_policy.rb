@@ -12,8 +12,13 @@ class StaffPortal::BusyLabPolicy < ApplicationPolicy
   end
   
   class Scope < Scope
+    def initialize(user, scope, params)
+      super(user, scope)
+      @exam_id = params[:exam_id]
+    end
+
     def resolve
-      @user.busy_labs
+      @user.faculty.exams.find(@exam_id).busy_labs
     end
   end
 end

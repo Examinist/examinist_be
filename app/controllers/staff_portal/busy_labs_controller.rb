@@ -40,8 +40,12 @@ class StaffPortal::BusyLabsController < ApplicationController
     params.permit(:staff_id)
   end
 
+  def policy_scope_class
+    StaffPortal::BusyLabPolicy::Scope.new(@current_user, BusyLab, { exam_id: params[:exam_id] })
+  end
+
   def find_busy_lab
-    records = policy_scope([:staff_portal, BusyLab])
+    records = policy_scope_class.resolve
     @busy_lab = records.find(params[:id])
   end
 end

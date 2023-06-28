@@ -16,6 +16,7 @@ class BusyLab < ApplicationRecord
   before_update :can_assign_proctor?, if: -> { will_save_change_to_staff_id? && staff_id.present? }
   before_update :check_staff_is_proctor, if: -> { will_save_change_to_staff_id? && staff_id.present? }
   before_update :check_proctor_belongs_to_faculty, if: -> { will_save_change_to_staff_id? && staff_id.present? }
+  before_update :check_proctor_not_busy, if: -> { will_save_change_to_staff_id? && staff_id.present? }
   after_update :check_pending_labs_assignment_status, if: -> { saved_change_to_staff_id? }
 
   # Methods  
@@ -82,6 +83,16 @@ class BusyLab < ApplicationRecord
     else
       exam.update_columns(pending_labs_assignment: true)
     end
+  end
+
+  def check_proctor_not_busy
+    return unless BusyLab.where.not(id: id)
+                         .where(':start <= busy_labs.end_date and :end >= busy_labs.start_date',
+                                start: start_date, end: end_date)
+                         .where(staff_id: staff_id)
+                         .present?
+    
+    errors.add(:staff_id, :proctor_is_busy, strict: true)
   end
 end
 

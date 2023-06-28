@@ -11,6 +11,10 @@ RSpec.describe 'staff_portal/busy_labs', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
+      parameter name: :exam_id, in: :query,
+                schema: { type: :integer, example: 1 }, required: true,
+                description: 'This is the exam id given'
+
       parameter '$ref' => '#/components/global_parameters/id_param'
 
       parameter name: :payload, in: :body, schema: {
@@ -48,6 +52,10 @@ RSpec.describe 'staff_portal/busy_labs', type: :request do
       operationId 'getBusyLabStudents'
       produces 'application/json'
 
+      parameter name: :exam_id, in: :query,
+                schema: { type: :integer, example: 1 }, required: true,
+                description: 'This is the exam id given'
+
       parameter '$ref' => '#/components/global_parameters/id_param'
 
       security [staff_auth: []]
@@ -77,6 +85,10 @@ RSpec.describe 'staff_portal/busy_labs', type: :request do
 
       operationId 'getBusyLabAvailableProctors'
       produces 'application/json'
+
+      parameter name: :exam_id, in: :query,
+                schema: { type: :integer, example: 1 }, required: true,
+                description: 'This is the exam id given'
 
       parameter '$ref' => '#/components/global_parameters/id_param'
 

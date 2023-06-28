@@ -365,6 +365,13 @@ paths:
               * Updating a Busy lab for a specific Exam (assign and unassign proctor)
       operationId: updateBusyLab
       parameters:
+      - name: exam_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        required: true
+        description: This is the exam id given
       - "$ref": "#/components/global_parameters/id_param"
       security:
       - staff_auth: []
@@ -407,6 +414,13 @@ paths:
               * List Students in Busy Lab
       operationId: getBusyLabStudents
       parameters:
+      - name: exam_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        required: true
+        description: This is the exam id given
       - "$ref": "#/components/global_parameters/id_param"
       security:
       - staff_auth: []
@@ -440,6 +454,13 @@ paths:
               * List Available Proctors for Busy Lab
       operationId: getBusyLabAvailableProctors
       parameters:
+      - name: exam_id
+        in: query
+        schema:
+          type: integer
+          example: 1
+        required: true
+        description: This is the exam id given
       - "$ref": "#/components/global_parameters/id_param"
       security:
       - staff_auth: []
