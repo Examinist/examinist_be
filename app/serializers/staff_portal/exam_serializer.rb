@@ -41,8 +41,10 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
   end
 
   def self.get_busy_labs(obj)
-    return StaffPortal::BusyLabSerializer.new(params[:user].proctored_busy_labs.find_by(exam_id: obj.id)).to_j if params[:proctoring_lab]
-
-    StaffPortal::BusyLabSerializer.new(obj.busy_labs).to_j
+    if params[:proctoring_lab]
+      return StaffPortal::BusyLabSerializer.new(params[:user].proctored_busy_labs.find_by(exam_id: obj.id),
+                                                params: { show_details: true }).to_j
+    end
+    StaffPortal::BusyLabSerializer.new(obj.busy_labs, params: { show_details: true }).to_j
   end
 end
