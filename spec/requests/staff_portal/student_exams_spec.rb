@@ -66,7 +66,9 @@ RSpec.describe '/staff_portal/exams/{exam_id}/student_exams', type: :request do
     patch 'Update Student Exam' do
       tags 'Staff Portal / Student Exams'
       description "This API is responsible for:\n
-      * Update the Score of Student Exam"
+      * Update the Score of Student Exam OR update the student status by the proctor\n
+      But only use student status if u are a proctor & only use the answers attributes if\n
+      you are an admin or instructor."
 
       operationId 'updateStudentExam'
       consumes 'application/json'
@@ -78,6 +80,7 @@ RSpec.describe '/staff_portal/exams/{exam_id}/student_exams', type: :request do
       parameter name: :payload, in: :body, schema: {
         type: :object,
         properties: {
+          student_status: { type: :string, enum: %w[absent attended sick_leave cheated] },
           student_answers_attributes: {
             type: :array,
             items: {

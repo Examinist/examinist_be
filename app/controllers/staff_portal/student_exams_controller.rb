@@ -48,13 +48,11 @@ class StaffPortal::StudentExamsController < ApplicationController
 
   def find_student_exam
     records = policy_scope_class.resolve
-    # TODO: to be discussed
-    # records = records.pending_grading if action_name == 'update'
     @student_exam = records.find(params[:id])
   end
 
   def update_student_exam_params
-    params.permit(student_answers_attributes: %i[id score])
+    params.permit(policy([:staff_portal, @student_exam]).permitted_attributes_for_update)
   end
 
   def policy_scope_class

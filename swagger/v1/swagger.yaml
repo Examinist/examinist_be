@@ -905,6 +905,33 @@ paths:
               - duration
               - course_id
               - question_type_topics
+  "/staff_portal/exams/sixty_minutes_exams":
+    get:
+      summary: List 60 Minutes Exams
+      tags:
+      - Staff Portal / Exam
+      description: |-
+        This API is responsible for:
+
+              * Listing the 60 minutes Exams
+      operationId: listSixtyMinutesExams
+      parameters:
+      - "$ref": "#/components/global_parameters/page_param"
+      security:
+      - staff_auth: []
+      responses:
+        '200':
+          description: Exams Listed successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/list/exams_list"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
   "/staff_portal/labs":
     get:
       summary: List labs
@@ -1837,7 +1864,11 @@ paths:
       description: |-
         This API is responsible for:
 
-              * Update the Score of Student Exam
+              * Update the Score of Student Exam OR update the student status by the proctor
+
+              But only use student status if u are a proctor & only use the answers attributes if
+
+              you are an admin or instructor.
       operationId: updateStudentExam
       parameters:
       - "$ref": "#/components/global_parameters/exam_id_param"
@@ -1869,6 +1900,13 @@ paths:
             schema:
               type: object
               properties:
+                student_status:
+                  type: string
+                  enum:
+                  - absent
+                  - attended
+                  - sick_leave
+                  - cheated
                 student_answers_attributes:
                   type: array
                   items:

@@ -10,6 +10,7 @@ class StudentExam < ApplicationRecord
 
   # enums
   enum status: { upcoming: 0, ongoing: 1, pending_grading: 2, graded: 3 }, _default: 'upcoming'
+  enum student_status: { absent: 0, attended: 1, sick_leave: 2, cheated: 3 }
 
   # validations
   validates_presence_of :exam
@@ -123,13 +124,14 @@ end
 #
 # Table name: student_exams
 #
-#  id         :bigint           not null, primary key
-#  grade      :float
-#  status     :integer          default("upcoming")
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  exam_id    :bigint           not null
-#  student_id :bigint
+#  id             :bigint           not null, primary key
+#  grade          :float
+#  status         :integer          default("upcoming")
+#  student_status :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  exam_id        :bigint           not null
+#  student_id     :bigint
 #
 # Indexes
 #

@@ -1,4 +1,7 @@
+require 'net/http'
+
 class StaffPortal::ExamsController < ApplicationController
+  include Pundit
   before_action :check_authorization_policy
   before_action :find_exam, only: %i[update destroy show]
 
@@ -14,7 +17,10 @@ class StaffPortal::ExamsController < ApplicationController
     end
     @pagy, records = pagy(records) unless params[:page].to_i == -1
     number_of_pages = @pagy.present? ? @pagy.pages : 1
-    render_response({ exams: StaffPortal::ExamSerializer.new(records.order(updated_at: :desc)).to_j }, :ok, pagination: number_of_pages)
+    proctoring_lab = @current_user.proctor? ? true : nil
+    render_response({ exams: StaffPortal::ExamSerializer.new(records.order(updated_at: :desc),
+                                                             params: { proctoring_lab: proctoring_lab, user: @current_user }).to_j },
+                    :ok, pagination: number_of_pages)
   end
 
   #######
@@ -67,7 +73,25 @@ class StaffPortal::ExamsController < ApplicationController
     render_response({ exam: StaffPortal::AutoExamSerializer.new(exam, params: { show_details: true }).to_j }, :ok)
   end
 
+  #######
+  # List Exams (upcoming within 60 minutes & ongoing)
+  # GET: /staff_portal/exams/sixty_minutes_exams
+  # Auth: Proctor Only (inside university labs)
+  #######
+  def sixty_minutes_exams
+    records = policy_scope_class.resolve.sixty_minutes
+    @pagy, records = pagy(records) unless params[:page].to_i == -1
+    number_of_pages = @pagy.present? ? @pagy.pages : 1
+    render_response({ exams: StaffPortal::ExamSerializer.new(records, params: { proctoring_lab: true, user: @current_user }).to_j },
+                    :ok, pagination: number_of_pages)
+  end
+
   private
+
+  def pundit_user
+    client_ip = request.headers['X-Forwarded-For'] || request.remote_ip
+    UserContext.new(@current_user, client_ip)
+  end
 
   def check_authorization_policy
     authorize([:staff_portal, Exam])
@@ -102,6 +126,6 @@ class StaffPortal::ExamsController < ApplicationController
 
   def policy_scope_class
     'StaffPortal::ExamPolicy::Scope'.constantize
-                                    .new(@current_user, Exam, { action_name: action_name, course_id: params[:course_id] })
+                                    .new(pundit_user, Exam, { action_name: action_name, course_id: params[:course_id] })
   end
 end
