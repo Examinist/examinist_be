@@ -56,6 +56,7 @@ class Exam < ApplicationRecord
 
   # Non DB attributes
   attr_accessor :_force
+  attr_accessor :assigned_labs
 
   # Methods
   def valid_status_transition?(old_status, new_status)
@@ -104,6 +105,17 @@ class Exam < ApplicationRecord
     students.size
   end
 
+  def can_schedule?(starts_at, labs)
+    begin
+      check_starts_at_validty(starts_at)
+      check_labs_capacity(labs)
+      check_student_conflicts(starts_at, starts_at + self.duration.minutes)
+      true
+    rescue => e
+      false
+    end
+  end
+
   private
 
   def nullify_scheduling_attributes!
@@ -140,7 +152,7 @@ class Exam < ApplicationRecord
     raise(ErrorHandler::GeneralRequestError, I18n.t('exam.cant_create'))
   end
 
-  def check_starts_at_validty
+  def check_starts_at_validty(starts_at = self.starts_at)
     return unless starts_at < Time.now + 5.hours
 
     errors.add(:starts_at, :old_starts_at, strict: true)
@@ -156,7 +168,7 @@ class Exam < ApplicationRecord
     create_student_answers
   end
 
-  def check_labs_capacity
+  def check_labs_capacity(labs = self.labs)
     num_of_students = students.size
     labs_capacity = labs.sum(:capacity)
     return unless labs_capacity < num_of_students
@@ -164,8 +176,9 @@ class Exam < ApplicationRecord
     errors.add(:base, :capacity_not_enough, difference: num_of_students - labs_capacity, strict: true)
   end
 
-  def check_student_conflicts
+  def check_student_conflicts(starts_at = self.starts_at, ends_at = self.ends_at)
     overlapped_studens = Student.joins(:exams)
+                                .where(id: students.pluck(:id))
                                 .where(faculty: course.faculty)
                                 .where.not('exams.id = :id', id: id)
                                 .where(exams: { status: %i[scheduled ongoing] })

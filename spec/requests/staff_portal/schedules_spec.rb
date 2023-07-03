@@ -237,4 +237,72 @@ RSpec.describe 'staff_portal/schedules', type: :request do
       end
     end
   end
+
+  path '/staff_portal/schedules/auto_generate' do
+    post 'Generate Schedule' do
+      tags 'Staff Portal / Schedule'
+      description "This API is responsible for:\n
+      * Automatically generating a Schedule"
+
+      operationId 'generateSchedule'
+      consumes 'application/json'
+      produces 'application/json'
+
+      parameter name: :payload, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string, example: 'CSED-Midterm' },
+          schedule_from: { type: :string, example: '01-07-2023' },
+          schedule_to: { type: :string, example: '13-07-2023' },
+          exam_starting_time: { type: :string, example: '10:00' , description: 'This is a 24H format of the time'},
+          exam_ids: { 
+            type: :array,
+            items: {
+              type: :integer,
+              example: 1
+            }
+          },
+          lab_ids: {
+            type: :array,
+            items: {
+              type: :integer,
+              example: 1
+            }
+          },
+          holiday_dates: {
+            type: :array,
+            items: {
+              type: :string,
+              example: '05-07-2023'
+            }
+          },
+          exam_week_days: {
+            type: :array,
+            items: {
+              type: :string,
+              example: 'wednesday'
+            }
+          }
+        },
+        required: %w[title schedule_from schedule_to exam_starting_time exam_ids lab_ids holiday_dates exam_week_days]
+      }
+
+      security [staff_auth: []]
+
+      response 201, 'Schedule Generated successfully' do
+        schema '$ref' => '#/components/responses/staff_portal/show/auto_schedule'
+        run_test!
+      end
+
+      response 401, 'One of the following errors' do
+        schema '$ref' => '#/components/errors/unauthorized'
+        run_test!
+      end
+
+      response 404, 'You may have no access to this item or it doesnt exist' do
+        schema '$ref' => '#/components/errors/not_found'
+        run_test!
+      end
+    end
+  end
 end

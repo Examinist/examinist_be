@@ -19,6 +19,10 @@ class StaffPortal::SchedulePolicy < ApplicationPolicy
     user.admin?
   end
 
+  def auto_generate?
+    user.admin? || user.instructor?
+  end
+
   class Scope < Scope
     def resolve
       user.schedules

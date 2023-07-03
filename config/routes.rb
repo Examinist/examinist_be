@@ -58,7 +58,11 @@ Rails.application.routes.draw do
       end
     end
     resources :labs, only: %i[index]
-    resources :schedules, only: %i[index show create update destroy]
+    resources :schedules, only: %i[index show create update destroy] do
+      collection do
+        post :auto_generate
+      end
+    end
     resources :busy_labs, only: %i[update] do
       member do
         get :students
