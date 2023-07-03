@@ -48,7 +48,7 @@ class Exam < ApplicationRecord
   before_update :check_starts_at_validty, if: -> { will_save_change_to_starts_at? && starts_at.present? }
   before_destroy :raise_error, unless: -> { unscheduled? }
   after_save :calculate_total_score, unless: ->{ is_auto }
-  after_save :check_labs_capacity, if: -> { !_force }
+  after_save :check_labs_capacity, if: -> { starts_at.present? && !_force }
   after_save :check_student_conflicts, if: -> { saved_change_to_starts_at? && starts_at.present? && !_force }
   after_update_commit :fire_jobs, if: -> { saved_change_to_starts_at? && starts_at.present? }
   after_update_commit :end_exam, if: -> { saved_change_to_duration? && starts_at.present? }
