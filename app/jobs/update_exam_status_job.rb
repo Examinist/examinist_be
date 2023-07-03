@@ -25,5 +25,6 @@ class UpdateExamStatusJob < ApplicationJob
     return unless exam.ends_at&.round(0) == args[:ends_at].round(0) && exam.valid_status_transition?(exam.status, 'pending_grading')
     exam.update!(status: 'pending_grading')
     exam.busy_labs.destroy_all
+    HandleIdleStudentExamsJob.set(wait_until: Time.now + 5.minutes).perform_later({ exam_id: exam.id })
   end
 end

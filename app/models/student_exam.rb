@@ -26,7 +26,7 @@ class StudentExam < ApplicationRecord
   # Associations
   belongs_to :student, optional: true
   belongs_to :exam
-  has_many :student_answers, dependent: :destroy
+  has_many :student_answers, ->{ order(created_at: :asc) }, dependent: :destroy
   has_many :exam_questions, through: :student_answers
 
   # Nested Attributes
@@ -109,8 +109,8 @@ class StudentExam < ApplicationRecord
     student_exams_except_current = exam.student_exams.where.not(id: id)
     return unless student_exams_except_current.all? { |student_exam| student_exam.status == 'graded' }
 
-    exam.busy_labs&.destroy_all
     exam.update!(status: :graded)
+    exam.busy_labs&.destroy_all
   end
 end
 
