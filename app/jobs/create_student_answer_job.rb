@@ -12,7 +12,7 @@ class CreateStudentAnswerJob < ApplicationJob
     eqs = exam.exam_questions
     exam.students.each do |student|
       student_exam = StudentExam.find_by(student_id: student.id, exam_id: exam.id)
-      eqs = eqs.shuffle
+      eqs = eqs.shuffle if exam.has_models
       student_answers_to_create = eqs.map do |eq|
         { exam_question_id: eq.id }
       end
