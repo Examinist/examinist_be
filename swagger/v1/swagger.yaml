@@ -1842,6 +1842,86 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/errors/not_found"
+  "/staff_portal/schedules/auto_generate":
+    post:
+      summary: Generate Schedule
+      tags:
+      - Staff Portal / Schedule
+      description: |-
+        This API is responsible for:
+
+              * Automatically generating a Schedule
+      operationId: generateSchedule
+      parameters: []
+      security:
+      - staff_auth: []
+      responses:
+        '201':
+          description: Schedule Generated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/staff_portal/show/auto_schedule"
+        '401':
+          description: One of the following errors
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/unauthorized"
+        '404':
+          description: You may have no access to this item or it doesnt exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/errors/not_found"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: CSED-Midterm
+                schedule_from:
+                  type: string
+                  example: 01-07-2023
+                schedule_to:
+                  type: string
+                  example: 13-07-2023
+                exam_starting_time:
+                  type: string
+                  example: '10:00'
+                  description: This is a 24H format of the time
+                exam_ids:
+                  type: array
+                  items:
+                    type: integer
+                    example: 1
+                lab_ids:
+                  type: array
+                  items:
+                    type: integer
+                    example: 1
+                holiday_dates:
+                  type: array
+                  items:
+                    type: string
+                    example: 05-07-2023
+                exam_week_days:
+                  type: array
+                  items:
+                    type: string
+                    example: wednesday
+              required:
+              - title
+              - schedule_from
+              - schedule_to
+              - exam_starting_time
+              - exam_ids
+              - lab_ids
+              - holiday_dates
+              - exam_week_days
   "/staff_portal/sessions":
     post:
       summary: Staff Login
@@ -3218,6 +3298,71 @@ components:
       - creation_mode
       - creator
       - course
+    auto_scheduled_exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Midterm
+        status:
+          type: string
+          enum:
+          - unscheduled
+          - scheduled
+          - ongoing
+          - pending_grading
+          - graded
+          example: unscheduled
+        duration:
+          type: integer
+          example: 120
+        total_score:
+          type: integer
+          example: 40
+        has_models:
+          type: boolean
+          example: false
+        created_at:
+          type: datetime
+          example: '2023-04-06T12:38:03.081+03:00'
+        pending_labs_assignment:
+          type: boolean
+          example: true
+        scheduled_date:
+          type: datetime
+          example: '2023-04-26T12:38:03.081+03:00'
+        creation_mode:
+          type: string
+          example: Manual
+        creator:
+          "$ref": "#/components/schemas/staff"
+        course:
+          "$ref": "#/components/schemas/course"
+        number_of_students:
+          type: integer
+          example: 40
+        busy_labs:
+          type: array
+          example: []
+        labs:
+          type: array
+          description: Labs that are suggested to be assigned to this exam
+          items:
+            "$ref": "#/components/schemas/lab"
+      required:
+      - id
+      - title
+      - status
+      - duration
+      - total_score
+      - created_at
+      - scheduled_date
+      - creation_mode
+      - creator
+      - course
     detailed_exam:
       type: object
       properties:
@@ -3329,6 +3474,23 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/exam"
+      required:
+      - id
+      - title
+      - exams
+    auto_schedule:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: CSED-Midterm
+        exams:
+          type: array
+          items:
+            "$ref": "#/components/schemas/auto_scheduled_exam"
       required:
       - id
       - title
@@ -3948,6 +4110,19 @@ components:
               example: success
             schedule:
               "$ref": "#/components/schemas/detailed_schedule"
+            message:
+              type: string
+              description: 'This message is the error message in case of status: "error"
+                otherwise it is null'
+              example: 
+        auto_schedule:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            schedule:
+              "$ref": "#/components/schemas/auto_schedule"
             message:
               type: string
               description: 'This message is the error message in case of status: "error"

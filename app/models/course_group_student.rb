@@ -13,11 +13,11 @@ class CourseGroupStudent < ApplicationRecord
   private
 
   def validate_student_in_faculty  
-    errors.add(:student_id, :student_not_in_faculty) unless student.faculty_id == course_group.course_faculty_id
+    errors.add(:student_id, :student_not_in_faculty) unless student&.faculty_id == course_group&.course_faculty_id
   end
 
   def validate_uniqueness_of_student_per_course
-    errors.add(:student_id, :student_already_enrolled_into_course) if student.enrolled_courses.include?(course_group.course)
+    errors.add(:student_id, :student_already_enrolled_into_course) if student&.enrolled_courses&.include?(course_group&.course)
   end
 end
 
