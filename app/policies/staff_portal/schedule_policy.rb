@@ -20,7 +20,7 @@ class StaffPortal::SchedulePolicy < ApplicationPolicy
   end
 
   def auto_generate?
-    user.admin? || user.instructor?
+    user.admin?
   end
 
   class Scope < Scope
