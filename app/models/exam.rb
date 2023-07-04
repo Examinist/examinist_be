@@ -169,6 +169,8 @@ class Exam < ApplicationRecord
   end
 
   def check_labs_capacity(labs = self.labs)
+    return if graded? || pending_grading?
+
     num_of_students = students.size
     labs_capacity = labs.sum(:capacity)
     return unless labs_capacity < num_of_students
