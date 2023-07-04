@@ -51,6 +51,16 @@ class StaffPortal::SchedulesController < ApplicationController
     render_response({ schedule: StaffPortal::ScheduleSerializer.new(@schedule, params: { show_details: true }).to_j }, :ok)
   end
 
+  #######
+  # Generate Schedule Automaticalliy
+  # POST: /staff_portal/schedules/auto_generate
+  # Auth: Admin and Instructor
+  #######
+  def auto_generate
+    schedule = Schedule.generate_schedule(auto_generate_schedule_params)
+    render_response({ schedule: StaffPortal::ScheduleSerializer.new(schedule, params: { show_details: true, auto_grade: true }).to_j }, :ok)
+  end
+
   private
 
   def check_authorization_policy
@@ -74,5 +84,12 @@ class StaffPortal::SchedulesController < ApplicationController
       :title, { exams_attributes: [:id, :_force, :starts_at,
                                    { busy_labs_attributes: %i[id _destroy lab_id] }] }
     )
+  end
+
+  def auto_generate_schedule_params
+    params.permit(
+      :title, { exam_ids: [] }, :schedule_from, :schedule_to, { holiday_dates: [] }, { exam_week_days: [] },
+      :exam_starting_time, { lab_ids: [] }
+    ).merge(faculty_id: @current_user.faculty_id)
   end
 end

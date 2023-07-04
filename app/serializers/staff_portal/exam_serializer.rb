@@ -30,6 +30,10 @@ class StaffPortal::ExamSerializer < ApplicationSerializer
     get_questions(object)
   end
 
+  attribute :labs, if: proc { |_record, params| params && params[:auto_grade] } do |object|
+    StaffPortal::LabSerializer.new(object.assigned_labs).to_j
+  end
+
   ####################### Methods ############################
   def self.get_questions(obj)
     exam_questions = []

@@ -150,3 +150,7 @@ en:
     cant_delete: "Exam can't be deleted"
   student_exam:
     cant_update: "The exam of the student can't be edited due to the status of his exam."
+  schedule:
+    cant_generate_schedule: "Schedule can't be generated.. Relax some constraints please!"
+    exams_scheduled_already: "Schedule can't be generated.. Some exams are already scheduled!"
+    exams_not_same_faculty: "Schedule can't be generated.. Some exams are not of the faculty you entered!"

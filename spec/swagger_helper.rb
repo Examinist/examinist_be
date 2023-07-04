@@ -431,6 +431,34 @@ RSpec.configure do |config|
             },
             required: %w[id title status duration total_score created_at scheduled_date creation_mode creator course]
           },
+          auto_scheduled_exam: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'Midterm' },
+              status: { type: :string, enum: %w[unscheduled scheduled ongoing pending_grading graded], example: 'unscheduled' },
+              duration: { type: :integer, example: 120 },
+              total_score: { type: :integer, example: 40 },
+              has_models: { type: :boolean, example: false },
+              created_at: { type: :datetime, example: '2023-04-06T12:38:03.081+03:00' },
+              pending_labs_assignment: { type: :boolean, example: true },
+              scheduled_date: { type: :datetime, example: '2023-04-26T12:38:03.081+03:00' },
+              creation_mode: { type: :string, example: 'Manual' },
+              creator: { '$ref' => '#/components/schemas/staff' },
+              course: { '$ref' => '#/components/schemas/course' },
+              number_of_students: { type: :integer, example: 40 },
+              busy_labs: {
+                type: :array,
+                example: []
+              },
+              labs: {
+                type: :array,
+                description: 'Labs that are suggested to be assigned to this exam',
+                items: { '$ref' => '#/components/schemas/lab' }
+              }
+            },
+            required: %w[id title status duration total_score created_at scheduled_date creation_mode creator course]
+          },
           detailed_exam: {
             type: 'object',
             properties: {
@@ -491,6 +519,18 @@ RSpec.configure do |config|
               exams: {
                 type: :array,
                 items: { '$ref' => '#/components/schemas/exam' }
+              }
+            },
+            required: %w[id title exams]
+          },
+          auto_schedule: {
+            type: 'object',
+            properties: {
+              id: { type: :integer, example: 1 },
+              title: { type: :string, example: 'CSED-Midterm' },
+              exams: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/auto_scheduled_exam' }
               }
             },
             required: %w[id title exams]
@@ -974,6 +1014,18 @@ RSpec.configure do |config|
                 properties: {
                   status: { type: :string, example: 'success' },
                   schedule: { '$ref' => '#/components/schemas/detailed_schedule' },
+                  message: {
+                    type: :string,
+                    description: 'This message is the error message in case of status: "error" otherwise it is null',
+                    example: nil
+                  }
+                }
+              },
+              auto_schedule: {
+                type: :object,
+                properties: {
+                  status: { type: :string, example: 'success' },
+                  schedule: { '$ref' => '#/components/schemas/auto_schedule' },
                   message: {
                     type: :string,
                     description: 'This message is the error message in case of status: "error" otherwise it is null',
