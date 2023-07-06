@@ -32,8 +32,7 @@ class StaffPortal::ExamPolicy < ApplicationPolicy
   end
 
   def sixty_minutes_exams?
-    # @user.proctor? && @ip == ENV['IP_ADDRESS']
-     @user.proctor?
+    @user.proctor? && @ip == ENV['IP_ADDRESS']
   end
 
   class Scope < Scope

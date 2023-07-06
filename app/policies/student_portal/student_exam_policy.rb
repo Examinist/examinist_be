@@ -12,18 +12,15 @@ class StudentPortal::StudentExamPolicy < ApplicationPolicy
   end
 
   def show?
-    # @ip == ENV['IP_ADDRESS']
-    true
+    @ip == ENV['IP_ADDRESS']
   end
 
   def update?
-    # @ip == ENV['IP_ADDRESS']
-    true
+    @ip == ENV['IP_ADDRESS']
   end
 
   def sixty_minutes_exams?
-    # @ip == ENV['IP_ADDRESS']
-    true
+    @ip == ENV['IP_ADDRESS']
   end
 
   class Scope < Scope

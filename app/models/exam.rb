@@ -45,7 +45,7 @@ class Exam < ApplicationRecord
   before_update :raise_error, unless: ->{ will_save_change_to_status? || %w[unscheduled scheduled].include?(status_was) }
   before_update :nullify_scheduling_attributes!, if: ->{ will_save_change_to_status?(to: UNSCHEDULED) }
   before_update :update_exam_status_scheduled, if: -> { will_save_change_to_starts_at?(from: nil) }
-  #before_update :check_starts_at_validty, if: -> { will_save_change_to_starts_at? && starts_at.present? }
+  before_update :check_starts_at_validty, if: -> { will_save_change_to_starts_at? && starts_at.present? }
   before_destroy :raise_error, unless: -> { unscheduled? }
   after_save :calculate_total_score, unless: ->{ is_auto }
   after_save :check_labs_capacity, if: -> { starts_at.present? && !_force }
@@ -107,7 +107,7 @@ class Exam < ApplicationRecord
 
   def can_schedule?(starts_at, labs)
     begin
-      # check_starts_at_validty(starts_at)
+      check_starts_at_validty(starts_at)
       check_labs_capacity(labs)
       check_student_conflicts(starts_at, starts_at + self.duration.minutes)
       true

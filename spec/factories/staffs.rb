@@ -7,8 +7,8 @@ FactoryBot.define do
     last_name { Faker::Name.name }
     username { Faker::Internet.username }
     password { 'password' }
-    role { %i[proctor].sample }
-    faculty_id {1}
+    role { %i[admin instructor proctor].sample }
+    faculty
   end
 end
 
