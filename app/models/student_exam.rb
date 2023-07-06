@@ -109,7 +109,7 @@ class StudentExam < ApplicationRecord
     student_exams_except_current = exam.student_exams.where.not(id: id)
     return unless student_exams_except_current.all? { |student_exam| student_exam.status == 'graded' }
 
-    exam.update!(status: :graded)
+    exam.update!(status: :graded) unless exam.graded?
     exam.busy_labs&.destroy_all
   end
 end
