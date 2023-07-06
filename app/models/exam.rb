@@ -122,6 +122,7 @@ class Exam < ApplicationRecord
     self.starts_at = nil
     self.schedule_id = nil
     self.ends_at = nil
+    self.pending_labs_assignment = true
     busy_labs.destroy_all
     student_exams.destroy_all
   end
