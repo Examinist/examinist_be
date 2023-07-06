@@ -57,9 +57,15 @@ class Schedule < ApplicationRecord
 
   def get_exam_days(schedule_from, schedule_to, holiday_dates, exam_week_days, time)
     exam_days = []
-    current_date = DateTime.strptime("#{schedule_from} #{time}", "%d-%m-%Y %H:%M")
-    end_date = DateTime.strptime("#{schedule_to} #{time}", "%d-%m-%Y %H:%M")
-    holiday_dates = holiday_dates.map { |date| DateTime.strptime("#{date} #{time}", "%d-%m-%Y %H:%M") }
+    schedule_from = schedule_from.split('-')
+    schedule_to = schedule_to.split('-')
+    time = time.split(':')
+    current_date = DateTime.new(schedule_from.third.to_i, schedule_from.second.to_i, schedule_from.first.to_i, time.first.to_i, time.second.to_i, 0, "+3")
+    end_date = DateTime.new(schedule_to.third.to_i, schedule_to.second.to_i, schedule_to.first.to_i, time.first.to_i, time.second.to_i, 0, "+3")
+    holiday_dates = holiday_dates.map do |date|
+      date = date.split('-')
+      DateTime.new(date.third.to_i, date.second.to_i, date.first.to_i, time.first.to_i, time.second.to_i, 0, "+3")
+    end
 
     while current_date <= end_date
       unless holiday_dates.include?(current_date) || !exam_week_days.include?(current_date.strftime('%A').downcase)
