@@ -41,7 +41,7 @@ class StudentExam < ApplicationRecord
   scope :filter_by_status, ->(status) { where(status: status) }
 
   # Hooks
-  before_update :raise_error, unless: -> { will_save_change_to_status? || %w[ongoing pending_grading].include?(status_was) }
+  before_update :raise_error, unless: -> { will_save_change_to_status? || %w[ongoing pending_grading graded].include?(status_was) }
   before_update :check_final_submission, if: -> { @is_submitting.present? }
   after_update :calculate_grade_and_transition, if: -> { pending_grading? && !saved_change_to_grade? }
   after_update_commit :check_parent_exam_completion, if: -> { graded? }

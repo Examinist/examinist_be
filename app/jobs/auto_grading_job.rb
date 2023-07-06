@@ -4,6 +4,7 @@ class AutoGradingJob < ApplicationJob
     return unless student_exam.present?
 
     grade_each_question(student_exam)
+    grade_absent_students(student_exam)
     student_exam.calculate_grade_and_transition
   end
 
@@ -22,6 +23,14 @@ class AutoGradingJob < ApplicationJob
       score = probability * correctly_answered_choices.size * full_mark
 
       student_answer.update!(score: score, auto_grading: true)
+    end
+  end
+
+  def grade_absent_students(student_exam)
+    return unless student_exam.absent?
+
+    student_exam.student_answers.map do |student_answer|
+      student_answer.update!(score: 0, auto_grading: true)
     end
   end
 end
